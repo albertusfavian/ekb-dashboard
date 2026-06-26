@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard ICK EKB – KPwBI Jawa Tengah 2026</title>
+<!-- SheetJS untuk baca Excel -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<!-- Chart.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root{
+  --bg:#0f1117;--card:#1a1d27;--card2:#21253a;--border:#2e3250;
+  --accent:#4f8ef7;--accent2:#7c6af7;--green:#22c55e;
+  --yellow:#f59e0b;--red:#ef4444;--gray:#6b7280;
+  --text:#e2e8f0;--text2:#94a3b8;--gold:#c8a020;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;font-size:14px;min-height:100vh;}
+
+/* ── WELCOME SCREEN ── */
+#welcome-screen{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  min-height:100vh;gap:0;
+  background:linear-gradient(135deg,#0a1628 0%,#1a2e52 50%,#0d1f3c 100%);
+}
+.wcard{
+  background:var(--card);border:1px solid var(--border);border-radius:16px;
+  padding:40px 48px;text-align:center;max-width:460px;width:90%;
+  box-shadow:0 25px 60px rgba(0,0,0,0.5);
+}
+.wlogo{width:64px;height:64px;background:var(--gold);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;font-weight:800;
+  font-size:22px;color:#003366;margin:0 auto 20px;}
+.wcard h2{font-size:20px;font-weight:700;margin-bottom:8px;}
+.wcard p{font-size:13px;color:var(--text2);line-height:1.6;margin-bottom:28px;}
+.btn-primary{
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  color:#fff;border:none;padding:14px 28px;border-radius:10px;
+  font-size:14px;font-weight:700;cursor:pointer;width:100%;
+  transition:opacity 0.15s;display:flex;align-items:center;justify-content:center;gap:9px;
+}
+.btn-primary:hover{opacity:0.87;}
+.btn-primary:disabled{opacity:0.4;cursor:not-allowed;}
+.btn-secondary{
+  background:var(--card2);color:var(--text2);border:1px solid var(--border);
+  padding:11px 28px;border-radius:10px;font-size:13px;font-weight:600;
+  cursor:pointer;width:100%;margin-top:10px;transition:all 0.15s;
+}
+.btn-secondary:hover{border-color:var(--accent);color:var(--accent);}
+.hint{font-size:11px;color:var(--gray);margin-top:16px;line-height:1.5;}
+.divider{display:flex;align-items:center;gap:10px;margin:14px 0;color:var(--gray);font-size:11px;}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--border);}
+/* hidden file input fallback */
+#file-input{display:none;}
+
+/* ── SAVED FILE BANNER ── */
+#saved-banner{
+  display:none;
+  background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.2);
+  border-radius:10px;padding:12px 16px;margin-bottom:16px;
+  display:none;align-items:center;gap:10px;
+}
+.saved-icon{font-size:18px;}
+.saved-text{flex:1;text-align:left;}
+.saved-text strong{font-size:12px;color:var(--green);display:block;}
+.saved-text span{font-size:11px;color:var(--text2);}
+.btn-load-saved{
+  background:var(--green);color:#fff;border:none;
+  padding:8px 16px;border-radius:7px;cursor:pointer;
+  font-size:12px;font-weight:700;flex-shrink:0;
+}
+
+/* ── LOADING ── */
+#loading-screen{
+  display:none;flex-direction:column;align-items:center;justify-content:center;
+  min-height:100vh;gap:16px;
+  background:linear-gradient(135deg,#0a1628 0%,#1a2e52 50%,#0d1f3c 100%);
+}
+.spinner{width:44px;height:44px;border:3px solid var(--border);
+  border-top-color:var(--accent);border-radius:50%;animation:spin 0.8s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.loading-msg{color:var(--text2);font-size:13px;}
+
+/* ── DASHBOARD ── */
+#dashboard{display:none;}
+
+/* ── HEADER ── */
+.header{
+  background:linear-gradient(135deg,#0a1628 0%,#1a2e52 50%,#0d1f3c 100%);
+  border-bottom:2px solid var(--gold);padding:13px 24px;
+  display:flex;align-items:center;gap:16px;
+}
+.hlogo{width:42px;height:42px;background:var(--gold);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-weight:800;font-size:14px;color:#003366;flex-shrink:0;}
+.htitle h1{font-size:15px;font-weight:700;color:#fff;}
+.htitle p{font-size:11px;color:var(--text2);margin-top:1px;}
+.hright{margin-left:auto;display:flex;align-items:center;gap:8px;}
+.badge{background:rgba(200,160,32,.15);border:1px solid var(--gold);
+  color:var(--gold);padding:3px 11px;border-radius:20px;font-size:10px;font-weight:600;}
+.file-badge{background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);
+  color:var(--green);padding:3px 11px;border-radius:20px;font-size:10px;
+  max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.btn-hdr{background:rgba(79,142,247,.1);border:1px solid rgba(79,142,247,.25);
+  color:var(--accent);padding:5px 13px;border-radius:7px;cursor:pointer;
+  font-size:11px;font-weight:700;transition:all .15s;white-space:nowrap;}
+.btn-hdr:hover{background:rgba(79,142,247,.2);}
+.btn-hdr:disabled{opacity:.4;cursor:not-allowed;}
+
+/* ── CONTROLS ── */
+.controls{
+  padding:10px 24px;background:var(--card);border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+}
+.controls label{font-size:10px;color:var(--text2);font-weight:700;
+  text-transform:uppercase;letter-spacing:.5px;}
+.btn-group{display:flex;gap:4px;flex-wrap:wrap;}
+.mbtn{background:var(--card2);border:1px solid var(--border);color:var(--text2);
+  padding:4px 11px;border-radius:6px;cursor:pointer;font-size:11px;
+  font-weight:600;transition:all .15s;}
+.mbtn:hover{border-color:var(--accent);color:var(--accent);}
+.mbtn.active{background:var(--accent);border-color:var(--accent);color:#fff;}
+.sep{width:1px;height:18px;background:var(--border);}
+.last-upd{font-size:10px;color:var(--gray);margin-left:auto;}
+
+/* ── MAIN ── */
+.main{padding:14px 24px;display:flex;flex-direction:column;gap:14px;}
+
+/* ── KPI CARDS ── */
+.kpi-row{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;}
+.kpi{background:var(--card);border:1px solid var(--border);border-radius:11px;
+  padding:13px 15px;position:relative;overflow:hidden;}
+.kpi::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:11px 11px 0 0;}
+.kpi.blue::before{background:var(--accent);}
+.kpi.green::before{background:var(--green);}
+.kpi.yellow::before{background:var(--yellow);}
+.kpi.red::before{background:var(--red);}
+.kpi-label{font-size:9px;color:var(--text2);font-weight:700;text-transform:uppercase;letter-spacing:.4px;}
+.kpi-value{font-size:24px;font-weight:800;margin-top:4px;line-height:1;}
+.kpi-sub{font-size:10px;color:var(--text2);margin-top:4px;}
+
+/* ── CHARTS ── */
+.charts-row{display:grid;grid-template-columns:2fr 1fr;gap:10px;}
+.chart-card{background:var(--card);border:1px solid var(--border);border-radius:11px;padding:14px;}
+.ctitle{font-size:11px;font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:6px;}
+.cdot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
+
+/* ── BOTTOM ── */
+.bottom-row{display:grid;grid-template-columns:1fr 1.7fr;gap:10px;}
+
+/* ── BADGES ── */
+.bs{display:inline-block;padding:2px 7px;border-radius:20px;font-size:9px;font-weight:700;}
+.s-on{background:rgba(34,197,94,.15);color:var(--green);border:1px solid rgba(34,197,94,.3);}
+.s-tr{background:rgba(79,142,247,.15);color:var(--accent);border:1px solid rgba(79,142,247,.3);}
+.s-at{background:rgba(245,158,11,.15);color:var(--yellow);border:1px solid rgba(245,158,11,.3);}
+.s-pp{background:rgba(239,68,68,.15);color:var(--red);border:1px solid rgba(239,68,68,.3);}
+.s-bd{background:rgba(107,114,128,.15);color:var(--gray);border:1px solid rgba(107,114,128,.3);}
+
+/* ── UKER ── */
+.uker-list{display:flex;flex-direction:column;gap:6px;max-height:290px;overflow-y:auto;}
+.uker-item{display:flex;flex-direction:column;gap:3px;}
+.uker-row1{display:flex;justify-content:space-between;align-items:center;}
+.uker-name{font-size:11px;font-weight:700;}
+.uker-pct{font-size:12px;font-weight:800;}
+.ubar{background:rgba(255,255,255,.06);border-radius:3px;height:5px;}
+.ubar-fill{height:5px;border-radius:3px;transition:width .4s;}
+.chips{display:flex;gap:3px;flex-wrap:wrap;}
+.chip{font-size:9px;padding:1px 5px;border-radius:8px;}
+.c-on{background:rgba(34,197,94,.1);color:var(--green);}
+.c-at{background:rgba(245,158,11,.1);color:var(--yellow);}
+.c-pp{background:rgba(239,68,68,.1);color:var(--red);}
+
+/* ── DETAIL TABLE ── */
+.twrap{max-height:310px;overflow-y:auto;overflow-x:auto;}
+.dtable{width:100%;border-collapse:collapse;font-size:10px;}
+.dtable th{position:sticky;top:0;background:var(--card2);color:var(--text2);
+  font-weight:700;text-transform:uppercase;letter-spacing:.3px;
+  padding:6px 8px;text-align:left;border-bottom:1px solid var(--border);white-space:nowrap;}
+.dtable td{padding:5px 8px;border-bottom:1px solid rgba(46,50,80,.4);vertical-align:top;}
+.dtable tr:hover td{background:rgba(79,142,247,.03);}
+.pcell{display:flex;align-items:center;gap:5px;}
+.mbar{background:rgba(255,255,255,.08);border-radius:2px;height:4px;width:48px;flex-shrink:0;}
+.mbar-fill{height:4px;border-radius:2px;}
+.ufilter{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:7px;}
+.ufbtn{background:var(--card2);border:1px solid var(--border);color:var(--text2);
+  padding:2px 8px;border-radius:5px;cursor:pointer;font-size:10px;transition:all .15s;}
+.ufbtn:hover{border-color:var(--accent);color:var(--accent);}
+.ufbtn.active{background:rgba(79,142,247,.15);border-color:var(--accent);color:var(--accent);}
+.cbadge{background:rgba(79,142,247,.1);color:var(--accent);
+  border:1px solid rgba(79,142,247,.2);border-radius:4px;
+  padding:1px 6px;font-size:9px;font-weight:700;margin-left:4px;}
+
+/* ── FOOTER ── */
+.footer{padding:8px 24px;border-top:1px solid var(--border);
+  display:flex;justify-content:space-between;color:var(--gray);font-size:9px;}
+
+::-webkit-scrollbar{width:4px;height:4px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
+</style>
+</head>
+<body>
+
+<!-- ═══════════ WELCOME SCREEN ═══════════ -->
+<div id="welcome-screen">
+  <div class="wcard">
+    <div class="wlogo">BI</div>
+    <h2>Dashboard ICK EKB 2026</h2>
+    <p>KPwBI Provinsi Jawa Tengah<br>
+       Pilih file Excel EKB dari komputer Anda.<br>
+       Data akan diproses langsung di browser — tidak ada yang dikirim ke server.</p>
+
+    <!-- Banner file tersimpan (muncul jika sebelumnya sudah pilih file) -->
+    <div id="saved-banner">
+      <span class="saved-icon">📂</span>
+      <div class="saved-text">
+        <strong>File sebelumnya tersimpan</strong>
+        <span id="saved-filename">—</span>
+      </div>
+      <button class="btn-load-saved" onclick="loadSavedFile()">Muat Ulang</button>
+    </div>
+
+    <button class="btn-primary" id="btn-pick" onclick="pickFile()">
+      📂 Pilih File Excel EKB
+    </button>
+
+    <div class="divider">atau</div>
+
+    <!-- Fallback untuk browser yang tidak support File System Access API -->
+    <label for="file-input">
+      <div class="btn-secondary" onclick="document.getElementById('file-input').click()">
+        Upload File (fallback)
+      </div>
+    </label>
+    <input type="file" id="file-input" accept=".xlsx,.xls" onchange="handleFileInput(event)">
+
+    <p class="hint">
+      💡 Gunakan tombol utama di Chrome/Edge untuk kemudahan reload otomatis.<br>
+      File tersimpan di memori browser — tidak perlu pilih ulang setiap sesi.
+    </p>
+  </div>
+</div>
+
+<!-- ═══════════ LOADING ═══════════ -->
+<div id="loading-screen">
+  <div class="spinner"></div>
+  <div class="loading-msg" id="loading-msg">Membaca file Excel…</div>
+</div>
+
+<!-- ═══════════ DASHBOARD ═══════════ -->
+<div id="dashboard">
+  <div class="header">
+    <div class="hlogo">BI</div>
+    <div class="htitle">
+      <h1>Dashboard Monitoring ICK – EKB 2026</h1>
+      <p>Kantor Perwakilan Bank Indonesia – Provinsi Jawa Tengah</p>
+    </div>
+    <div class="hright">
+      <span class="badge" id="badge-period">—</span>
+      <span class="file-badge" id="file-badge" title="">—</span>
+      <button class="btn-hdr" id="btn-reload" onclick="reloadFile()">↻ Reload File</button>
+      <button class="btn-hdr" onclick="backToWelcome()" style="background:rgba(107,114,128,.1);border-color:rgba(107,114,128,.3);color:var(--gray)">Ganti File</button>
+    </div>
+  </div>
+
+  <div class="controls">
+    <label>Bulan:</label>
+    <div class="btn-group" id="month-btns"></div>
+    <div class="sep"></div>
+    <span class="last-upd" id="last-upd"></span>
+  </div>
+
+  <div class="main">
+    <div class="kpi-row">
+      <div class="kpi blue">
+        <div class="kpi-label">Total ICK</div>
+        <div class="kpi-value" id="kpi-total" style="color:var(--accent)">—</div>
+        <div class="kpi-sub">dari <span id="kpi-nuker">—</span> Uker</div>
+      </div>
+      <div class="kpi green">
+        <div class="kpi-label">Rata-rata Progres</div>
+        <div class="kpi-value" id="kpi-avg" style="color:var(--green)">—</div>
+        <div class="kpi-sub">Ekspektasi: <span id="kpi-eksp">—</span></div>
+      </div>
+      <div class="kpi" id="kpi-gap-card">
+        <div class="kpi-label">Gap vs Ekspektasi</div>
+        <div class="kpi-value" id="kpi-gap">—</div>
+        <div class="kpi-sub" id="kpi-gap-desc">—</div>
+      </div>
+      <div class="kpi green">
+        <div class="kpi-label">On Track + Tercapai</div>
+        <div class="kpi-value" id="kpi-on" style="color:var(--green)">—</div>
+        <div class="kpi-sub" id="kpi-pct-on">—</div>
+      </div>
+      <div class="kpi yellow">
+        <div class="kpi-label">Perlu Perhatian</div>
+        <div class="kpi-value" id="kpi-pp" style="color:var(--yellow)">—</div>
+        <div class="kpi-sub">At Risk: <span id="kpi-at">—</span></div>
+      </div>
+    </div>
+
+    <div class="charts-row">
+      <div class="chart-card">
+        <div class="ctitle"><div class="cdot" style="background:var(--accent)"></div>Tren Progres Bulanan vs Ekspektasi</div>
+        <div style="position:relative;height:195px"><canvas id="trendChart"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <div class="ctitle"><div class="cdot" style="background:var(--accent2)"></div>Distribusi Status ICK</div>
+        <div style="display:flex;align-items:center;justify-content:center;height:182px">
+          <canvas id="donutChart" style="max-width:182px;max-height:182px"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="bottom-row">
+      <div class="chart-card">
+        <div class="ctitle">
+          <div class="cdot" style="background:var(--green)"></div>Progres per Uker
+          <span class="cbadge" id="uker-badge"></span>
+        </div>
+        <div class="uker-list" id="uker-list"></div>
+      </div>
+      <div class="chart-card">
+        <div class="ctitle">
+          <div class="cdot" style="background:var(--gold)"></div>Detail ICK
+          <span class="cbadge" id="detail-count"></span>
+        </div>
+        <div class="ufilter" id="ufilter"></div>
+        <div class="twrap">
+          <table class="dtable">
+            <thead><tr>
+              <th>ICK / Indikator</th><th>Uker</th><th>Tipe</th><th>Progres</th><th>Status</th>
+            </tr></thead>
+            <tbody id="detail-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <span>Sumber: Excel EKB KPwBI Jawa Tengah 2026 · Diproses lokal di browser</span>
+    <span id="footer-time"></span>
+  </div>
+</div>
+
+<script>
+// ── CONSTANTS ──────────────────────────────────────────────────
+const SHEET = "EKB Jateng";
+const MN=["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"];
+const ML=["Jan","Feb","Mar","Apr","Mei","Jun","Jul","Agu","Sep","Okt","Nov","Des"];
+const SC={'On Track':'#22c55e','Tercapai':'#4f8ef7','At Risk':'#f59e0b','Perlu Perhatian':'#ef4444','Belum Ada Data':'#6b7280'};
+const TIPE_DOT={'Skala Penilaian':'#a78bfa','Biner / Level Tertentu':'#38bdf8','Kuantitatif - Hitungan':'#22c55e','Kuantitatif - Volume':'#fb923c','Lainnya':'#6b7280'};
+
+let fileHandle = null;   // File System Access API handle
+let currentFileName = '';
+let processedData = null;
+let currentMonth = null;
+let currentUker = 'ALL';
+let trendChart, donutChart;
+
+// ── DB untuk simpan file handle ────────────────────────────────
+const DB_NAME='ekb_dash', DB_STORE='handles', DB_KEY='excel_handle';
+function openDB(){
+  return new Promise((res,rej)=>{
+    const req=indexedDB.open(DB_NAME,1);
+    req.onupgradeneeded=e=>e.target.result.createObjectStore(DB_STORE);
+    req.onsuccess=e=>res(e.target.result);
+    req.onerror=e=>rej(e);
+  });
+}
+async function saveHandle(handle){
+  try{const db=await openDB();const tx=db.transaction(DB_STORE,'readwrite');tx.objectStore(DB_STORE).put(handle,DB_KEY);}catch(e){}
+}
+async function loadHandle(){
+  try{const db=await openDB();return new Promise((res,rej)=>{const tx=db.transaction(DB_STORE,'readonly');const req=tx.objectStore(DB_STORE).get(DB_KEY);req.onsuccess=e=>res(e.target.result);req.onerror=e=>rej(e);});}catch(e){return null;}
+}
+
+// ── INIT ───────────────────────────────────────────────────────
+window.addEventListener('DOMContentLoaded', async ()=>{
+  const saved = await loadHandle();
+  if(saved){
+    fileHandle = saved;
+    currentFileName = saved.name;
+    document.getElementById('saved-banner').style.display='flex';
+    document.getElementById('saved-filename').textContent = saved.name;
+  }
+});
+
+// ── SCREENS ───────────────────────────────────────────────────
+function show(id){
+  ['welcome-screen','loading-screen','dashboard'].forEach(s=>{
+    const el=document.getElementById(s);
+    el.style.display=(s===id)?( s==='dashboard'?'block':'flex'):'none';
+  });
+}
+
+function backToWelcome(){ show('welcome-screen'); }
+
+function setLoading(msg='Membaca file Excel…'){
+  show('loading-screen');
+  document.getElementById('loading-msg').textContent=msg;
+}
+
+// ── FILE SYSTEM ACCESS API (Chrome/Edge) ──────────────────────
+const supportsFileAPI = 'showOpenFilePicker' in window;
+
+async function pickFile(){
+  if(!supportsFileAPI){
+    // Fallback ke input[type=file]
+    document.getElementById('file-input').click();
+    return;
+  }
+  try{
+    const [handle] = await window.showOpenFilePicker({
+      types:[{description:'Excel Files',accept:{'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':['.xlsx','.xls']}}],
+      multiple:false
+    });
+    fileHandle = handle;
+    currentFileName = handle.name;
+    await saveHandle(handle);
+    document.getElementById('saved-banner').style.display='flex';
+    document.getElementById('saved-filename').textContent=handle.name;
+    await readAndRender(handle);
+  }catch(e){
+    if(e.name!=='AbortError') alert('Gagal membuka file: '+e.message);
+  }
+}
+
+async function loadSavedFile(){
+  if(!fileHandle){ alert('File belum dipilih.'); return; }
+  await readAndRender(fileHandle);
+}
+
+async function reloadFile(){
+  if(!fileHandle){ backToWelcome(); return; }
+  document.getElementById('btn-reload').disabled=true;
+  document.getElementById('btn-reload').textContent='Memuat…';
+  await readAndRender(fileHandle);
+  document.getElementById('btn-reload').disabled=false;
+  document.getElementById('btn-reload').textContent='↻ Reload File';
+}
+
+async function readAndRender(handle){
+  setLoading('Membaca file Excel dari disk…');
+  try{
+    // Minta permission jika expired
+    let perm = await handle.queryPermission({mode:'read'});
+    if(perm!=='granted') perm = await handle.requestPermission({mode:'read'});
+    if(perm!=='granted') throw new Error('Izin akses file ditolak.');
+
+    const file = await handle.getFile();
+    await processFile(file);
+  }catch(e){
+    show('welcome-screen');
+    alert('Gagal baca file: '+e.message);
+  }
+}
+
+// ── FALLBACK: input[type=file] ────────────────────────────────
+async function handleFileInput(e){
+  const file = e.target.files[0];
+  if(!file) return;
+  currentFileName = file.name;
+  setLoading('Membaca file Excel…');
+  await processFile(file);
+}
+
+// ── PROCESS EXCEL ─────────────────────────────────────────────
+async function processFile(file){
+  try{
+    document.getElementById('loading-msg').textContent='Membaca Excel ('+Math.round(file.size/1024)+' KB)…';
+    const buf = await file.arrayBuffer();
+
+    document.getElementById('loading-msg').textContent='Memproses data ICK…';
+    const wb = XLSX.read(buf, {type:'array', cellDates:false, raw:false});
+
+    // Cari sheet EKB Jateng
+    let sheetName = wb.SheetNames.find(n=>n.trim()===SHEET);
+    if(!sheetName) sheetName = wb.SheetNames[0];
+
+    const ws = wb.Sheets[sheetName];
+    // Ambil sebagai 2D array, header=false agar kita bisa skip rows manual
+    const raw = XLSX.utils.sheet_to_json(ws, {header:1, defval:null, raw:false});
+
+    document.getElementById('loading-msg').textContent='Menghitung status & agregasi…';
+    processedData = buildDashboardData(raw);
+
+    document.getElementById('loading-msg').textContent='Merender visualisasi…';
+    initDashboard();
+  }catch(e){
+    show('welcome-screen');
+    alert('Error saat memproses Excel:\n'+e.message+'\n\nPastikan file yang dipilih adalah EKB Jateng yang benar.');
+    console.error(e);
+  }
+}
+
+// ── DATA PROCESSING ───────────────────────────────────────────
+function pn(v, isPct=false){
+  if(v===null||v===undefined||v==='') return null;
+  if(typeof v==='boolean') return null;
+  if(typeof v==='number'){const n=v;return isPct&&n>1.5?+(n/100).toFixed(6):+n.toFixed(6);}
+  let s=String(v).trim().replace('%','').replace(',','.');
+  // hapus prefix >= <= ± Rp
+  s=s.replace(/^[≥≤±]/,'').replace(/^[Rr][Pp]\s*/,'').trim();
+  const n=parseFloat(s);
+  if(isNaN(n)) return null;
+  return isPct&&n>1.5?+(n/100).toFixed(6):+n.toFixed(6);
+}
+function getStatus(p,e,sifat){
+  if(p===null) return 'Belum Ada Data';
+  if(sifat==='Level tertentu'&&p>=0.99) return 'Tercapai';
+  if(sifat==='Level tertentu'&&p>=e*.70) return 'On Track';
+  if(sifat==='Level tertentu') return 'Perlu Perhatian';
+  if(p>=e*.95) return 'On Track';
+  if(p>=e*.70) return 'At Risk';
+  return 'Perlu Perhatian';
+}
+function getTipe(sifat,narasi,t26){
+  const n=(narasi||'').toLowerCase();
+  const kw=['skala','penilaian kualitas','nilai asesmen','kualitas penyelenggaraan','tingkat pemahaman','kualitas pelaksanaan','kualitas kegiatan'];
+  const isSkala=kw.some(k=>n.includes(k));
+  const isLarge=typeof t26==='number'&&t26>100;
+  if(sifat==='Level tertentu'&&isSkala) return 'Skala Penilaian';
+  if(sifat==='Level tertentu') return 'Biner / Level Tertentu';
+  if(sifat==='Akumulatif'&&isLarge) return 'Kuantitatif - Volume';
+  if(sifat==='Akumulatif') return 'Kuantitatif - Hitungan';
+  return 'Lainnya';
+}
+
+function buildDashboardData(raw){
+  if(!raw||raw.length<7) throw new Error('Data sheet kosong atau terlalu pendek.');
+  const headers=raw[5].map(h=>String(h||'').trim());
+  const ci=h=>headers.indexOf(h);
+  const dataRows=raw.slice(6).filter(r=>r[ci('PS')]!=null&&String(r[ci('PS')]||'').trim()!=='');
+
+  // cari kolom bulan
+  const monthIdx={};
+  for(let m=1;m<=12;m++){const k=String(m).padStart(2,'0');const i=headers.indexOf(k);if(i>=0)monthIdx[m]=i;}
+
+  const records=[];
+  for(const[mNo,si]of Object.entries(monthIdx)){
+    const m=+mNo,eksp=+(m/12).toFixed(4);
+    for(const row of dataRows){
+      const sifat=String(row[ci('Sifat Perhitungan Target')]||'').trim();
+      const narasi=String(row[ci('Narasi Target ICK')]||'');
+      const t26=pn(row[ci('Target 2026')]);
+      const prog=pn(row[si+3],true);
+      const real=pn(row[si+1]);
+      if(prog===null&&real===null) continue;
+      if(prog===null) continue; // hanya simpan baris yang ada progres
+
+      const ick=String(row[ci('Target ICK')]||'').trim();
+      let lbl=String(row[ci('Deskripsi Indikator ICK Satker')]||row[ci('Indikator ICK Satker')]||'').trim();
+      if(!lbl||lbl==='null'||lbl==='undefined') lbl=ick;
+      if(lbl.length>80) lbl=lbl.slice(0,80)+'…';
+
+      records.push({
+        ick,lbl,
+        uker:String(row[ci('Uker')]||'').trim(),
+        sifat,tipe:getTipe(sifat,narasi,t26),
+        bulan:m,bl:ML[m-1],
+        progres:prog,realisasi:real,ekspektasi:eksp,
+        status:getStatus(prog,eksp,sifat),
+      });
+    }
+  }
+
+  const byMonth={};
+  const monthly=[];
+  for(let m=1;m<=12;m++){
+    const recs=records.filter(r=>r.bulan===m);
+    if(!recs.length) continue;
+    const progs=recs.map(r=>r.progres);
+    const sts=recs.map(r=>r.status);
+    const avg=+(progs.reduce((a,b)=>a+b,0)/progs.length).toFixed(4);
+    const sc={};['On Track','Tercapai','At Risk','Perlu Perhatian','Belum Ada Data'].forEach(s=>sc[s]=sts.filter(x=>x===s).length);
+    const ud={};
+    for(const r of recs){if(!ud[r.uker]){ud[r.uker]={p:[],st:[]};} ud[r.uker].p.push(r.progres);ud[r.uker].st.push(r.status);}
+    const ukerArr=Object.entries(ud).map(([u,d])=>({
+      u,avg:+(d.p.reduce((a,b)=>a+b,0)/d.p.length).toFixed(4),
+      n:d.p.length,on:d.st.filter(s=>s==='On Track'||s==='Tercapai').length,
+      at:d.st.filter(s=>s==='At Risk').length,pp:d.st.filter(s=>s==='Perlu Perhatian').length
+    })).sort((a,b)=>b.avg-a.avg);
+    const detail=[...recs].sort((a,b)=>a.uker.localeCompare(b.uker)||a.ick.localeCompare(b.ick))
+      .map(r=>({ick:r.ick,lbl:r.lbl,uker:r.uker,tipe:r.tipe,prog:r.progres,eksp:r.ekspektasi,status:r.status}));
+    byMonth[m]={m,nama:MN[m-1],avg,eksp:+(m/12).toFixed(4),n:new Set(recs.map(r=>r.ick)).size,nUker:Object.keys(ud).length,sc,uker:ukerArr,detail};
+    monthly.push({m,lbl:ML[m-1],avg,eksp:+(m/12).toFixed(4)});
+  }
+  return{monthly,byMonth};
+}
+
+// ── DASHBOARD INIT ────────────────────────────────────────────
+function initDashboard(){
+  const months=processedData.monthly;
+  // Pilih bulan terakhir yang data-nya cukup lengkap (>5 ICK)
+  const complete=months.filter(m=>{const d=processedData.byMonth[m.m];return d.n>5;});
+  currentMonth=(complete[complete.length-1]||months[months.length-1])?.m;
+  currentUker='ALL';
+
+  // Month buttons
+  const btnDiv=document.getElementById('month-btns');
+  btnDiv.innerHTML=months.map(m=>`<button class="mbtn ${m.m===currentMonth?'active':''}" data-m="${m.m}" onclick="setMonth(${m.m})">${m.lbl}</button>`).join('');
+
+  // Header info
+  document.getElementById('file-badge').textContent=currentFileName;
+  document.getElementById('file-badge').title=currentFileName;
+  document.getElementById('last-upd').textContent='Dimuat: '+new Date().toLocaleString('id-ID');
+  document.getElementById('footer-time').textContent='Dimuat: '+new Date().toLocaleString('id-ID');
+
+  if(trendChart){trendChart.destroy();trendChart=null;}
+  if(donutChart){donutChart.destroy();donutChart=null;}
+  initTrendChart();
+  renderAll();
+  show('dashboard');
+}
+
+// ── RENDER ────────────────────────────────────────────────────
+function pct(v){return v==null?'—':(v*100).toFixed(1)+'%';}
+function bColor(v){if(v>=.9)return '#22c55e';if(v>=.6)return '#4f8ef7';if(v>=.4)return '#f59e0b';return '#ef4444';}
+function sClass(s){return{'On Track':'s-on','Tercapai':'s-tr','At Risk':'s-at','Perlu Perhatian':'s-pp','Belum Ada Data':'s-bd'}[s]||'s-bd';}
+
+function setMonth(m){
+  currentMonth=m;currentUker='ALL';
+  document.querySelectorAll('.mbtn').forEach(b=>b.classList.toggle('active',+b.dataset.m===m));
+  renderAll();updateTrendHighlight();
+}
+function renderAll(){
+  const d=processedData.byMonth[currentMonth];
+  if(!d)return;
+  document.getElementById('badge-period').textContent='Periode: '+d.nama+' 2026';
+  renderKPIs(d);renderDonut(d);renderUker(d);renderDetail(d);
+}
+function renderKPIs(d){
+  const on=d.sc['On Track']+d.sc['Tercapai'];
+  const total=Object.values(d.sc).reduce((a,b)=>a+b,0);
+  const gap=d.avg-d.eksp;
+  document.getElementById('kpi-total').textContent=d.n;
+  document.getElementById('kpi-nuker').textContent=d.nUker;
+  document.getElementById('kpi-avg').textContent=pct(d.avg);
+  document.getElementById('kpi-eksp').textContent=pct(d.eksp);
+  document.getElementById('kpi-gap').textContent=(gap>=0?'+':'')+pct(gap);
+  document.getElementById('kpi-gap').style.color=gap>=0?'var(--green)':'var(--red)';
+  document.getElementById('kpi-gap-card').className='kpi '+(gap>=0?'green':'red');
+  document.getElementById('kpi-gap-desc').textContent=gap>=0?'Ahead of schedule ✓':'Behind schedule ✗';
+  document.getElementById('kpi-on').textContent=on+' ICK';
+  document.getElementById('kpi-pct-on').textContent=pct(total>0?on/total:0)+' dari total aktif';
+  document.getElementById('kpi-pp').textContent=d.sc['Perlu Perhatian']+' ICK';
+  document.getElementById('kpi-at').textContent=d.sc['At Risk']+' ICK';
+  document.getElementById('uker-badge').textContent=d.nama+' 2026';
+}
+function renderDonut(d){
+  const labels=['On Track','Tercapai','At Risk','Perlu Perhatian'];
+  const vals=labels.map(l=>d.sc[l]||0);
+  if(donutChart) donutChart.destroy();
+  const ctx=document.getElementById('donutChart').getContext('2d');
+  donutChart=new Chart(ctx,{type:'doughnut',data:{labels,datasets:[{data:vals,backgroundColor:labels.map(l=>SC[l]),borderColor:'#1a1d27',borderWidth:3}]},
+    options:{responsive:true,maintainAspectRatio:false,cutout:'68%',
+      plugins:{legend:{position:'bottom',labels:{color:'#94a3b8',font:{size:9},boxWidth:9,padding:6}},
+               tooltip:{callbacks:{label:c=>` ${c.label}: ${c.parsed} ICK`}}}}});
+}
+function renderUker(d){
+  const list=document.getElementById('uker-list');
+  if(!d.uker?.length){list.innerHTML='<div style="color:var(--text2);font-size:11px">Data belum tersedia</div>';return;}
+  list.innerHTML=d.uker.map(u=>{
+    const p=(u.avg*100).toFixed(1),c=bColor(u.avg);
+    return `<div class="uker-item"><div class="uker-row1"><span class="uker-name">${u.u}</span><span class="uker-pct" style="color:${c}">${p}%</span></div>
+    <div class="ubar"><div class="ubar-fill" style="width:${Math.min(u.avg*100,100)}%;background:${c}"></div></div>
+    <div class="chips"><span class="chip c-on">✓${u.on}</span>${u.at?`<span class="chip c-at">⚠${u.at}</span>`:''} ${u.pp?`<span class="chip c-pp">✗${u.pp}</span>`:''}</div></div>`;
+  }).join('');
+}
+function renderDetail(d){
+  const ukers=['ALL',...new Set(d.detail.map(r=>r.uker))].filter(Boolean);
+  document.getElementById('ufilter').innerHTML=ukers.map(u=>`<button class="ufbtn ${u===currentUker?'active':''}" onclick="filterUker('${u.replace(/'/g,"\\'")}'">${u==='ALL'?'Semua':u}</button>`).join('');
+  const filtered=currentUker==='ALL'?d.detail:d.detail.filter(r=>r.uker===currentUker);
+  document.getElementById('detail-count').textContent=filtered.length+' ICK';
+  document.getElementById('detail-tbody').innerHTML=filtered.map(r=>{
+    const w=Math.min((r.prog||0)*100,100).toFixed(0),c=bColor(r.prog||0);
+    const tc=TIPE_DOT[r.tipe]||'#6b7280';
+    return `<tr>
+      <td style="max-width:150px;font-size:9px;color:var(--text2)">${r.lbl}</td>
+      <td style="font-weight:700;font-size:9px;white-space:nowrap">${r.uker}</td>
+      <td><span style="display:inline-block;width:5px;height:5px;border-radius:50%;background:${tc};margin-right:3px;vertical-align:middle"></span><span style="font-size:9px">${r.tipe.replace('Kuantitatif - ','K.')}</span></td>
+      <td><div class="pcell"><div class="mbar"><div class="mbar-fill" style="width:${w}%;background:${c}"></div></div>
+          <span style="color:${c};font-weight:700;font-size:9px">${pct(r.prog)}</span></div>
+          <div style="font-size:8px;color:var(--text2)">E:${pct(r.eksp)}</div></td>
+      <td><span class="bs ${sClass(r.status)}">${r.status}</span></td></tr>`;
+  }).join('');
+}
+function filterUker(u){
+  currentUker=u;
+  const d=processedData.byMonth[currentMonth];if(d)renderDetail(d);
+  document.querySelectorAll('.ufbtn').forEach(b=>b.classList.toggle('active',b.textContent.trim()===(u==='ALL'?'Semua':u)));
+}
+function initTrendChart(){
+  const months=processedData.monthly;
+  const ctx=document.getElementById('trendChart').getContext('2d');
+  trendChart=new Chart(ctx,{type:'line',
+    data:{labels:months.map(m=>m.lbl),datasets:[
+      {label:'Progres (%)',data:months.map(m=>m.avg!=null?+(m.avg*100).toFixed(2):null),
+       borderColor:'#4f8ef7',backgroundColor:'rgba(79,142,247,.07)',borderWidth:2.5,
+       pointBackgroundColor:'#4f8ef7',pointRadius:5,pointHoverRadius:7,fill:true,tension:.35},
+      {label:'Ekspektasi (%)',data:months.map(m=>+(m.eksp*100).toFixed(2)),
+       borderColor:'#6b7280',borderDash:[5,4],borderWidth:1.5,pointRadius:0,fill:false,tension:0}
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},
+      plugins:{legend:{labels:{color:'#94a3b8',font:{size:10},boxWidth:10,padding:10}},
+               tooltip:{backgroundColor:'#21253a',borderColor:'#2e3250',borderWidth:1,titleColor:'#e2e8f0',bodyColor:'#94a3b8',
+                        callbacks:{label:c=>` ${c.dataset.label}: ${c.parsed.y.toFixed(1)}%`}}},
+      scales:{x:{grid:{color:'rgba(46,50,80,.5)'},ticks:{color:'#94a3b8',font:{size:10}}},
+              y:{grid:{color:'rgba(46,50,80,.5)'},ticks:{color:'#94a3b8',font:{size:10},callback:v=>v+'%'},min:0,max:100}}}});
+}
+function updateTrendHighlight(){
+  if(!trendChart) return;
+  const months=processedData.monthly;
+  trendChart.data.datasets[0].pointBackgroundColor=months.map(m=>m.m===currentMonth?'#fff':'#4f8ef7');
+  trendChart.data.datasets[0].pointRadius=months.map(m=>m.m===currentMonth?8:4);
+  trendChart.data.datasets[0].pointBorderColor=months.map(m=>m.m===currentMonth?'#4f8ef7':'transparent');
+  trendChart.data.datasets[0].pointBorderWidth=months.map(()=>2);
+  trendChart.update('none');
+}
+</script>
+</body>
+</html>
