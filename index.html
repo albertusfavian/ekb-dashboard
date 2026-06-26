@@ -1,1353 +1,2289 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dashboard ICK EKB – KPwBI Jawa Tengah 2026</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<style>
-/* ── TOKENS ── */
-:root{
-  --sky:#87CEEB; --sky-dark:#4fa8d5; --sky-deeper:#1a6fa0;
-  --navy:#0a2a5e; --navy2:#0f3875;
-  --bg:#eef5fb; --white:#ffffff;
-  --card:#ffffff; --border:#c8e0f0; --border2:#dbeef8;
-  --text:#0d1e3a; --text2:#4a6080; --muted:#8aabb0;
-  --green:#16a34a; --green-bg:#dcfce7;
-  --yellow:#b45309; --yellow-bg:#fef9c3;
-  --red:#dc2626; --red-bg:#fee2e2;
-  --blue:#2563eb; --blue-bg:#dbeafe;
-  --purple:#7c3aed; --purple-bg:#ede9fe;
-  --orange:#c2410c; --orange-bg:#ffedd5;
-  --gray:#6b7280; --sidebar:#0a2a5e;
-  --sidebar-hover:rgba(135,206,235,.15);
-  --sidebar-active:rgba(135,206,235,.25);
-}
-*{box-sizing:border-box;margin:0;padding:0;}
-body{background:var(--bg);color:var(--text);font-family:'Plus Jakarta Sans',system-ui,sans-serif;font-size:14px;min-height:100vh;}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard ICK EKB – KPwBI Jawa Tengah 2026</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <style>
+    /* ── TOKENS ── */
+    :root {
+      --sky: #87CEEB;
+      --sky-dark: #4fa8d5;
+      --sky-deeper: #1a6fa0;
+      --navy: #0a2a5e;
+      --navy2: #0f3875;
+      --bg: #eef5fb;
+      --white: #ffffff;
+      --card: #ffffff;
+      --border: #c8e0f0;
+      --border2: #dbeef8;
+      --text: #0d1e3a;
+      --text2: #4a6080;
+      --muted: #8aabb0;
+      --green: #16a34a;
+      --green-bg: #dcfce7;
+      --yellow: #b45309;
+      --yellow-bg: #fef9c3;
+      --red: #dc2626;
+      --red-bg: #fee2e2;
+      --blue: #2563eb;
+      --blue-bg: #dbeafe;
+      --purple: #7c3aed;
+      --purple-bg: #ede9fe;
+      --orange: #c2410c;
+      --orange-bg: #ffedd5;
+      --gray: #6b7280;
+      --sidebar: #0a2a5e;
+      --sidebar-hover: rgba(135, 206, 235, .15);
+      --sidebar-active: rgba(135, 206, 235, .25);
+    }
 
-/* ════ WELCOME ════ */
-#welcome-screen{
-  display:flex;align-items:center;justify-content:center;
-  min-height:100vh;background:linear-gradient(135deg,#0a2a5e 0%,#1a5a9a 50%,#87CEEB 100%);
-}
-.wcard{
-  background:var(--white);border-radius:20px;padding:44px 52px;
-  text-align:center;max-width:480px;width:90%;
-  box-shadow:0 24px 64px rgba(10,42,94,.25);
-}
-.wlogo{
-  width:68px;height:68px;
-  background:linear-gradient(135deg,var(--navy),var(--sky));
-  border-radius:50%;display:flex;align-items:center;justify-content:center;
-  font-weight:800;font-size:22px;color:#fff;margin:0 auto 20px;
-  box-shadow:0 8px 24px rgba(135,206,235,.4);
-}
-.wcard h2{font-size:22px;font-weight:800;color:var(--navy);margin-bottom:6px;}
-.wcard .wsub{font-size:13px;color:var(--sky-dark);font-weight:600;margin-bottom:6px;}
-.wcard p{font-size:12px;color:var(--text2);line-height:1.7;margin-bottom:28px;}
-.btn-primary{
-  background:linear-gradient(135deg,var(--navy),var(--sky-dark));
-  color:#fff;border:none;padding:14px 28px;border-radius:12px;
-  font-size:14px;font-weight:700;cursor:pointer;width:100%;
-  transition:opacity .15s;display:flex;align-items:center;justify-content:center;gap:9px;
-  box-shadow:0 4px 16px rgba(10,42,94,.25);
-}
-.btn-primary:hover{opacity:.88;}
-.btn-primary:disabled{opacity:.4;cursor:not-allowed;}
-.btn-secondary{
-  background:var(--bg);color:var(--text2);border:1.5px solid var(--border);
-  padding:11px 28px;border-radius:12px;font-size:13px;font-weight:600;
-  cursor:pointer;width:100%;margin-top:10px;transition:all .15s;
-}
-.btn-secondary:hover{border-color:var(--sky-dark);color:var(--sky-deeper);}
-.hint{font-size:11px;color:var(--muted);margin-top:16px;line-height:1.6;}
-.divider{display:flex;align-items:center;gap:10px;margin:14px 0;color:var(--muted);font-size:11px;}
-.divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--border);}
-#file-input{display:none;}
-#saved-banner{
-  display:none;background:var(--green-bg);border:1px solid #86efac;
-  border-radius:10px;padding:12px 16px;margin-bottom:16px;align-items:center;gap:10px;
-}
-.saved-icon{font-size:18px;}
-.saved-text{flex:1;text-align:left;}
-.saved-text strong{font-size:12px;color:var(--green);display:block;}
-.saved-text span{font-size:11px;color:var(--text2);}
-.btn-load-saved{
-  background:var(--green);color:#fff;border:none;
-  padding:8px 16px;border-radius:8px;cursor:pointer;font-size:12px;font-weight:700;flex-shrink:0;
-}
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-/* ════ LOADING ════ */
-#loading-screen{
-  display:none;flex-direction:column;align-items:center;justify-content:center;
-  min-height:100vh;gap:18px;
-  background:linear-gradient(135deg,#0a2a5e 0%,#1a5a9a 50%,#87CEEB 100%);
-}
-.spinner{
-  width:48px;height:48px;border:3px solid rgba(255,255,255,.2);
-  border-top-color:#fff;border-radius:50%;animation:spin .8s linear infinite;
-}
-@keyframes spin{to{transform:rotate(360deg);}}
-.loading-msg{color:#fff;font-size:13px;opacity:.85;}
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+      font-size: 14px;
+      min-height: 100vh;
+    }
 
-/* ════ DASHBOARD ════ */
-#dashboard{display:none;}
-.dash-wrap{display:flex;height:100vh;overflow:hidden;}
+    /* ════ WELCOME ════ */
+    #welcome-screen {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #0a2a5e 0%, #1a5a9a 50%, #87CEEB 100%);
+    }
 
-/* SIDEBAR */
-.sidebar{width:230px;min-width:230px;background:var(--sidebar);display:flex;flex-direction:column;overflow-y:auto;}
-.sb-logo{display:flex;align-items:center;gap:12px;padding:20px 18px 18px;border-bottom:1px solid rgba(135,206,235,.15);}
-.sb-logo-icon{
-  width:42px;height:42px;min-width:42px;
-  background:linear-gradient(135deg,var(--sky),#fff);
-  border-radius:10px;display:flex;align-items:center;justify-content:center;
-  font-weight:800;font-size:14px;color:var(--navy);
-}
-.sb-logo-text{font-size:11px;font-weight:700;color:#fff;line-height:1.4;}
-.sb-logo-text span{color:var(--sky);font-size:10px;font-weight:400;display:block;margin-top:2px;}
-.sb-section{padding:16px 0 4px;}
-.sb-section-label{font-size:9px;color:rgba(135,206,235,.5);text-transform:uppercase;letter-spacing:1.2px;padding:0 18px 6px;font-weight:700;}
-.sb-item{
-  display:flex;align-items:center;gap:10px;padding:9px 18px;
-  font-size:12px;color:rgba(255,255,255,.65);cursor:pointer;
-  transition:all .18s;border-left:3px solid transparent;user-select:none;
-}
-.sb-item:hover{background:var(--sidebar-hover);color:#fff;}
-.sb-item.active{background:var(--sidebar-active);color:var(--sky);border-left-color:var(--sky);}
-.sb-item .sb-dot{width:7px;height:7px;border-radius:50%;background:rgba(135,206,235,.4);flex-shrink:0;}
-.sb-item.active .sb-dot{background:var(--sky);}
-.sb-status-badge{
-  display:inline-block;margin:12px 18px 4px;padding:6px 12px;border-radius:8px;
-  font-size:11px;font-weight:700;text-align:center;
-}
-.sb-divider{height:1px;background:rgba(135,206,235,.1);margin:8px 18px;}
-.sb-footer{margin-top:auto;padding:14px 18px;border-top:1px solid rgba(135,206,235,.1);font-size:10px;color:rgba(255,255,255,.3);line-height:1.6;}
+    .wcard {
+      background: var(--white);
+      border-radius: 20px;
+      padding: 44px 52px;
+      text-align: center;
+      max-width: 480px;
+      width: 90%;
+      box-shadow: 0 24px 64px rgba(10, 42, 94, .25);
+    }
 
-/* MAIN AREA */
-.main-area{flex:1;display:flex;flex-direction:column;overflow:hidden;}
-.topbar{
-  background:var(--white);border-bottom:2px solid var(--sky);
-  padding:12px 22px;display:flex;align-items:center;gap:14px;
-  box-shadow:0 2px 12px rgba(10,42,94,.07);flex-shrink:0;
-}
-.topbar-title{font-size:15px;font-weight:800;color:var(--navy);}
-.topbar-sub{font-size:10px;color:var(--text2);margin-top:1px;}
-.topbar-right{margin-left:auto;display:flex;align-items:center;gap:8px;}
-.tb-badge{background:var(--sky);color:var(--navy);padding:3px 11px;border-radius:20px;font-size:10px;font-weight:700;}
-.tb-file{
-  background:var(--green-bg);border:1px solid #86efac;color:var(--green);
-  padding:3px 11px;border-radius:20px;font-size:10px;
-  max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
-}
-.tb-btn{
-  background:var(--bg);border:1.5px solid var(--border);color:var(--sky-deeper);
-  padding:5px 13px;border-radius:8px;cursor:pointer;font-size:11px;font-weight:700;
-  transition:all .15s;white-space:nowrap;
-}
-.tb-btn:hover{background:var(--sky);color:var(--navy);border-color:var(--sky);}
-.tb-btn:disabled{opacity:.4;cursor:not-allowed;}
+    .wlogo {
+      width: 68px;
+      height: 68px;
+      background: linear-gradient(135deg, var(--navy), var(--sky));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 22px;
+      color: #fff;
+      margin: 0 auto 20px;
+      box-shadow: 0 8px 24px rgba(135, 206, 235, .4);
+    }
 
-/* TAB NAV */
-.tab-nav{
-  background:var(--white);border-bottom:1px solid var(--border);
-  padding:0 22px;display:flex;align-items:center;gap:0;flex-shrink:0;
-}
-.tab-nav-btn{
-  padding:10px 18px;font-size:12px;font-weight:700;cursor:pointer;
-  color:var(--text2);border:none;background:none;
-  border-bottom:3px solid transparent;transition:all .18s;letter-spacing:.3px;
-}
-.tab-nav-btn:hover{color:var(--sky-deeper);}
-.tab-nav-btn.active{color:var(--navy);border-bottom-color:var(--sky-dark);}
-.tab-nav-right{margin-left:auto;display:flex;align-items:center;gap:6px;}
-.ctrl-label{font-size:10px;color:var(--text2);font-weight:700;text-transform:uppercase;letter-spacing:.5px;}
-.btn-group{display:flex;gap:4px;flex-wrap:wrap;}
-.mbtn{
-  background:var(--bg);border:1.5px solid var(--border);color:var(--text2);
-  padding:3px 9px;border-radius:6px;cursor:pointer;font-size:10px;font-weight:700;transition:all .15s;
-}
-.mbtn:hover{border-color:var(--sky-dark);color:var(--sky-deeper);}
-.mbtn.active{background:var(--sky);border-color:var(--sky);color:var(--navy);}
-.last-upd{font-size:10px;color:var(--muted);}
+    .wcard h2 {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--navy);
+      margin-bottom: 6px;
+    }
 
-/* CONTENT */
-.content{flex:1;overflow-y:auto;padding:16px 22px;display:flex;flex-direction:column;gap:12px;}
-.tab-page{display:none;}
-.tab-page.active{display:flex;flex-direction:column;gap:12px;}
+    .wcard .wsub {
+      font-size: 13px;
+      color: var(--sky-dark);
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
 
-/* KPI ROW */
-.kpi-row{display:grid;gap:10px;}
-.kpi-row-5{grid-template-columns:repeat(5,1fr);}
-.kpi-row-4{grid-template-columns:repeat(4,1fr);}
-.kpi{
-  background:var(--card);border:1px solid var(--border);border-radius:13px;
-  padding:14px 16px;position:relative;overflow:hidden;
-  box-shadow:0 2px 8px rgba(10,42,94,.06);
-}
-.kpi::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;border-radius:13px 13px 0 0;}
-.kpi.sky::before{background:linear-gradient(90deg,var(--sky),var(--sky-deeper));}
-.kpi.green::before{background:linear-gradient(90deg,#22c55e,#16a34a);}
-.kpi.yellow::before{background:linear-gradient(90deg,#f59e0b,#b45309);}
-.kpi.red::before{background:linear-gradient(90deg,#ef4444,#dc2626);}
-.kpi.blue::before{background:linear-gradient(90deg,#3b82f6,#1d4ed8);}
-.kpi.purple::before{background:linear-gradient(90deg,#a78bfa,#7c3aed);}
-.kpi.orange::before{background:linear-gradient(90deg,#fb923c,#c2410c);}
-.kpi-label{font-size:9px;color:var(--text2);font-weight:700;text-transform:uppercase;letter-spacing:.5px;}
-.kpi-value{font-size:24px;font-weight:800;margin-top:5px;line-height:1;}
-.kpi-sub{font-size:10px;color:var(--text2);margin-top:5px;}
-.kpi-badge{
-  position:absolute;top:10px;right:10px;
-  font-size:9px;font-weight:700;padding:2px 7px;border-radius:10px;
-}
+    .wcard p {
+      font-size: 12px;
+      color: var(--text2);
+      line-height: 1.7;
+      margin-bottom: 28px;
+    }
 
-/* CARD */
-.chart-card{
-  background:var(--card);border:1px solid var(--border);border-radius:13px;
-  padding:16px 18px;box-shadow:0 2px 8px rgba(10,42,94,.06);
-}
-.chart-card-title{
-  display:flex;align-items:center;gap:8px;margin-bottom:12px;
-  font-size:11px;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.5px;
-}
-.ctitle-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
-.cbadge{
-  background:var(--blue-bg);color:var(--blue);border-radius:6px;
-  padding:1px 7px;font-size:9px;font-weight:700;margin-left:4px;
-}
+    .btn-primary {
+      background: linear-gradient(135deg, var(--navy), var(--sky-dark));
+      color: #fff;
+      border: none;
+      padding: 14px 28px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      width: 100%;
+      transition: opacity .15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      box-shadow: 0 4px 16px rgba(10, 42, 94, .25);
+    }
 
-/* LAYOUT ROWS */
-.charts-row{display:grid;grid-template-columns:2fr 1fr;gap:12px;}
-.three-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
-.two-col{display:grid;grid-template-columns:1fr 1.8fr;gap:12px;}
+    .btn-primary:hover {
+      opacity: .88;
+    }
 
-/* STATUS BADGES */
-.bs{display:inline-block;padding:2px 8px;border-radius:20px;font-size:9px;font-weight:700;}
-.s-on{background:var(--green-bg);color:var(--green);}
-.s-tr{background:var(--blue-bg);color:var(--blue);}
-.s-at{background:var(--yellow-bg);color:var(--yellow);}
-.s-pp{background:var(--red-bg);color:var(--red);}
-.s-bd{background:#f3f4f6;color:var(--gray);}
+    .btn-primary:disabled {
+      opacity: .4;
+      cursor: not-allowed;
+    }
 
-/* UKER LIST */
-.uker-list{display:flex;flex-direction:column;gap:8px;max-height:280px;overflow-y:auto;}
-.uker-item{display:flex;flex-direction:column;gap:3px;}
-.uker-row1{display:flex;justify-content:space-between;align-items:center;}
-.uker-name{font-size:11px;font-weight:700;color:var(--text);}
-.uker-pct{font-size:12px;font-weight:800;}
-.ubar{background:var(--border2);border-radius:3px;height:6px;}
-.ubar-fill{height:6px;border-radius:3px;transition:width .4s;}
-.chips{display:flex;gap:4px;flex-wrap:wrap;margin-top:1px;}
-.chip{font-size:9px;padding:1px 6px;border-radius:8px;}
-.c-on{background:var(--green-bg);color:var(--green);}
-.c-at{background:var(--yellow-bg);color:var(--yellow);}
-.c-pp{background:var(--red-bg);color:var(--red);}
+    .btn-secondary {
+      background: var(--bg);
+      color: var(--text2);
+      border: 1.5px solid var(--border);
+      padding: 11px 28px;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 10px;
+      transition: all .15s;
+    }
 
-/* TABLE */
-.ufilter{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px;}
-.ufbtn{
-  background:var(--bg);border:1.5px solid var(--border);color:var(--text2);
-  padding:2px 9px;border-radius:6px;cursor:pointer;font-size:10px;font-weight:600;transition:all .15s;
-}
-.ufbtn:hover{border-color:var(--sky-dark);color:var(--sky-deeper);}
-.ufbtn.active{background:var(--sky);border-color:var(--sky);color:var(--navy);}
-.twrap{max-height:300px;overflow-y:auto;overflow-x:auto;}
-.dtable{width:100%;border-collapse:collapse;font-size:10px;}
-.dtable th{
-  position:sticky;top:0;background:#f0f6ff;color:var(--text2);
-  font-weight:700;text-transform:uppercase;letter-spacing:.4px;
-  padding:7px 9px;text-align:left;border-bottom:2px solid var(--border);white-space:nowrap;
-}
-.dtable td{padding:6px 9px;border-bottom:1px solid var(--border2);vertical-align:middle;}
-.dtable tr:hover td{background:#f7fbff;}
-.pcell{display:flex;align-items:center;gap:5px;}
-.mbar{background:var(--border2);border-radius:2px;height:5px;width:50px;flex-shrink:0;}
-.mbar-fill{height:5px;border-radius:2px;}
+    .btn-secondary:hover {
+      border-color: var(--sky-dark);
+      color: var(--sky-deeper);
+    }
 
-/* TIPE BREAKDOWN */
-.tipe-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
-.tipe-card{
-  background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
-  padding:10px 14px;display:flex;flex-direction:column;gap:3px;
-}
-.tipe-label{font-size:9px;color:var(--text2);font-weight:700;text-transform:uppercase;letter-spacing:.5px;}
-.tipe-count{font-size:20px;font-weight:800;}
-.tipe-sub{font-size:9px;color:var(--muted);}
+    .hint {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 16px;
+      line-height: 1.6;
+    }
 
-/* TOOLTIP */
-.tt{position:relative;display:inline-block;cursor:help;}
-.tt:hover .tt-content{display:block;}
-.tt-content{
-  display:none;position:absolute;bottom:120%;left:50%;transform:translateX(-50%);
-  background:#1a2a4a;color:#fff;padding:6px 10px;border-radius:8px;
-  font-size:10px;white-space:nowrap;z-index:999;min-width:180px;max-width:300px;white-space:normal;
-  box-shadow:0 4px 16px rgba(0,0,0,.3);
-}
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 14px 0;
+      color: var(--muted);
+      font-size: 11px;
+    }
 
-/* FOOTER */
-.footer{
-  background:var(--white);border-top:1px solid var(--border);
-  padding:8px 22px;display:flex;justify-content:space-between;
-  color:var(--muted);font-size:9px;flex-shrink:0;
-}
+    .divider::before,
+    .divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
 
-::-webkit-scrollbar{width:4px;height:4px;}
-::-webkit-scrollbar-track{background:transparent;}
-::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
-::-webkit-scrollbar-thumb:hover{background:var(--sky);}
+    #file-input {
+      display: none;
+    }
 
-/* ════ SEARCH PAGE ════ */
-.search-input-wrap{position:relative;margin-bottom:14px;}
-.search-input{
-  width:100%;padding:11px 16px 11px 42px;border:2px solid var(--border);border-radius:12px;
-  font-size:13px;font-family:inherit;color:var(--text);background:var(--white);
-  transition:border-color .15s;outline:none;
-}
-.search-input:focus{border-color:var(--sky-dark);}
-.search-icon-abs{
-  position:absolute;left:14px;top:50%;transform:translateY(-50%);
-  font-size:15px;color:var(--text2);pointer-events:none;
-}
-.search-results{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:10px;}
-.ick-card{
-  background:var(--card);border:1.5px solid var(--border);border-radius:12px;
-  padding:14px 16px;cursor:pointer;transition:all .18s;
-  box-shadow:0 2px 8px rgba(10,42,94,.05);
-  border-left:4px solid var(--sky);
-}
-.ick-card:hover{border-left-color:var(--sky-deeper);box-shadow:0 6px 20px rgba(10,42,94,.12);transform:translateY(-1px);}
-.ick-card-name{font-size:11px;font-weight:700;color:var(--text);margin-bottom:8px;line-height:1.4;}
-.ick-card-meta{display:flex;gap:5px;flex-wrap:wrap;align-items:center;margin-bottom:8px;}
-.ick-card-uker{font-size:9px;font-weight:700;background:var(--blue-bg);color:var(--blue);padding:2px 7px;border-radius:8px;}
-.ick-card-tipe{font-size:9px;color:var(--text2);background:var(--bg);padding:2px 7px;border-radius:8px;border:1px solid var(--border);}
-.ick-card-bottom{display:flex;align-items:center;justify-content:space-between;}
-.search-empty{text-align:center;padding:56px 20px;color:var(--text2);font-size:13px;grid-column:1/-1;}
+    #saved-banner {
+      display: none;
+      background: var(--green-bg);
+      border: 1px solid #86efac;
+      border-radius: 10px;
+      padding: 12px 16px;
+      margin-bottom: 16px;
+      align-items: center;
+      gap: 10px;
+    }
 
-/* ════ ICK DETAIL MODAL ════ */
-.ick-modal-overlay{
-  display:none;position:fixed;inset:0;background:rgba(10,42,94,.5);z-index:1000;
-  align-items:flex-start;justify-content:center;padding:24px;overflow-y:auto;
-}
-.ick-modal-overlay.open{display:flex;}
-.ick-modal{
-  background:var(--white);border-radius:16px;width:100%;max-width:960px;
-  display:flex;flex-direction:column;box-shadow:0 24px 64px rgba(10,42,94,.35);
-  margin:auto;
-}
-.ick-modal-header{
-  background:linear-gradient(135deg,var(--navy),var(--navy2));
-  padding:20px 24px;display:flex;align-items:flex-start;gap:14px;flex-shrink:0;
-  border-radius:16px 16px 0 0;
-}
-.ick-modal-back{
-  background:rgba(255,255,255,.15);border:none;color:#fff;
-  width:36px;height:36px;border-radius:9px;cursor:pointer;font-size:18px;
-  display:flex;align-items:center;justify-content:center;flex-shrink:0;
-  transition:background .15s;margin-top:2px;
-}
-.ick-modal-back:hover{background:rgba(255,255,255,.28);}
-.ick-modal-title{font-size:14px;font-weight:800;color:#fff;line-height:1.45;flex:1;}
-.ick-modal-sub{font-size:11px;color:var(--sky);margin-top:5px;display:flex;gap:10px;flex-wrap:wrap;}
-.ick-mbadge{
-  font-size:9px;font-weight:700;padding:3px 9px;border-radius:20px;
-  background:rgba(135,206,235,.2);color:var(--sky);
-}
-.ick-modal-body{padding:18px 22px;display:flex;flex-direction:column;gap:14px;}
-.ick-trend-wrap{position:relative;height:210px;}
-.imt{width:100%;border-collapse:collapse;font-size:10px;}
-.imt th{
-  position:sticky;top:0;background:#f0f6ff;color:var(--text2);
-  font-weight:700;text-transform:uppercase;letter-spacing:.4px;
-  padding:7px 10px;text-align:left;border-bottom:2px solid var(--border);white-space:nowrap;
-}
-.imt td{padding:7px 10px;border-bottom:1px solid var(--border2);vertical-align:middle;}
-.imt tr:hover td{background:#f7fbff;}
-.imt-note{max-width:160px;font-size:9px;color:var(--text2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;cursor:default;}
-</style>
+    .saved-icon {
+      font-size: 18px;
+    }
+
+    .saved-text {
+      flex: 1;
+      text-align: left;
+    }
+
+    .saved-text strong {
+      font-size: 12px;
+      color: var(--green);
+      display: block;
+    }
+
+    .saved-text span {
+      font-size: 11px;
+      color: var(--text2);
+    }
+
+    .btn-load-saved {
+      background: var(--green);
+      color: #fff;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    /* ════ LOADING ════ */
+    #loading-screen {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      gap: 18px;
+      background: linear-gradient(135deg, #0a2a5e 0%, #1a5a9a 50%, #87CEEB 100%);
+    }
+
+    .spinner {
+      width: 48px;
+      height: 48px;
+      border: 3px solid rgba(255, 255, 255, .2);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin .8s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .loading-msg {
+      color: #fff;
+      font-size: 13px;
+      opacity: .85;
+    }
+
+    /* ════ DASHBOARD ════ */
+    #dashboard {
+      display: none;
+    }
+
+    .dash-wrap {
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* SIDEBAR */
+    .sidebar {
+      width: 230px;
+      min-width: 230px;
+      background: var(--sidebar);
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+    }
+
+    .sb-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 20px 18px 18px;
+      border-bottom: 1px solid rgba(135, 206, 235, .15);
+    }
+
+    .sb-logo-icon {
+      width: 42px;
+      height: 42px;
+      min-width: 42px;
+      background: linear-gradient(135deg, var(--sky), #fff);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 14px;
+      color: var(--navy);
+    }
+
+    .sb-logo-text {
+      font-size: 11px;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.4;
+    }
+
+    .sb-logo-text span {
+      color: var(--sky);
+      font-size: 10px;
+      font-weight: 400;
+      display: block;
+      margin-top: 2px;
+    }
+
+    .sb-section {
+      padding: 16px 0 4px;
+    }
+
+    .sb-section-label {
+      font-size: 9px;
+      color: rgba(135, 206, 235, .5);
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      padding: 0 18px 6px;
+      font-weight: 700;
+    }
+
+    .sb-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 18px;
+      font-size: 12px;
+      color: rgba(255, 255, 255, .65);
+      cursor: pointer;
+      transition: all .18s;
+      border-left: 3px solid transparent;
+      user-select: none;
+    }
+
+    .sb-item:hover {
+      background: var(--sidebar-hover);
+      color: #fff;
+    }
+
+    .sb-item.active {
+      background: var(--sidebar-active);
+      color: var(--sky);
+      border-left-color: var(--sky);
+    }
+
+    .sb-item .sb-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: rgba(135, 206, 235, .4);
+      flex-shrink: 0;
+    }
+
+    .sb-item.active .sb-dot {
+      background: var(--sky);
+    }
+
+    .sb-status-badge {
+      display: inline-block;
+      margin: 12px 18px 4px;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 11px;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    .sb-divider {
+      height: 1px;
+      background: rgba(135, 206, 235, .1);
+      margin: 8px 18px;
+    }
+
+    .sb-footer {
+      margin-top: auto;
+      padding: 14px 18px;
+      border-top: 1px solid rgba(135, 206, 235, .1);
+      font-size: 10px;
+      color: rgba(255, 255, 255, .3);
+      line-height: 1.6;
+    }
+
+    /* MAIN AREA */
+    .main-area {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .topbar {
+      background: var(--white);
+      border-bottom: 2px solid var(--sky);
+      padding: 12px 22px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      box-shadow: 0 2px 12px rgba(10, 42, 94, .07);
+      flex-shrink: 0;
+    }
+
+    .topbar-title {
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--navy);
+    }
+
+    .topbar-sub {
+      font-size: 10px;
+      color: var(--text2);
+      margin-top: 1px;
+    }
+
+    .topbar-right {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .tb-badge {
+      background: var(--sky);
+      color: var(--navy);
+      padding: 3px 11px;
+      border-radius: 20px;
+      font-size: 10px;
+      font-weight: 700;
+    }
+
+    .tb-file {
+      background: var(--green-bg);
+      border: 1px solid #86efac;
+      color: var(--green);
+      padding: 3px 11px;
+      border-radius: 20px;
+      font-size: 10px;
+      max-width: 180px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .tb-btn {
+      background: var(--bg);
+      border: 1.5px solid var(--border);
+      color: var(--sky-deeper);
+      padding: 5px 13px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 11px;
+      font-weight: 700;
+      transition: all .15s;
+      white-space: nowrap;
+    }
+
+    .tb-btn:hover {
+      background: var(--sky);
+      color: var(--navy);
+      border-color: var(--sky);
+    }
+
+    .tb-btn:disabled {
+      opacity: .4;
+      cursor: not-allowed;
+    }
+
+    /* TAB NAV */
+    .tab-nav {
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      padding: 0 22px;
+      display: flex;
+      align-items: center;
+      gap: 0;
+      flex-shrink: 0;
+    }
+
+    .tab-nav-btn {
+      padding: 10px 18px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      color: var(--text2);
+      border: none;
+      background: none;
+      border-bottom: 3px solid transparent;
+      transition: all .18s;
+      letter-spacing: .3px;
+    }
+
+    .tab-nav-btn:hover {
+      color: var(--sky-deeper);
+    }
+
+    .tab-nav-btn.active {
+      color: var(--navy);
+      border-bottom-color: var(--sky-dark);
+    }
+
+    .tab-nav-right {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .ctrl-label {
+      font-size: 10px;
+      color: var(--text2);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 4px;
+      flex-wrap: wrap;
+    }
+
+    .mbtn {
+      background: var(--bg);
+      border: 1.5px solid var(--border);
+      color: var(--text2);
+      padding: 3px 9px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 10px;
+      font-weight: 700;
+      transition: all .15s;
+    }
+
+    .mbtn:hover {
+      border-color: var(--sky-dark);
+      color: var(--sky-deeper);
+    }
+
+    .mbtn.active {
+      background: var(--sky);
+      border-color: var(--sky);
+      color: var(--navy);
+    }
+
+    .last-upd {
+      font-size: 10px;
+      color: var(--muted);
+    }
+
+    /* CONTENT */
+    .content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .tab-page {
+      display: none;
+    }
+
+    .tab-page.active {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    /* KPI ROW */
+    .kpi-row {
+      display: grid;
+      gap: 10px;
+    }
+
+    .kpi-row-5 {
+      grid-template-columns: repeat(5, 1fr);
+    }
+
+    .kpi-row-4 {
+      grid-template-columns: repeat(4, 1fr);
+    }
+
+    .kpi {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 13px;
+      padding: 14px 16px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(10, 42, 94, .06);
+    }
+
+    .kpi::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      border-radius: 13px 13px 0 0;
+    }
+
+    .kpi.sky::before {
+      background: linear-gradient(90deg, var(--sky), var(--sky-deeper));
+    }
+
+    .kpi.green::before {
+      background: linear-gradient(90deg, #22c55e, #16a34a);
+    }
+
+    .kpi.yellow::before {
+      background: linear-gradient(90deg, #f59e0b, #b45309);
+    }
+
+    .kpi.red::before {
+      background: linear-gradient(90deg, #ef4444, #dc2626);
+    }
+
+    .kpi.blue::before {
+      background: linear-gradient(90deg, #3b82f6, #1d4ed8);
+    }
+
+    .kpi.purple::before {
+      background: linear-gradient(90deg, #a78bfa, #7c3aed);
+    }
+
+    .kpi.orange::before {
+      background: linear-gradient(90deg, #fb923c, #c2410c);
+    }
+
+    .kpi-label {
+      font-size: 9px;
+      color: var(--text2);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+    }
+
+    .kpi-value {
+      font-size: 24px;
+      font-weight: 800;
+      margin-top: 5px;
+      line-height: 1;
+    }
+
+    .kpi-sub {
+      font-size: 10px;
+      color: var(--text2);
+      margin-top: 5px;
+    }
+
+    .kpi-badge {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: 9px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 10px;
+    }
+
+    /* CARD */
+    .chart-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 13px;
+      padding: 16px 18px;
+      box-shadow: 0 2px 8px rgba(10, 42, 94, .06);
+    }
+
+    .chart-card-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--navy);
+      text-transform: uppercase;
+      letter-spacing: .5px;
+    }
+
+    .ctitle-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .cbadge {
+      background: var(--blue-bg);
+      color: var(--blue);
+      border-radius: 6px;
+      padding: 1px 7px;
+      font-size: 9px;
+      font-weight: 700;
+      margin-left: 4px;
+    }
+
+    /* LAYOUT ROWS */
+    .charts-row {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 12px;
+    }
+
+    .three-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 12px;
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1.8fr;
+      gap: 12px;
+    }
+
+    /* STATUS BADGES */
+    .bs {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 20px;
+      font-size: 9px;
+      font-weight: 700;
+    }
+
+    .s-on {
+      background: var(--green-bg);
+      color: var(--green);
+    }
+
+    .s-tr {
+      background: var(--blue-bg);
+      color: var(--blue);
+    }
+
+    .s-at {
+      background: var(--yellow-bg);
+      color: var(--yellow);
+    }
+
+    .s-pp {
+      background: var(--red-bg);
+      color: var(--red);
+    }
+
+    .s-bd {
+      background: #f3f4f6;
+      color: var(--gray);
+    }
+
+    /* UKER LIST */
+    .uker-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      max-height: 280px;
+      overflow-y: auto;
+    }
+
+    .uker-item {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .uker-row1 {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .uker-name {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .uker-pct {
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .ubar {
+      background: var(--border2);
+      border-radius: 3px;
+      height: 6px;
+    }
+
+    .ubar-fill {
+      height: 6px;
+      border-radius: 3px;
+      transition: width .4s;
+    }
+
+    .chips {
+      display: flex;
+      gap: 4px;
+      flex-wrap: wrap;
+      margin-top: 1px;
+    }
+
+    .chip {
+      font-size: 9px;
+      padding: 1px 6px;
+      border-radius: 8px;
+    }
+
+    .c-on {
+      background: var(--green-bg);
+      color: var(--green);
+    }
+
+    .c-at {
+      background: var(--yellow-bg);
+      color: var(--yellow);
+    }
+
+    .c-pp {
+      background: var(--red-bg);
+      color: var(--red);
+    }
+
+    /* TABLE */
+    .ufilter {
+      display: flex;
+      gap: 5px;
+      flex-wrap: wrap;
+      margin-bottom: 8px;
+    }
+
+    .ufbtn {
+      background: var(--bg);
+      border: 1.5px solid var(--border);
+      color: var(--text2);
+      padding: 2px 9px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 10px;
+      font-weight: 600;
+      transition: all .15s;
+    }
+
+    .ufbtn:hover {
+      border-color: var(--sky-dark);
+      color: var(--sky-deeper);
+    }
+
+    .ufbtn.active {
+      background: var(--sky);
+      border-color: var(--sky);
+      color: var(--navy);
+    }
+
+    .twrap {
+      max-height: 300px;
+      overflow-y: auto;
+      overflow-x: auto;
+    }
+
+    .dtable {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 10px;
+    }
+
+    .dtable th {
+      position: sticky;
+      top: 0;
+      background: #f0f6ff;
+      color: var(--text2);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .4px;
+      padding: 7px 9px;
+      text-align: left;
+      border-bottom: 2px solid var(--border);
+      white-space: nowrap;
+    }
+
+    .dtable td {
+      padding: 6px 9px;
+      border-bottom: 1px solid var(--border2);
+      vertical-align: middle;
+    }
+
+    .dtable tr:hover td {
+      background: #f7fbff;
+    }
+
+    .pcell {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .mbar {
+      background: var(--border2);
+      border-radius: 2px;
+      height: 5px;
+      width: 50px;
+      flex-shrink: 0;
+    }
+
+    .mbar-fill {
+      height: 5px;
+      border-radius: 2px;
+    }
+
+    /* TIPE BREAKDOWN */
+    .tipe-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .tipe-card {
+      background: var(--bg);
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .tipe-label {
+      font-size: 9px;
+      color: var(--text2);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+    }
+
+    .tipe-count {
+      font-size: 20px;
+      font-weight: 800;
+    }
+
+    .tipe-sub {
+      font-size: 9px;
+      color: var(--muted);
+    }
+
+    /* TOOLTIP */
+    .tt {
+      position: relative;
+      display: inline-block;
+      cursor: help;
+    }
+
+    .tt:hover .tt-content {
+      display: block;
+    }
+
+    .tt-content {
+      display: none;
+      position: absolute;
+      bottom: 120%;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #1a2a4a;
+      color: #fff;
+      padding: 6px 10px;
+      border-radius: 8px;
+      font-size: 10px;
+      white-space: nowrap;
+      z-index: 999;
+      min-width: 180px;
+      max-width: 300px;
+      white-space: normal;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, .3);
+    }
+
+    /* FOOTER */
+    .footer {
+      background: var(--white);
+      border-top: 1px solid var(--border);
+      padding: 8px 22px;
+      display: flex;
+      justify-content: space-between;
+      color: var(--muted);
+      font-size: 9px;
+      flex-shrink: 0;
+    }
+
+    ::-webkit-scrollbar {
+      width: 4px;
+      height: 4px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 2px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--sky);
+    }
+
+    /* ════ SEARCH PAGE ════ */
+    .search-input-wrap {
+      position: relative;
+      margin-bottom: 14px;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 11px 16px 11px 42px;
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      font-size: 13px;
+      font-family: inherit;
+      color: var(--text);
+      background: var(--white);
+      transition: border-color .15s;
+      outline: none;
+    }
+
+    .search-input:focus {
+      border-color: var(--sky-dark);
+    }
+
+    .search-icon-abs {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 15px;
+      color: var(--text2);
+      pointer-events: none;
+    }
+
+    .search-results {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+      gap: 10px;
+    }
+
+    .ick-card {
+      background: var(--card);
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 16px;
+      cursor: pointer;
+      transition: all .18s;
+      box-shadow: 0 2px 8px rgba(10, 42, 94, .05);
+      border-left: 4px solid var(--sky);
+    }
+
+    .ick-card:hover {
+      border-left-color: var(--sky-deeper);
+      box-shadow: 0 6px 20px rgba(10, 42, 94, .12);
+      transform: translateY(-1px);
+    }
+
+    .ick-card-name {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 8px;
+      line-height: 1.4;
+    }
+
+    .ick-card-meta {
+      display: flex;
+      gap: 5px;
+      flex-wrap: wrap;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .ick-card-uker {
+      font-size: 9px;
+      font-weight: 700;
+      background: var(--blue-bg);
+      color: var(--blue);
+      padding: 2px 7px;
+      border-radius: 8px;
+    }
+
+    .ick-card-tipe {
+      font-size: 9px;
+      color: var(--text2);
+      background: var(--bg);
+      padding: 2px 7px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+    }
+
+    .ick-card-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .search-empty {
+      text-align: center;
+      padding: 56px 20px;
+      color: var(--text2);
+      font-size: 13px;
+      grid-column: 1/-1;
+    }
+
+    /* ════ ICK DETAIL MODAL ════ */
+    .ick-modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(10, 42, 94, .5);
+      z-index: 1000;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 24px;
+      overflow-y: auto;
+    }
+
+    .ick-modal-overlay.open {
+      display: flex;
+    }
+
+    .ick-modal {
+      background: var(--white);
+      border-radius: 16px;
+      width: 100%;
+      max-width: 960px;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 24px 64px rgba(10, 42, 94, .35);
+      margin: auto;
+    }
+
+    .ick-modal-header {
+      background: linear-gradient(135deg, var(--navy), var(--navy2));
+      padding: 20px 24px;
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      flex-shrink: 0;
+      border-radius: 16px 16px 0 0;
+    }
+
+    .ick-modal-back {
+      background: rgba(255, 255, 255, .15);
+      border: none;
+      color: #fff;
+      width: 36px;
+      height: 36px;
+      border-radius: 9px;
+      cursor: pointer;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: background .15s;
+      margin-top: 2px;
+    }
+
+    .ick-modal-back:hover {
+      background: rgba(255, 255, 255, .28);
+    }
+
+    .ick-modal-title {
+      font-size: 14px;
+      font-weight: 800;
+      color: #fff;
+      line-height: 1.45;
+      flex: 1;
+    }
+
+    .ick-modal-sub {
+      font-size: 11px;
+      color: var(--sky);
+      margin-top: 5px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .ick-mbadge {
+      font-size: 9px;
+      font-weight: 700;
+      padding: 3px 9px;
+      border-radius: 20px;
+      background: rgba(135, 206, 235, .2);
+      color: var(--sky);
+    }
+
+    .ick-modal-body {
+      padding: 18px 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .ick-trend-wrap {
+      position: relative;
+      height: 210px;
+    }
+
+    .imt {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 10px;
+    }
+
+    .imt th {
+      position: sticky;
+      top: 0;
+      background: #f0f6ff;
+      color: var(--text2);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .4px;
+      padding: 7px 10px;
+      text-align: left;
+      border-bottom: 2px solid var(--border);
+      white-space: nowrap;
+    }
+
+    .imt td {
+      padding: 7px 10px;
+      border-bottom: 1px solid var(--border2);
+      vertical-align: middle;
+    }
+
+    .imt tr:hover td {
+      background: #f7fbff;
+    }
+
+    .imt-note {
+      max-width: 160px;
+      font-size: 9px;
+      color: var(--text2);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      cursor: default;
+    }
+  </style>
 </head>
+
 <body>
 
-<!-- ═══ WELCOME ═══ -->
-<div id="welcome-screen">
-  <div class="wcard">
-    <div class="wlogo">BI</div>
-    <h2>Dashboard ICK EKB 2026</h2>
-    <div class="wsub">KPwBI Provinsi Jawa Tengah</div>
-    <p>Pilih file Excel EKB dari komputer Anda.<br>
-       Data diproses langsung di browser — tidak dikirim ke server.</p>
-    <div id="saved-banner">
-      <span class="saved-icon">📂</span>
-      <div class="saved-text">
-        <strong>File tersimpan sebelumnya</strong>
-        <span id="saved-filename">—</span>
+  <!-- ═══ WELCOME ═══ -->
+  <div id="welcome-screen">
+    <div class="wcard">
+      <div class="wlogo">BI</div>
+      <h2>Dashboard ICK EKB 2026</h2>
+      <div class="wsub">KPwBI Provinsi Jawa Tengah</div>
+      <p>Pilih file Excel EKB dari komputer Anda.<br>
+        Data diproses langsung di browser — tidak dikirim ke server.</p>
+      <div id="saved-banner">
+        <span class="saved-icon">📂</span>
+        <div class="saved-text">
+          <strong>File tersimpan sebelumnya</strong>
+          <span id="saved-filename">—</span>
+        </div>
+        <button class="btn-load-saved" onclick="loadSavedFile()">Muat Ulang</button>
       </div>
-      <button class="btn-load-saved" onclick="loadSavedFile()">Muat Ulang</button>
+      <button class="btn-primary" onclick="pickFile()">📂 Pilih File Excel EKB</button>
+      <div class="divider">atau</div>
+      <label for="file-input">
+        <div class="btn-secondary" onclick="document.getElementById('file-input').click()">Upload File (Firefox/Safari)
+        </div>
+      </label>
+      <input type="file" id="file-input" accept=".xlsx,.xls" onchange="handleFileInput(event)">
+      <p class="hint">💡 Gunakan tombol utama di Chrome/Edge agar file tersimpan otomatis.</p>
     </div>
-    <button class="btn-primary" onclick="pickFile()">📂 Pilih File Excel EKB</button>
-    <div class="divider">atau</div>
-    <label for="file-input">
-      <div class="btn-secondary" onclick="document.getElementById('file-input').click()">Upload File (Firefox/Safari)</div>
-    </label>
-    <input type="file" id="file-input" accept=".xlsx,.xls" onchange="handleFileInput(event)">
-    <p class="hint">💡 Gunakan tombol utama di Chrome/Edge agar file tersimpan otomatis.</p>
   </div>
-</div>
 
-<!-- ═══ LOADING ═══ -->
-<div id="loading-screen">
-  <div class="spinner"></div>
-  <div class="loading-msg" id="loading-msg">Membaca file Excel…</div>
-</div>
+  <!-- ═══ LOADING ═══ -->
+  <div id="loading-screen">
+    <div class="spinner"></div>
+    <div class="loading-msg" id="loading-msg">Membaca file Excel…</div>
+  </div>
 
-<!-- ═══ DASHBOARD ═══ -->
-<div id="dashboard">
-<div class="dash-wrap">
+  <!-- ═══ DASHBOARD ═══ -->
+  <div id="dashboard">
+    <div class="dash-wrap">
 
-  <!-- SIDEBAR -->
-  <aside class="sidebar">
-    <div class="sb-logo">
-      <div class="sb-logo-icon">BI</div>
-      <div class="sb-logo-text">Dashboard EKB 2026<span>KPwBI Jawa Tengah</span></div>
-    </div>
-    <!-- Status label -->
-    <div id="sb-status-badge" class="sb-status-badge" style="display:none"></div>
+      <!-- SIDEBAR -->
+      <aside class="sidebar">
+        <div class="sb-logo">
+          <div class="sb-logo-icon">BI</div>
+          <div class="sb-logo-text">Dashboard EKB 2026<span>KPwBI Jawa Tengah</span></div>
+        </div>
+        <!-- Status label -->
+        <div id="sb-status-badge" class="sb-status-badge" style="display:none"></div>
 
-    <div class="sb-section">
-      <div class="sb-section-label">Navigasi</div>
-      <div class="sb-item active" id="sb-overview" onclick="switchTab('overview',this)">
-        <div class="sb-dot"></div> Overview
-      </div>
-      <div class="sb-item" id="sb-uker" onclick="switchTab('uker',this)">
-        <div class="sb-dot"></div> Per Uker
-      </div>
-      <div class="sb-item" id="sb-detail" onclick="switchTab('detail',this)">
-        <div class="sb-dot"></div> Detail ICK
-      </div>
-      <div class="sb-item" id="sb-narasi" onclick="switchTab('narasi',this)">
-        <div class="sb-dot"></div> Skala &amp; Biner
-      </div>
-      <div class="sb-item" id="sb-search" onclick="switchTab('search',this)">
-        <div class="sb-dot"></div> 🔍 Cari ICK
-      </div>
-    </div>
-
-    <div class="sb-divider"></div>
-
-    <div class="sb-section">
-      <div class="sb-section-label">Unit Kerja</div>
-      <div id="sb-uker-list"></div>
-    </div>
-
-    <div class="sb-footer">
-      Sumber: Excel EKB KPwBI Jawa Tengah 2026<br>
-      Diproses lokal — data tidak dikirim ke server
-    </div>
-  </aside>
-
-  <!-- MAIN -->
-  <div class="main-area">
-    <div class="topbar">
-      <div>
-        <div class="topbar-title">Monitoring ICK – EKB 2026</div>
-        <div class="topbar-sub">Kantor Perwakilan Bank Indonesia – Provinsi Jawa Tengah</div>
-      </div>
-      <div class="topbar-right">
-        <span class="tb-badge" id="badge-period">—</span>
-        <span class="tb-file" id="file-badge" title="">—</span>
-        <button class="tb-btn" id="btn-reload" onclick="reloadFile()">↻ Reload</button>
-        <button class="tb-btn" onclick="backToWelcome()" style="color:var(--text2)">Ganti File</button>
-      </div>
-    </div>
-
-    <!-- TAB NAV -->
-    <div class="tab-nav">
-      <button class="tab-nav-btn active" id="tnbtn-overview" onclick="switchTab('overview')">Overview</button>
-      <button class="tab-nav-btn" id="tnbtn-uker" onclick="switchTab('uker')">Per Uker</button>
-      <button class="tab-nav-btn" id="tnbtn-detail" onclick="switchTab('detail')">Detail ICK</button>
-      <button class="tab-nav-btn" id="tnbtn-narasi" onclick="switchTab('narasi')">Skala &amp; Biner</button>
-      <button class="tab-nav-btn" id="tnbtn-search" onclick="switchTab('search')">🔍 Cari ICK</button>
-      <div class="tab-nav-right">
-        <span class="ctrl-label">Bulan:</span>
-        <div class="btn-group" id="month-btns"></div>
-        <span class="last-upd" id="last-upd" style="margin-left:10px"></span>
-      </div>
-    </div>
-
-    <div class="content">
-
-      <!-- ════ OVERVIEW ════ -->
-      <div class="tab-page active" id="page-overview">
-
-        <!-- KPI Row 1: KPI Utama -->
-        <div class="kpi-row kpi-row-5">
-          <div class="kpi sky">
-            <div class="kpi-label">Total ICK Aktif</div>
-            <div class="kpi-value" id="kpi-total" style="color:var(--sky-deeper)">—</div>
-            <div class="kpi-sub">dari <span id="kpi-nuker">—</span> Unit Kerja</div>
+        <div class="sb-section">
+          <div class="sb-section-label">Navigasi</div>
+          <div class="sb-item active" id="sb-overview" onclick="switchTab('overview',this)">
+            <div class="sb-dot"></div> Overview
           </div>
-          <div class="kpi green">
-            <div class="kpi-label">Avg Progres (Kuantitatif)</div>
-            <div class="kpi-value" id="kpi-avg-kuan" style="color:var(--green)">—</div>
-            <div class="kpi-sub">Ekspektasi: <span id="kpi-eksp">—</span></div>
+          <div class="sb-item" id="sb-uker" onclick="switchTab('uker',this)">
+            <div class="sb-dot"></div> Per Uker
           </div>
-          <div class="kpi" id="kpi-gap-card">
-            <div class="kpi-label">Gap vs Ekspektasi</div>
-            <div class="kpi-value" id="kpi-gap">—</div>
-            <div class="kpi-sub" id="kpi-gap-desc">—</div>
+          <div class="sb-item" id="sb-detail" onclick="switchTab('detail',this)">
+            <div class="sb-dot"></div> Detail ICK
           </div>
-          <div class="kpi blue">
-            <div class="kpi-label">Delta MoM</div>
-            <div class="kpi-value" id="kpi-mom" style="color:var(--blue)">—</div>
-            <div class="kpi-sub">vs bulan lalu</div>
+          <div class="sb-item" id="sb-narasi" onclick="switchTab('narasi',this)">
+            <div class="sb-dot"></div> Skala &amp; Biner
           </div>
-          <div class="kpi purple">
-            <div class="kpi-label">Label Status</div>
-            <div class="kpi-value" id="kpi-label" style="font-size:16px;margin-top:8px">—</div>
-            <div class="kpi-sub" id="kpi-pct-on">—</div>
+          <div class="sb-item" id="sb-search" onclick="switchTab('search',this)">
+            <div class="sb-dot"></div> 🔍 Cari ICK
           </div>
         </div>
 
-        <!-- KPI Row 2: Status + Prognosa -->
-        <div class="kpi-row kpi-row-4">
-          <div class="kpi green">
-            <div class="kpi-label">On Track + Tercapai</div>
-            <div class="kpi-value" id="kpi-on" style="color:var(--green)">—</div>
-            <div class="kpi-sub" id="kpi-on-pct">—</div>
+        <div class="sb-divider"></div>
+
+        <div class="sb-section">
+          <div class="sb-section-label">Unit Kerja</div>
+          <div id="sb-uker-list"></div>
+        </div>
+
+        <div class="sb-footer">
+          Sumber: Excel EKB KPwBI Jawa Tengah 2026<br>
+          Diproses lokal — data tidak dikirim ke server
+        </div>
+      </aside>
+
+      <!-- MAIN -->
+      <div class="main-area">
+        <div class="topbar">
+          <div>
+            <div class="topbar-title">Monitoring ICK – EKB 2026</div>
+            <div class="topbar-sub">Kantor Perwakilan Bank Indonesia – Provinsi Jawa Tengah</div>
           </div>
-          <div class="kpi orange">
-            <div class="kpi-label">Butuh Tindakan</div>
-            <div class="kpi-value" id="kpi-butuh" style="color:var(--orange)">—</div>
-            <div class="kpi-sub">At Risk: <span id="kpi-at">—</span> | Perlu Perhatian: <span id="kpi-pp">—</span></div>
-          </div>
-          <div class="kpi sky">
-            <div class="kpi-label">Prognosa Tercapai</div>
-            <div class="kpi-value" id="kpi-prognosa-ok" style="color:var(--sky-deeper)">—</div>
-            <div class="kpi-sub">dari <span id="kpi-prognosa-total">—</span> ICK berprognosa</div>
-          </div>
-          <div class="kpi sky">
-            <div class="kpi-label">Avg Prognosa Akhir Tahun</div>
-            <div class="kpi-value" id="kpi-avg-prognosa" style="color:var(--sky-deeper)">—</div>
-            <div class="kpi-sub">estimasi capaian akhir 2026</div>
+          <div class="topbar-right">
+            <span class="tb-badge" id="badge-period">—</span>
+            <span class="tb-file" id="file-badge" title="">—</span>
+            <button class="tb-btn" id="btn-reload" onclick="reloadFile()">↻ Reload</button>
+            <button class="tb-btn" onclick="backToWelcome()" style="color:var(--text2)">Ganti File</button>
           </div>
         </div>
 
-        <!-- Charts Row -->
-        <div class="charts-row">
-          <div class="chart-card">
-            <div class="chart-card-title">
-              <div class="ctitle-dot" style="background:var(--sky-dark)"></div>
-              Tren Progres Bulanan (Kuantitatif) vs Ekspektasi
-              <span style="font-size:9px;color:var(--text2);font-weight:400;text-transform:none;letter-spacing:0;margin-left:4px">hanya ICK Akumulatif</span>
-            </div>
-            <div style="position:relative;height:175px"><canvas id="trendChart"></canvas></div>
-          </div>
-          <div class="chart-card">
-            <div class="chart-card-title">
-              <div class="ctitle-dot" style="background:var(--sky)"></div>
-              Distribusi Status ICK
-            </div>
-            <div style="display:flex;align-items:center;justify-content:center;height:175px">
-              <canvas id="donutChart" style="max-width:175px;max-height:175px"></canvas>
-            </div>
+        <!-- TAB NAV -->
+        <div class="tab-nav">
+          <button class="tab-nav-btn active" id="tnbtn-overview" onclick="switchTab('overview')">Overview</button>
+          <button class="tab-nav-btn" id="tnbtn-uker" onclick="switchTab('uker')">Per Uker</button>
+          <button class="tab-nav-btn" id="tnbtn-detail" onclick="switchTab('detail')">Detail ICK</button>
+          <button class="tab-nav-btn" id="tnbtn-narasi" onclick="switchTab('narasi')">Skala &amp; Biner</button>
+          <button class="tab-nav-btn" id="tnbtn-search" onclick="switchTab('search')">🔍 Cari ICK</button>
+          <div class="tab-nav-right">
+            <span class="ctrl-label">Bulan:</span>
+            <div class="btn-group" id="month-btns"></div>
+            <span class="last-upd" id="last-upd" style="margin-left:10px"></span>
           </div>
         </div>
 
-        <!-- Bottom Row -->
-        <div class="two-col">
-          <div class="chart-card">
-            <div class="chart-card-title">
-              <div class="ctitle-dot" style="background:var(--green)"></div>
-              Progres per Unit Kerja
-              <span class="cbadge" id="uker-badge"></span>
-            </div>
-            <div class="uker-list" id="uker-list"></div>
-          </div>
-          <div class="chart-card">
-            <div class="chart-card-title">
-              <div class="ctitle-dot" style="background:var(--sky-dark)"></div>
-              Detail ICK – Overview
-              <span class="cbadge" id="detail-count"></span>
-            </div>
-            <div class="ufilter" id="ufilter-overview"></div>
-            <div class="twrap">
-              <table class="dtable">
-                <thead><tr>
-                  <th>ICK / Indikator</th><th>Uker</th><th>Tipe</th><th>Progres</th><th>Pct/Target</th><th>Status</th>
-                </tr></thead>
-                <tbody id="detail-tbody"></tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      </div><!-- /overview -->
+        <div class="content">
 
-      <!-- ════ PER UKER ════ -->
-      <div class="tab-page" id="page-uker">
-        <div class="chart-card">
-          <div class="chart-card-title">
+          <!-- ════ OVERVIEW ════ -->
+          <div class="tab-page active" id="page-overview">
+
+            <!-- KPI Row 1: KPI Utama -->
+            <div class="kpi-row kpi-row-5">
+              <div class="kpi sky">
+                <div class="kpi-label">Total ICK Aktif</div>
+                <div class="kpi-value" id="kpi-total" style="color:var(--sky-deeper)">—</div>
+                <div class="kpi-sub">dari <span id="kpi-nuker">—</span> Unit Kerja</div>
+              </div>
+              <div class="kpi green">
+                <div class="kpi-label">Avg Progres (Kuantitatif)</div>
+                <div class="kpi-value" id="kpi-avg-kuan" style="color:var(--green)">—</div>
+                <div class="kpi-sub">Ekspektasi: <span id="kpi-eksp">—</span></div>
+              </div>
+              <div class="kpi" id="kpi-gap-card">
+                <div class="kpi-label">Gap vs Ekspektasi</div>
+                <div class="kpi-value" id="kpi-gap">—</div>
+                <div class="kpi-sub" id="kpi-gap-desc">—</div>
+              </div>
+              <div class="kpi blue">
+                <div class="kpi-label">Delta MoM</div>
+                <div class="kpi-value" id="kpi-mom" style="color:var(--blue)">—</div>
+                <div class="kpi-sub">vs bulan lalu</div>
+              </div>
+              <div class="kpi purple">
+                <div class="kpi-label">Label Status</div>
+                <div class="kpi-value" id="kpi-label" style="font-size:16px;margin-top:8px">—</div>
+                <div class="kpi-sub" id="kpi-pct-on">—</div>
+              </div>
+            </div>
+
+            <!-- KPI Row 2: Status + Prognosa -->
+            <div class="kpi-row kpi-row-4">
+              <div class="kpi green">
+                <div class="kpi-label">On Track + Tercapai</div>
+                <div class="kpi-value" id="kpi-on" style="color:var(--green)">—</div>
+                <div class="kpi-sub" id="kpi-on-pct">—</div>
+              </div>
+              <div class="kpi orange">
+                <div class="kpi-label">Butuh Tindakan</div>
+                <div class="kpi-value" id="kpi-butuh" style="color:var(--orange)">—</div>
+                <div class="kpi-sub">At Risk: <span id="kpi-at">—</span> | Perlu Perhatian: <span id="kpi-pp">—</span>
+                </div>
+              </div>
+              <div class="kpi sky">
+                <div class="kpi-label">Prognosa Tercapai</div>
+                <div class="kpi-value" id="kpi-prognosa-ok" style="color:var(--sky-deeper)">—</div>
+                <div class="kpi-sub">dari <span id="kpi-prognosa-total">—</span> ICK berprognosa</div>
+              </div>
+              <div class="kpi sky">
+                <div class="kpi-label">Avg Prognosa Akhir Tahun</div>
+                <div class="kpi-value" id="kpi-avg-prognosa" style="color:var(--sky-deeper)">—</div>
+                <div class="kpi-sub">estimasi capaian akhir 2026</div>
+              </div>
+            </div>
+
+            <!-- Charts Row -->
+            <div class="charts-row">
+              <div class="chart-card">
+                <div class="chart-card-title">
+                  <div class="ctitle-dot" style="background:var(--sky-dark)"></div>
+                  Tren Progres Bulanan (Kuantitatif) vs Ekspektasi
+                  <span
+                    style="font-size:9px;color:var(--text2);font-weight:400;text-transform:none;letter-spacing:0;margin-left:4px">hanya
+                    ICK Akumulatif</span>
+                </div>
+                <div style="position:relative;height:175px"><canvas id="trendChart"></canvas></div>
+              </div>
+              <div class="chart-card">
+                <div class="chart-card-title">
+                  <div class="ctitle-dot" style="background:var(--sky)"></div>
+                  Distribusi Status ICK
+                </div>
+                <div style="display:flex;align-items:center;justify-content:center;height:175px">
+                  <canvas id="donutChart" style="max-width:175px;max-height:175px"></canvas>
+                </div>
+              </div>
+            </div>
+
+            <!-- Bottom Row -->
+            <div class="two-col">
+              <div class="chart-card">
+                <div class="chart-card-title">
+                  <div class="ctitle-dot" style="background:var(--green)"></div>
+                  Progres per Unit Kerja
+                  <span class="cbadge" id="uker-badge"></span>
+                </div>
+                <div class="uker-list" id="uker-list"></div>
+              </div>
+              <div class="chart-card">
+                <div class="chart-card-title">
+                  <div class="ctitle-dot" style="background:var(--sky-dark)"></div>
+                  Detail ICK – Overview
+                  <span class="cbadge" id="detail-count"></span>
+                </div>
+                <div class="ufilter" id="ufilter-overview"></div>
+                <div class="twrap">
+                  <table class="dtable">
+                    <thead>
+                      <tr>
+                        <th>ICK / Indikator</th>
+                        <th>Uker</th>
+                        <th>Tipe</th>
+                        <th>Progres</th>
+                        <th>Pct/Target</th>
+                        <th>Status</th>
+                      </tr>
+                    </thead>
+                    <tbody id="detail-tbody"></tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div><!-- /overview -->
+
+          <!-- ════ PER UKER ════ -->
+          <div class="tab-page" id="page-uker">
+            <div class="chart-card">
+              <div class="chart-card-title">
+                <div class="ctitle-dot" style="background:var(--sky-dark)"></div>
+                Progres Kuantitatif per Unit Kerja — <span id="uker-month-label">—</span>
+                <span
+                  style="font-size:9px;color:var(--text2);font-weight:400;text-transform:none;letter-spacing:0;margin-left:4px">garis
+                  merah = ekspektasi</span>
+              </div>
+              <div style="position:relative;height:300px"><canvas id="ukerBarChart"></canvas></div>
+            </div>
+            <div class="two-col">
+              <div class="chart-card">
+                <div class="chart-card-title">
+                  <div class="ctitle-dot" style="background:var(--green)"></div>
+                  Distribusi Status per Uker
+                </div>
+                <div style="position:relative;height:240px"><canvas id="ukerStackChart"></canvas></div>
+              </div>
+              <div class="chart-card">
+                <div class="chart-card-title">
+                  <div class="ctitle-dot" style="background:var(--purple)"></div>
+                  Breakdown per Tipe Pengukuran
+                </div>
+                <div id="tipe-breakdown-uker" style="display:flex;flex-direction:column;gap:8px;margin-top:4px"></div>
+              </div>
+            </div>
+          </div><!-- /uker -->
+
+          <!-- ════ DETAIL ICK ════ -->
+          <div class="tab-page" id="page-detail">
+            <div class="chart-card">
+              <div class="chart-card-title">
+                <div class="ctitle-dot" style="background:var(--sky-dark)"></div>
+                Detail ICK — Kuantitatif (Valid Tren Chart)
+                <span class="cbadge" id="detail-tab-count"></span>
+              </div>
+              <div class="ufilter" id="ufilter-detail"></div>
+              <div class="twrap" style="max-height:calc(100vh - 280px)">
+                <table class="dtable">
+                  <thead>
+                    <tr>
+                      <th>ICK / Indikator</th>
+                      <th>Uker</th>
+                      <th>Tipe</th>
+                      <th>Progres</th>
+                      <th>Ekspektasi</th>
+                      <th>Gap</th>
+                      <th>Realisasi</th>
+                      <th>Target</th>
+                      <th>Pct/Target</th>
+                      <th>Prognosa</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody id="detail-tab-tbody"></tbody>
+                </table>
+              </div>
+            </div>
+          </div><!-- /detail -->
+
+          <!-- ════ SKALA & BINER ════ -->
+          <div class="tab-page" id="page-narasi">
+            <div class="kpi-row kpi-row-4">
+              <div class="kpi purple">
+                <div class="kpi-label">Skala Penilaian</div>
+                <div class="kpi-value" id="kpi-n-skala" style="color:var(--purple)">—</div>
+                <div class="kpi-sub">Avg Nilai: <span id="kpi-avg-skala">—</span></div>
+              </div>
+              <div class="kpi blue">
+                <div class="kpi-label">Biner / Level Tertentu</div>
+                <div class="kpi-value" id="kpi-n-biner" style="color:var(--blue)">—</div>
+                <div class="kpi-sub">Tercapai: <span id="kpi-pct-biner">—</span></div>
+              </div>
+              <div class="kpi orange">
+                <div class="kpi-label">Target Fleksibel (≥/≤/±)</div>
+                <div class="kpi-value" id="kpi-n-fleksibel" style="color:var(--orange)">—</div>
+                <div class="kpi-sub">ICK dengan target range</div>
+              </div>
+              <div class="kpi sky">
+                <div class="kpi-label">Perlu Narasi Detail</div>
+                <div class="kpi-value" id="kpi-n-narasi" style="color:var(--sky-deeper)">—</div>
+                <div class="kpi-sub">tidak bisa diukur linear</div>
+              </div>
+            </div>
+            <div class="chart-card">
+              <div class="chart-card-title">
+                <div class="ctitle-dot" style="background:var(--purple)"></div>
+                ICK Skala Penilaian &amp; Biner / Level Tertentu
+                <span class="cbadge" id="narasi-count"></span>
+              </div>
+              <div class="ufilter" id="ufilter-narasi"></div>
+              <div class="twrap" style="max-height:calc(100vh - 280px)">
+                <table class="dtable">
+                  <thead>
+                    <tr>
+                      <th>ICK / Indikator</th>
+                      <th>Uker</th>
+                      <th>Tipe</th>
+                      <th>Target</th>
+                      <th>Fleksibel</th>
+                      <th>Realisasi</th>
+                      <th>Penjelasan</th>
+                      <th>Keterangan</th>
+                      <th>Action</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody id="narasi-tbody"></tbody>
+                </table>
+              </div>
+            </div>
+          </div><!-- /narasi -->
+
+          <!-- ════ CARI ICK ════ -->
+          <div class="tab-page" id="page-search">
+            <div class="chart-card">
+              <div class="chart-card-title">
+                <div class="ctitle-dot" style="background:var(--sky-dark)"></div>
+                Cari ICK
+                <span class="cbadge" id="search-count"></span>
+              </div>
+              <div class="search-input-wrap">
+                <span class="search-icon-abs">🔍</span>
+                <input class="search-input" id="search-input" type="text"
+                  placeholder="Ketik nama ICK, kode, atau unit kerja…" oninput="renderSearchPage(this.value)">
+              </div>
+              <div class="search-results" id="search-results"></div>
+            </div>
+          </div><!-- /search -->
+
+        </div><!-- /content -->
+        <div class="footer">
+          <span>Sumber: Excel EKB KPwBI Provinsi Jawa Tengah 2026 · Diproses lokal di browser</span>
+          <span id="footer-time"></span>
+        </div>
+      </div><!-- /main-area -->
+    </div><!-- /dash-wrap -->
+  </div><!-- /dashboard -->
+
+  <!-- ════ ICK DETAIL MODAL ════ -->
+  <div class="ick-modal-overlay" id="ick-modal-overlay" onclick="closeICKDetailOverlay(event)">
+    <div class="ick-modal" id="ick-modal">
+      <div class="ick-modal-header">
+        <button class="ick-modal-back" onclick="closeICKDetail()">←</button>
+        <div style="flex:1">
+          <div class="ick-modal-title" id="ick-modal-title">—</div>
+          <div class="ick-modal-sub" id="ick-modal-sub">
+            <span id="ick-modal-uker">—</span>
+            <span id="ick-modal-sifat">—</span>
+          </div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px" id="ick-modal-badges"></div>
+        </div>
+      </div>
+      <div class="ick-modal-body">
+        <div class="chart-card" style="padding:14px 16px">
+          <div class="chart-card-title" style="margin-bottom:10px">
             <div class="ctitle-dot" style="background:var(--sky-dark)"></div>
-            Progres Kuantitatif per Unit Kerja — <span id="uker-month-label">—</span>
-            <span style="font-size:9px;color:var(--text2);font-weight:400;text-transform:none;letter-spacing:0;margin-left:4px">garis merah = ekspektasi</span>
+            Tren Progres vs Ekspektasi — Bulanan
           </div>
-          <div style="position:relative;height:300px"><canvas id="ukerBarChart"></canvas></div>
+          <div class="ick-trend-wrap"><canvas id="ickDetailChart"></canvas></div>
         </div>
-        <div class="two-col">
-          <div class="chart-card">
-            <div class="chart-card-title">
-              <div class="ctitle-dot" style="background:var(--green)"></div>
-              Distribusi Status per Uker
-            </div>
-            <div style="position:relative;height:240px"><canvas id="ukerStackChart"></canvas></div>
+        <div class="chart-card" style="padding:14px 16px">
+          <div class="chart-card-title" style="margin-bottom:10px">
+            <div class="ctitle-dot" style="background:var(--green)"></div>
+            Data per Bulan
           </div>
-          <div class="chart-card">
-            <div class="chart-card-title">
-              <div class="ctitle-dot" style="background:var(--purple)"></div>
-              Breakdown per Tipe Pengukuran
-            </div>
-            <div id="tipe-breakdown-uker" style="display:flex;flex-direction:column;gap:8px;margin-top:4px"></div>
-          </div>
-        </div>
-      </div><!-- /uker -->
-
-      <!-- ════ DETAIL ICK ════ -->
-      <div class="tab-page" id="page-detail">
-        <div class="chart-card">
-          <div class="chart-card-title">
-            <div class="ctitle-dot" style="background:var(--sky-dark)"></div>
-            Detail ICK — Kuantitatif (Valid Tren Chart)
-            <span class="cbadge" id="detail-tab-count"></span>
-          </div>
-          <div class="ufilter" id="ufilter-detail"></div>
-          <div class="twrap" style="max-height:calc(100vh - 280px)">
-            <table class="dtable">
-              <thead><tr>
-                <th>ICK / Indikator</th><th>Uker</th><th>Tipe</th>
-                <th>Progres</th><th>Ekspektasi</th><th>Gap</th>
-                <th>Realisasi</th><th>Target</th><th>Pct/Target</th>
-                <th>Prognosa</th><th>Status</th>
-              </tr></thead>
-              <tbody id="detail-tab-tbody"></tbody>
+          <div class="twrap" style="max-height:300px">
+            <table class="imt">
+              <thead>
+                <tr>
+                  <th>Bulan</th>
+                  <th>Progres</th>
+                  <th>Ekspektasi</th>
+                  <th>Gap</th>
+                  <th>Realisasi</th>
+                  <th>Pct/Target</th>
+                  <th>Prognosa</th>
+                  <th>Status</th>
+                  <th style="width:32px"></th>
+                </tr>
+              </thead>
+              <tbody id="ick-month-tbody"></tbody>
             </table>
           </div>
         </div>
-      </div><!-- /detail -->
-
-      <!-- ════ SKALA & BINER ════ -->
-      <div class="tab-page" id="page-narasi">
-        <div class="kpi-row kpi-row-4">
-          <div class="kpi purple">
-            <div class="kpi-label">Skala Penilaian</div>
-            <div class="kpi-value" id="kpi-n-skala" style="color:var(--purple)">—</div>
-            <div class="kpi-sub">Avg Nilai: <span id="kpi-avg-skala">—</span></div>
-          </div>
-          <div class="kpi blue">
-            <div class="kpi-label">Biner / Level Tertentu</div>
-            <div class="kpi-value" id="kpi-n-biner" style="color:var(--blue)">—</div>
-            <div class="kpi-sub">Tercapai: <span id="kpi-pct-biner">—</span></div>
-          </div>
-          <div class="kpi orange">
-            <div class="kpi-label">Target Fleksibel (≥/≤/±)</div>
-            <div class="kpi-value" id="kpi-n-fleksibel" style="color:var(--orange)">—</div>
-            <div class="kpi-sub">ICK dengan target range</div>
-          </div>
-          <div class="kpi sky">
-            <div class="kpi-label">Perlu Narasi Detail</div>
-            <div class="kpi-value" id="kpi-n-narasi" style="color:var(--sky-deeper)">—</div>
-            <div class="kpi-sub">tidak bisa diukur linear</div>
-          </div>
-        </div>
-        <div class="chart-card">
-          <div class="chart-card-title">
-            <div class="ctitle-dot" style="background:var(--purple)"></div>
-            ICK Skala Penilaian &amp; Biner / Level Tertentu
-            <span class="cbadge" id="narasi-count"></span>
-          </div>
-          <div class="ufilter" id="ufilter-narasi"></div>
-          <div class="twrap" style="max-height:calc(100vh - 280px)">
-            <table class="dtable">
-              <thead><tr>
-                <th>ICK / Indikator</th><th>Uker</th><th>Tipe</th>
-                <th>Target</th><th>Fleksibel</th>
-                <th>Realisasi</th><th>Penjelasan</th><th>Keterangan</th><th>Action</th>
-                <th>Status</th>
-              </tr></thead>
-              <tbody id="narasi-tbody"></tbody>
-            </table>
-          </div>
-        </div>
-      </div><!-- /narasi -->
-
-      <!-- ════ CARI ICK ════ -->
-      <div class="tab-page" id="page-search">
-        <div class="chart-card">
-          <div class="chart-card-title">
-            <div class="ctitle-dot" style="background:var(--sky-dark)"></div>
-            Cari ICK
-            <span class="cbadge" id="search-count"></span>
-          </div>
-          <div class="search-input-wrap">
-            <span class="search-icon-abs">🔍</span>
-            <input class="search-input" id="search-input" type="text"
-              placeholder="Ketik nama ICK, kode, atau unit kerja…"
-              oninput="renderSearchPage(this.value)">
-          </div>
-          <div class="search-results" id="search-results"></div>
-        </div>
-      </div><!-- /search -->
-
-    </div><!-- /content -->
-    <div class="footer">
-      <span>Sumber: Excel EKB KPwBI Provinsi Jawa Tengah 2026 · Diproses lokal di browser</span>
-      <span id="footer-time"></span>
-    </div>
-  </div><!-- /main-area -->
-</div><!-- /dash-wrap -->
-</div><!-- /dashboard -->
-
-<!-- ════ ICK DETAIL MODAL ════ -->
-<div class="ick-modal-overlay" id="ick-modal-overlay" onclick="closeICKDetailOverlay(event)">
-  <div class="ick-modal" id="ick-modal">
-    <div class="ick-modal-header">
-      <button class="ick-modal-back" onclick="closeICKDetail()">←</button>
-      <div style="flex:1">
-        <div class="ick-modal-title" id="ick-modal-title">—</div>
-        <div class="ick-modal-sub" id="ick-modal-sub">
-          <span id="ick-modal-uker">—</span>
-          <span id="ick-modal-sifat">—</span>
-        </div>
-        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px" id="ick-modal-badges"></div>
-      </div>
-    </div>
-    <div class="ick-modal-body">
-      <div class="chart-card" style="padding:14px 16px">
-        <div class="chart-card-title" style="margin-bottom:10px">
-          <div class="ctitle-dot" style="background:var(--sky-dark)"></div>
-          Tren Progres vs Ekspektasi — Bulanan
-        </div>
-        <div class="ick-trend-wrap"><canvas id="ickDetailChart"></canvas></div>
-      </div>
-      <div class="chart-card" style="padding:14px 16px">
-        <div class="chart-card-title" style="margin-bottom:10px">
-          <div class="ctitle-dot" style="background:var(--green)"></div>
-          Data per Bulan
-        </div>
-        <div class="twrap" style="max-height:300px">
-          <table class="imt">
-            <thead><tr>
-              <th>Bulan</th><th>Progres</th><th>Ekspektasi</th><th>Gap</th>
-              <th>Realisasi</th><th>Pct/Target</th><th>Prognosa</th><th>Status</th><th style="width:32px"></th>
-            </tr></thead>
-            <tbody id="ick-month-tbody"></tbody>
-          </table>
-        </div>
       </div>
     </div>
   </div>
-</div>
 
-<script>
-/* ══════════════════════════════════════════════
-   CONSTANTS
-══════════════════════════════════════════════ */
-const SHEET="EKB Jateng";
-const MN=["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"];
-const ML=["Jan","Feb","Mar","Apr","Mei","Jun","Jul","Agu","Sep","Okt","Nov","Des"];
-const SC={'On Track':'#22c55e','Tercapai':'#3b82f6','At Risk':'#f59e0b','Perlu Perhatian':'#ef4444','Belum Ada Data':'#9ca3af'};
-const TIPE_COLOR={'Skala Penilaian':'#7c3aed','Biner / Level Tertentu':'#2563eb','Kuantitatif - Hitungan':'#16a34a','Kuantitatif - Volume':'#c2410c','Lainnya':'#9ca3af'};
+  <script>
+    /* ══════════════════════════════════════════════
+       CONSTANTS
+    ══════════════════════════════════════════════ */
+    const SHEET = "EKB Jateng";
+    const MN = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+    const ML = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des"];
+    const SC = { 'On Track': '#22c55e', 'Tercapai': '#3b82f6', 'At Risk': '#f59e0b', 'Perlu Perhatian': '#ef4444', 'Belum Ada Data': '#9ca3af' };
+    const TIPE_COLOR = { 'Skala Penilaian': '#7c3aed', 'Biner / Level Tertentu': '#2563eb', 'Kuantitatif - Hitungan': '#16a34a', 'Kuantitatif - Volume': '#c2410c', 'Lainnya': '#9ca3af' };
 
-let fileHandle=null, currentFileName='', processedData=null;
-let currentMonth=null, currentUker='ALL', currentTab='overview';
-let trendChart, donutChart, ukerBarChart, ukerStackChart, ickDetailChart=null;
+    let fileHandle = null, currentFileName = '', processedData = null;
+    let currentMonth = null, currentUker = 'ALL', currentTab = 'overview';
+    let trendChart, donutChart, ukerBarChart, ukerStackChart, ickDetailChart = null;
 
-/* IndexedDB */
-const DB_NAME='ekb_dash', DB_STORE='handles', DB_KEY='excel_handle';
-function openDB(){
-  return new Promise((res,rej)=>{
-    const req=indexedDB.open(DB_NAME,1);
-    req.onupgradeneeded=e=>e.target.result.createObjectStore(DB_STORE);
-    req.onsuccess=e=>res(e.target.result);
-    req.onerror=e=>rej(e);
-  });
-}
-async function saveHandle(h){try{const db=await openDB();db.transaction(DB_STORE,'readwrite').objectStore(DB_STORE).put(h,DB_KEY);}catch(e){}}
-async function loadHandle(){
-  try{const db=await openDB();return new Promise((res,rej)=>{const tx=db.transaction(DB_STORE,'readonly');const req=tx.objectStore(DB_STORE).get(DB_KEY);req.onsuccess=e=>res(e.target.result);req.onerror=rej;});}
-  catch(e){return null;}
-}
-
-/* ══════════════════════════════════════════════
-   SCREENS
-══════════════════════════════════════════════ */
-window.addEventListener('DOMContentLoaded', async ()=>{
-  const saved=await loadHandle();
-  if(saved){
-    fileHandle=saved; currentFileName=saved.name;
-    const el=document.getElementById('saved-banner');
-    el.style.display='flex';
-    document.getElementById('saved-filename').textContent=saved.name;
-  }
-});
-
-function show(id){
-  ['welcome-screen','loading-screen','dashboard'].forEach(s=>{
-    const el=document.getElementById(s);
-    el.style.display=(s===id)?(s==='dashboard'?'block':'flex'):'none';
-  });
-}
-function backToWelcome(){show('welcome-screen');}
-function setLoading(msg){show('loading-screen');document.getElementById('loading-msg').textContent=msg||'Membaca file…';}
-
-/* ══════════════════════════════════════════════
-   FILE ACCESS
-══════════════════════════════════════════════ */
-const supportsFileAPI='showOpenFilePicker' in window;
-async function pickFile(){
-  if(!supportsFileAPI){document.getElementById('file-input').click();return;}
-  try{
-    const [h]=await window.showOpenFilePicker({types:[{description:'Excel',accept:{'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':['.xlsx','.xls']}}],multiple:false});
-    fileHandle=h; currentFileName=h.name;
-    await saveHandle(h);
-    document.getElementById('saved-banner').style.display='flex';
-    document.getElementById('saved-filename').textContent=h.name;
-    await readAndRender(h);
-  }catch(e){if(e.name!=='AbortError')alert('Gagal membuka file: '+e.message);}
-}
-async function loadSavedFile(){if(!fileHandle){alert('File belum dipilih.');return;} await readAndRender(fileHandle);}
-async function reloadFile(){
-  if(!fileHandle){backToWelcome();return;}
-  const btn=document.getElementById('btn-reload');
-  btn.disabled=true;btn.textContent='Memuat…';
-  await readAndRender(fileHandle);
-  btn.disabled=false;btn.textContent='↻ Reload';
-}
-async function readAndRender(h){
-  setLoading('Membaca file Excel dari disk…');
-  try{
-    let perm=await h.queryPermission({mode:'read'});
-    if(perm!=='granted') perm=await h.requestPermission({mode:'read'});
-    if(perm!=='granted') throw new Error('Izin akses file ditolak.');
-    await processFile(await h.getFile());
-  }catch(e){show('welcome-screen');alert('Gagal baca file: '+e.message);}
-}
-async function handleFileInput(e){
-  const f=e.target.files[0];if(!f)return;
-  currentFileName=f.name;setLoading('Membaca file Excel…');await processFile(f);
-}
-
-/* ══════════════════════════════════════════════
-   DATA PROCESSING — mengikuti logika Power Query
-══════════════════════════════════════════════ */
-async function processFile(file){
-  try{
-    document.getElementById('loading-msg').textContent='Membaca Excel ('+Math.round(file.size/1024)+' KB)…';
-    const buf=await file.arrayBuffer();
-    document.getElementById('loading-msg').textContent='Memproses data ICK…';
-    const wb=XLSX.read(buf,{type:'array',cellDates:false,raw:false});
-    let sn=wb.SheetNames.find(n=>n.trim()===SHEET)||wb.SheetNames[0];
-    const raw=XLSX.utils.sheet_to_json(wb.Sheets[sn],{header:1,defval:null,raw:false});
-    document.getElementById('loading-msg').textContent='Menghitung KPI & agregasi…';
-    processedData=buildDashboardData(raw);
-    document.getElementById('loading-msg').textContent='Merender visualisasi…';
-    initDashboard();
-  }catch(e){show('welcome-screen');alert('Error memproses Excel:\n'+e.message);console.error(e);}
-}
-
-/* ── ParseAngka — sama dengan Power Query inline ParseAngka ── */
-function pn(v, isPct=false){
-  if(v===null||v===undefined||v==='') return null;
-  if(typeof v==='boolean') return null;
-  if(typeof v==='number'){
-    return isPct && v>1.5 ? +(v/100).toFixed(6) : +v.toFixed(6);
-  }
-  let s=String(v).trim();
-  // Cek % di akhir (sebelum strip)
-  const hasPctSuffix=s.endsWith('%');
-  // Strip Rp prefix
-  if(/^[Rr][Pp]\s*/.test(s)) s=s.replace(/^[Rr][Pp]\s*/,'');
-  // Strip suffix %
-  if(hasPctSuffix) s=s.slice(0,-1).trim();
-  // Strip + di depan
-  if(s.startsWith('+')) s=s.slice(1);
-  // ≥ ≤ ± → null (dihandle oleh HasTargetFleksibel)
-  if(/^[≥≤±]/.test(s)) return null;
-  if(s===''||s==='-') return null;
-  // Normalize decimal separator
-  const dots=s.split('.').length-1;
-  const commas=s.split(',').length-1;
-  let normalized;
-  if(commas===1&&dots===0) normalized=s.replace(',','.');
-  else if(commas===1&&dots>0) normalized=s.replace(/\./g,'').replace(',','.');
-  else if(commas===0&&dots===1){
-    const afterDot=s.split('.')[1].length;
-    normalized=afterDot<=2?s:s.replace(/\./g,'');
-  }
-  else if(commas===0&&dots>1) normalized=s.replace(/\./g,'');
-  else normalized=s;
-  const n=parseFloat(normalized);
-  if(isNaN(n)) return null;
-  const effective=hasPctSuffix||isPct;
-  return effective&&n>1.5 ? +(n/100).toFixed(6) : +n.toFixed(6);
-}
-
-/* ── HasTargetFleksibel — flag sebelum ParseAngka, seperti PQ ── */
-function isFleksibel(rawVal){
-  if(rawVal===null||rawVal===undefined) return false;
-  const s=String(rawVal).trim();
-  return s.startsWith('≥')||s.startsWith('≤')||s.startsWith('±');
-}
-
-/* ── getTipe — sama dengan Dim_ICK WithTipePengukuran ── */
-function getTipe(sifat,narasi,t26){
-  const n=(narasi||'').toLowerCase();
-  const kw=['skala','penilaian kualitas','nilai asesmen','kualitas penyelenggaraan','tingkat pemahaman','kualitas pelaksanaan','kualitas kegiatan'];
-  const isSkala=kw.some(k=>n.includes(k));
-  const isLarge=t26!=null && t26>100;   // guard null sesuai PQ fix #2
-  if(sifat==='Level tertentu'&&isSkala) return 'Skala Penilaian';
-  if(sifat==='Level tertentu') return 'Biner / Level Tertentu';
-  if(sifat==='Akumulatif'&&isLarge) return 'Kuantitatif - Volume';
-  if(sifat==='Akumulatif') return 'Kuantitatif - Hitungan';
-  return 'Lainnya';
-}
-
-/* ── getStatus — sama dengan Fact_Progress WithStatus ── */
-function getStatus(p,e,sifat){
-  if(p===null) return 'Belum Ada Data';
-  if(sifat==='Level tertentu'&&p>=0.99) return 'Tercapai';
-  if(sifat==='Level tertentu'&&p>=e*0.70) return 'On Track';
-  if(sifat==='Level tertentu') return 'Perlu Perhatian';
-  if(p>=e*0.95) return 'On Track';
-  if(p>=e*0.70) return 'At Risk';
-  return 'Perlu Perhatian';
-}
-
-/* ── Kelompok_Visualisasi ── */
-function getKelompokViz(tipe){
-  if(tipe==='Kuantitatif - Hitungan'||tipe==='Kuantitatif - Volume') return 'Progress Bar';
-  if(tipe==='Biner / Level Tertentu') return 'Badge Status';
-  return 'Narasi';
-}
-
-/* ── Label Status Keseluruhan (DAX Bagian 6) ── */
-function getLabelStatus(pctOnTrack){
-  if(pctOnTrack>=0.90) return {label:'Sangat Baik',color:'#16a34a',bg:'#dcfce7'};
-  if(pctOnTrack>=0.75) return {label:'Baik',color:'#2563eb',bg:'#dbeafe'};
-  if(pctOnTrack>=0.60) return {label:'Cukup',color:'#b45309',bg:'#fef9c3'};
-  return {label:'Perlu Perhatian',color:'#dc2626',bg:'#fee2e2'};
-}
-
-/* ── buildDashboardData — menggabungkan semua logika PQ + DAX ── */
-function buildDashboardData(raw){
-  if(!raw||raw.length<7) throw new Error('Data sheet kosong atau terlalu pendek.');
-  const headers=raw[5].map(h=>String(h||'').trim());
-  const ci=h=>headers.indexOf(h);
-  const dataRows=raw.slice(6).filter(r=>r[ci('PS')]!=null&&String(r[ci('PS')]||'').trim()!=='');
-
-  // Temukan index kolom bulan (header "01","02",...,"12")
-  const monthIdx={};
-  for(let m=1;m<=12;m++){
-    const k=String(m).padStart(2,'0');
-    const i=headers.indexOf(k);
-    if(i>=0) monthIdx[m]=i;
-  }
-
-  // ── Build records — satu baris per (ICK × Bulan) ──
-  // Sub-header order (9 kolom per blok, sesuai Fact_Progress v4):
-  // si+0 Kode_Bulan | si+1 Realisasi | si+2 Penjelasan_Realisasi
-  // si+3 Progres    | si+4 Prognosa  | si+5 Keterangan
-  // si+6 Action     | si+7 Risiko    | si+8 Mitigasi
-  const records=[];
-  for(const[mNo,si]of Object.entries(monthIdx)){
-    const m=+mNo;
-    const eksp=+(m/12).toFixed(4);
-    for(const row of dataRows){
-      const sifat=String(row[ci('Sifat Perhitungan Target')]||'').trim();
-      const narasi=String(row[ci('Narasi Target ICK')]||'');
-      // HasTargetFleksibel — baca raw sebelum parse (PQ fix #3)
-      const rawTarget=row[ci('Target 2026')];
-      const hasTargetFleksibel=isFleksibel(rawTarget);
-      const t26=pn(rawTarget);
-
-      const prog=pn(row[si+3], true);   // Progres
-      const real=pn(row[si+1]);          // Realisasi
-      const prognosa=pn(row[si+4]);     // Prognosa_Akhir_Tahun
-
-      // Hapus baris tanpa data (sesuai PQ HasData filter)
-      if(prog===null && real===null) continue;
-      if(prog===null) continue;  // hanya simpan yang ada progres
-
-      const ick=String(row[ci('Target ICK')]||'').trim();
-      let lbl=String(row[ci('Deskripsi Indikator ICK Satker')]||row[ci('Indikator ICK Satker')]||'').trim();
-      if(!lbl||lbl==='null'||lbl==='undefined') lbl=ick;
-
-      const tipe=getTipe(sifat,narasi,t26);
-      // Valid_Tren_Chart = hanya ICK Akumulatif (Fact_Progress WithValidTren)
-      const validTrenChart=(sifat==='Akumulatif');
-      // Pct_vs_Target = Realisasi / Target_2026 (Fact_Progress WithPct)
-      const pctVsTarget=(t26!=null && t26!==0 && real!=null) ? real/t26 : null;
-      // Gap_vs_Ekspektasi
-      const gap=prog-eksp;
-      // Kelompok_Visualisasi dan flags (Dim_ICK)
-      const kelompokViz=getKelompokViz(tipe);
-      const perluNarasi=(tipe==='Skala Penilaian'||tipe==='Biner / Level Tertentu');
-
-      // Kolom teks per bulan
-      const penjelasan=row[si+2]?String(row[si+2]).trim():'';
-      const keterangan=row[si+5]?String(row[si+5]).trim():'';
-      const action=row[si+6]?String(row[si+6]).trim():'';
-
-      records.push({
-        ick, lbl: lbl.length>80?lbl.slice(0,80)+'…':lbl,
-        uker: String(row[ci('Uker')]||'').trim(),
-        sifat, tipe, kelompokViz, perluNarasi,
-        validTrenChart, hasTargetFleksibel,
-        bulan:m, bl:ML[m-1],
-        progres:prog, realisasi:real, ekspektasi:eksp,
-        gap, pctVsTarget, prognosa, t26,
-        penjelasan, keterangan, action,
-        status: getStatus(prog, eksp, sifat)
+    /* IndexedDB */
+    const DB_NAME = 'ekb_dash', DB_STORE = 'handles', DB_KEY = 'excel_handle';
+    function openDB() {
+      return new Promise((res, rej) => {
+        const req = indexedDB.open(DB_NAME, 1);
+        req.onupgradeneeded = e => e.target.result.createObjectStore(DB_STORE);
+        req.onsuccess = e => res(e.target.result);
+        req.onerror = e => rej(e);
       });
     }
-  }
-
-  // ── Aggregate per Bulan ──
-  const byMonth={}, monthly=[];
-  // Simpan avgKuantitatif per bulan untuk Delta MoM
-  const kpiByMonth={};
-
-  for(let m=1;m<=12;m++){
-    const recs=records.filter(r=>r.bulan===m);
-    if(!recs.length) continue;
-
-    // Semua ICK aktif
-    const allProgs=recs.map(r=>r.progres);
-    const sts=recs.map(r=>r.status);
-    const avg=+(allProgs.reduce((a,b)=>a+b,0)/allProgs.length).toFixed(4);
-
-    // Avg Progres Kuantitatif — hanya Valid_Tren_Chart (DAX Bagian 3)
-    const kuanRecs=recs.filter(r=>r.validTrenChart);
-    const avgKuantitatif=kuanRecs.length>0
-      ? +(kuanRecs.map(r=>r.progres).reduce((a,b)=>a+b,0)/kuanRecs.length).toFixed(4)
-      : null;
-
-    // Status counts
-    const sc={};
-    ['On Track','Tercapai','At Risk','Perlu Perhatian','Belum Ada Data'].forEach(s=>sc[s]=sts.filter(x=>x===s).length);
-    const nTotal=sts.length;
-    const nOn=(sc['On Track']||0)+(sc['Tercapai']||0);
-    const pctOn=nTotal>0?nOn/nTotal:0;
-
-    // ICK Butuh Tindakan (DAX Bagian 7)
-    const nButuhTindakan=(sc['At Risk']||0)+(sc['Perlu Perhatian']||0);
-
-    // Label Status (DAX Bagian 6)
-    const statusLabel=getLabelStatus(pctOn);
-
-    // Prognosa (DAX Bagian 5)
-    // Prognosa adalah raw value (sama dgn Realisasi), bukan 0-1
-    // avgPrognosa = avg(prognosa / target) agar bisa ditampilkan sebagai % (0-1 scale)
-    const progrecs=recs.filter(r=>r.prognosa!=null&&r.t26!=null&&r.t26!==0);
-    const avgPrognosa=progrecs.length>0
-      ? +(progrecs.map(r=>r.prognosa/r.t26).reduce((a,b)=>a+b,0)/progrecs.length).toFixed(4)
-      : null;
-    // ICK Prognosa >= Target (raw value comparison — sudah benar)
-    const nPrognosaOk=recs.filter(r=>r.prognosa!=null&&r.t26!=null&&r.prognosa>=r.t26).length;
-
-    // Per Tipe breakdown
-    const tipoCount={};
-    ['Skala Penilaian','Biner / Level Tertentu','Kuantitatif - Hitungan','Kuantitatif - Volume','Lainnya']
-      .forEach(t=>tipoCount[t]=recs.filter(r=>r.tipe===t).length);
-
-    // Avg Nilai Skala (DAX Bagian 3)
-    const skalaRecs=recs.filter(r=>r.tipe==='Skala Penilaian'&&r.realisasi!=null);
-    const avgNilaiSkala=skalaRecs.length>0
-      ? +(skalaRecs.map(r=>r.realisasi).reduce((a,b)=>a+b,0)/skalaRecs.length).toFixed(2)
-      : null;
-
-    // % Biner Tercapai (DAX Bagian 3)
-    const binerRecs=recs.filter(r=>r.tipe==='Biner / Level Tertentu');
-    const binerTercapai=binerRecs.filter(r=>r.status==='Tercapai').length;
-    const pctBiner=binerRecs.length>0?+(binerTercapai/binerRecs.length).toFixed(4):null;
-
-    // Jumlah HasTargetFleksibel (PQ Dim_ICK fix #3)
-    const nFleksibel=recs.filter(r=>r.hasTargetFleksibel).length;
-
-    // Jumlah Perlu_Narasi_Detail (Dim_ICK)
-    const nPerluNarasi=recs.filter(r=>r.perluNarasi).length;
-
-    // Per Uker
-    const ud={};
-    for(const r of recs){
-      if(!ud[r.uker]) ud[r.uker]={p:[],pk:[],st:[],recs:[]};
-      ud[r.uker].p.push(r.progres);
-      if(r.validTrenChart) ud[r.uker].pk.push(r.progres);
-      ud[r.uker].st.push(r.status);
-      ud[r.uker].recs.push(r);
+    async function saveHandle(h) { try { const db = await openDB(); db.transaction(DB_STORE, 'readwrite').objectStore(DB_STORE).put(h, DB_KEY); } catch (e) { } }
+    async function loadHandle() {
+      try { const db = await openDB(); return new Promise((res, rej) => { const tx = db.transaction(DB_STORE, 'readonly'); const req = tx.objectStore(DB_STORE).get(DB_KEY); req.onsuccess = e => res(e.target.result); req.onerror = rej; }); }
+      catch (e) { return null; }
     }
-    const ukerArr=Object.entries(ud).map(([u,d])=>({
-      u,
-      avg:+(d.p.reduce((a,b)=>a+b,0)/d.p.length).toFixed(4),
-      avgKuan:d.pk.length>0?+(d.pk.reduce((a,b)=>a+b,0)/d.pk.length).toFixed(4):null,
-      n:d.p.length, nKuan:d.pk.length,
-      on:d.st.filter(s=>s==='On Track'||s==='Tercapai').length,
-      at:d.st.filter(s=>s==='At Risk').length,
-      pp:d.st.filter(s=>s==='Perlu Perhatian').length
-    })).sort((a,b)=>(b.avgKuan??b.avg)-(a.avgKuan??a.avg));
 
-    const detail=[...recs]
-      .sort((a,b)=>a.uker.localeCompare(b.uker)||a.ick.localeCompare(b.ick));
-
-    kpiByMonth[m]={avg,avgKuantitatif,eksp:+(m/12).toFixed(4)};
-
-    byMonth[m]={
-      m, nama:MN[m-1], avg, avgKuantitatif,
-      eksp:+(m/12).toFixed(4),
-      n:new Set(recs.map(r=>r.ick)).size,
-      nKuan:new Set(kuanRecs.map(r=>r.ick)).size,
-      nUker:Object.keys(ud).length,
-      sc, nOn, pctOn, nButuhTindakan, statusLabel,
-      avgPrognosa, nPrognosaOk, nPrognosaTotal:progrecs.length,
-      tipoCount, avgNilaiSkala, pctBiner, nFleksibel, nPerluNarasi,
-      uker:ukerArr, detail
-    };
-    monthly.push({m, lbl:ML[m-1], avg, avgKuantitatif, eksp:+(m/12).toFixed(4)});
-  }
-
-  // Delta MoM — hitung setelah semua bulan selesai
-  for(let m=1;m<=12;m++){
-    if(!byMonth[m]) continue;
-    const prev=kpiByMonth[m-1];
-    byMonth[m].deltaVsLastMonth=(byMonth[m].avgKuantitatif!=null&&prev?.avgKuantitatif!=null)
-      ? +(byMonth[m].avgKuantitatif-prev.avgKuantitatif).toFixed(4)
-      : null;
-    const idx=monthly.findIndex(x=>x.m===m);
-    if(idx>=0) monthly[idx].deltaVsLastMonth=byMonth[m].deltaVsLastMonth;
-  }
-
-  // ── byICK: index semua records per kode ICK (untuk search + detail modal) ──
-  const byICK={};
-  for(const r of records){
-    const k=r.ick;
-    if(!byICK[k]) byICK[k]={
-      ick:r.ick, lbl:r.lbl, uker:r.uker, tipe:r.tipe,
-      sifat:r.sifat, kelompokViz:r.kelompokViz, perluNarasi:r.perluNarasi,
-      hasTargetFleksibel:r.hasTargetFleksibel, validTrenChart:r.validTrenChart,
-      t26:r.t26, months:[]
-    };
-    byICK[k].months.push({
-      bulan:r.bulan, bl:r.bl,
-      progres:r.progres, realisasi:r.realisasi, ekspektasi:r.ekspektasi,
-      gap:r.gap, pctVsTarget:r.pctVsTarget, prognosa:r.prognosa,
-      status:r.status, penjelasan:r.penjelasan, keterangan:r.keterangan, action:r.action
+    /* ══════════════════════════════════════════════
+       SCREENS
+    ══════════════════════════════════════════════ */
+    window.addEventListener('DOMContentLoaded', async () => {
+      const saved = await loadHandle();
+      if (saved) {
+        fileHandle = saved; currentFileName = saved.name;
+        const el = document.getElementById('saved-banner');
+        el.style.display = 'flex';
+        document.getElementById('saved-filename').textContent = saved.name;
+      }
     });
-  }
-  // sort bulan asc per ICK
-  for(const k of Object.keys(byICK)) byICK[k].months.sort((a,b)=>a.bulan-b.bulan);
 
-  return{monthly,byMonth,byICK};
-}
+    function show(id) {
+      ['welcome-screen', 'loading-screen', 'dashboard'].forEach(s => {
+        const el = document.getElementById(s);
+        el.style.display = (s === id) ? (s === 'dashboard' ? 'block' : 'flex') : 'none';
+      });
+    }
+    function backToWelcome() { show('welcome-screen'); }
+    function setLoading(msg) { show('loading-screen'); document.getElementById('loading-msg').textContent = msg || 'Membaca file…'; }
 
-/* ══════════════════════════════════════════════
-   DASHBOARD INIT
-══════════════════════════════════════════════ */
-function initDashboard(){
-  const months=processedData.monthly;
-  const complete=months.filter(m=>processedData.byMonth[m.m].n>5);
-  currentMonth=(complete[complete.length-1]||months[months.length-1])?.m;
-  currentUker='ALL';
+    /* ══════════════════════════════════════════════
+       FILE ACCESS
+    ══════════════════════════════════════════════ */
+    const supportsFileAPI = 'showOpenFilePicker' in window;
+    async function pickFile() {
+      if (!supportsFileAPI) { document.getElementById('file-input').click(); return; }
+      try {
+        const [h] = await window.showOpenFilePicker({ types: [{ description: 'Excel', accept: { 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': ['.xlsx', '.xls'] } }], multiple: false });
+        fileHandle = h; currentFileName = h.name;
+        await saveHandle(h);
+        document.getElementById('saved-banner').style.display = 'flex';
+        document.getElementById('saved-filename').textContent = h.name;
+        await readAndRender(h);
+      } catch (e) { if (e.name !== 'AbortError') alert('Gagal membuka file: ' + e.message); }
+    }
+    async function loadSavedFile() { if (!fileHandle) { alert('File belum dipilih.'); return; } await readAndRender(fileHandle); }
+    async function reloadFile() {
+      if (!fileHandle) { backToWelcome(); return; }
+      const btn = document.getElementById('btn-reload');
+      btn.disabled = true; btn.textContent = 'Memuat…';
+      await readAndRender(fileHandle);
+      btn.disabled = false; btn.textContent = '↻ Reload';
+    }
+    async function readAndRender(h) {
+      setLoading('Membaca file Excel dari disk…');
+      try {
+        let perm = await h.queryPermission({ mode: 'read' });
+        if (perm !== 'granted') perm = await h.requestPermission({ mode: 'read' });
+        if (perm !== 'granted') throw new Error('Izin akses file ditolak.');
+        await processFile(await h.getFile());
+      } catch (e) { show('welcome-screen'); alert('Gagal baca file: ' + e.message); }
+    }
+    async function handleFileInput(e) {
+      const f = e.target.files[0]; if (!f) return;
+      currentFileName = f.name; setLoading('Membaca file Excel…'); await processFile(f);
+    }
 
-  // Month buttons
-  document.getElementById('month-btns').innerHTML=months.map(m=>
-    `<button class="mbtn ${m.m===currentMonth?'active':''}" data-m="${m.m}" onclick="setMonth(${m.m})">${m.lbl}</button>`
-  ).join('');
+    /* ══════════════════════════════════════════════
+       DATA PROCESSING — mengikuti logika Power Query
+    ══════════════════════════════════════════════ */
+    async function processFile(file) {
+      try {
+        document.getElementById('loading-msg').textContent = 'Membaca Excel (' + Math.round(file.size / 1024) + ' KB)…';
+        const buf = await file.arrayBuffer();
+        document.getElementById('loading-msg').textContent = 'Memproses data ICK…';
+        const wb = XLSX.read(buf, { type: 'array', cellDates: false, raw: true });
+        let sn = wb.SheetNames.find(n => n.trim() === SHEET) || wb.SheetNames[0];
+        // raw:true → baca nilai asli sel (v property), bukan formatted display value (w property)
+        // Penting untuk sel rich-text agar teks lengkap terbaca tanpa terpotong
+        const raw = XLSX.utils.sheet_to_json(wb.Sheets[sn], { header: 1, defval: null, raw: true });
+        document.getElementById('loading-msg').textContent = 'Menghitung KPI & agregasi…';
+        processedData = buildDashboardData(raw);
+        document.getElementById('loading-msg').textContent = 'Merender visualisasi…';
+        initDashboard();
+      } catch (e) { show('welcome-screen'); alert('Error memproses Excel:\n' + e.message); console.error(e); }
+    }
 
-  document.getElementById('file-badge').textContent=currentFileName;
-  document.getElementById('file-badge').title=currentFileName;
-  const now=new Date().toLocaleString('id-ID');
-  document.getElementById('last-upd').textContent='Dimuat: '+now;
-  document.getElementById('footer-time').textContent='Dimuat: '+now;
+    /* ── ParseAngka — sama dengan Power Query inline ParseAngka ── */
+    function pn(v, isPct = false) {
+      if (v === null || v === undefined || v === '') return null;
+      if (typeof v === 'boolean') return null;
+      if (typeof v === 'number') {
+        return isPct && v > 1.5 ? +(v / 100).toFixed(6) : +v.toFixed(6);
+      }
+      let s = String(v).trim();
+      // Cek % di akhir (sebelum strip)
+      const hasPctSuffix = s.endsWith('%');
+      // Strip Rp prefix
+      if (/^[Rr][Pp]\s*/.test(s)) s = s.replace(/^[Rr][Pp]\s*/, '');
+      // Strip suffix %
+      if (hasPctSuffix) s = s.slice(0, -1).trim();
+      // Strip + di depan
+      if (s.startsWith('+')) s = s.slice(1);
+      // ≥ ≤ ± → null (dihandle oleh HasTargetFleksibel)
+      if (/^[≥≤±]/.test(s)) return null;
+      if (s === '' || s === '-') return null;
+      // Normalize decimal separator
+      const dots = s.split('.').length - 1;
+      const commas = s.split(',').length - 1;
+      let normalized;
+      if (commas === 1 && dots === 0) normalized = s.replace(',', '.');
+      else if (commas === 1 && dots > 0) normalized = s.replace(/\./g, '').replace(',', '.');
+      else if (commas === 0 && dots === 1) {
+        const afterDot = s.split('.')[1].length;
+        normalized = afterDot <= 2 ? s : s.replace(/\./g, '');
+      }
+      else if (commas === 0 && dots > 1) normalized = s.replace(/\./g, '');
+      else normalized = s;
+      const n = parseFloat(normalized);
+      if (isNaN(n)) return null;
+      const effective = hasPctSuffix || isPct;
+      return effective && n > 1.5 ? +(n / 100).toFixed(6) : +n.toFixed(6);
+    }
 
-  // Destroy existing charts
-  [trendChart,donutChart,ukerBarChart,ukerStackChart].forEach(c=>{if(c)c.destroy();});
-  trendChart=donutChart=ukerBarChart=ukerStackChart=null;
+    /* ── HasTargetFleksibel — flag sebelum ParseAngka, seperti PQ ── */
+    function isFleksibel(rawVal) {
+      if (rawVal === null || rawVal === undefined) return false;
+      const s = String(rawVal).trim();
+      return s.startsWith('≥') || s.startsWith('≤') || s.startsWith('±');
+    }
 
-  initTrendChart();
-  renderAll();
-  show('dashboard');
-}
+    /* ── getTipe — sama dengan Dim_ICK WithTipePengukuran ── */
+    function getTipe(sifat, narasi, t26) {
+      const n = (narasi || '').toLowerCase();
+      const kw = ['skala', 'penilaian kualitas', 'nilai asesmen', 'kualitas penyelenggaraan', 'tingkat pemahaman', 'kualitas pelaksanaan', 'kualitas kegiatan'];
+      const isSkala = kw.some(k => n.includes(k));
+      const isLarge = t26 != null && t26 > 100;   // guard null sesuai PQ fix #2
+      if (sifat === 'Level tertentu' && isSkala) return 'Skala Penilaian';
+      if (sifat === 'Level tertentu') return 'Biner / Level Tertentu';
+      if (sifat === 'Akumulatif' && isLarge) return 'Kuantitatif - Volume';
+      if (sifat === 'Akumulatif') return 'Kuantitatif - Hitungan';
+      return 'Lainnya';
+    }
 
-/* ══════════════════════════════════════════════
-   RENDER HELPERS
-══════════════════════════════════════════════ */
-function pct(v,dec=1){return v==null?'—':(v*100).toFixed(dec)+'%';}
-function fmtNum(v){if(v==null)return'—';if(v>=1000000)return(v/1000000).toFixed(1)+'jt';if(v>=1000)return(v/1000).toFixed(1)+'K';return v.toFixed(2);}
-function bColor(v){
-  if(v>=.9) return '#16a34a';
-  if(v>=.6) return '#2563eb';
-  if(v>=.4) return '#b45309';
-  return '#dc2626';
-}
-function sClass(s){return{'On Track':'s-on','Tercapai':'s-tr','At Risk':'s-at','Perlu Perhatian':'s-pp','Belum Ada Data':'s-bd'}[s]||'s-bd';}
-function truncate(s,n=60){return s&&s.length>n?s.slice(0,n)+'…':s||'';}
+    /* ── getStatus — sama dengan Fact_Progress WithStatus ── */
+    function getStatus(p, e, sifat) {
+      if (p === null) return 'Belum Ada Data';
+      if (sifat === 'Level tertentu' && p >= 0.99) return 'Tercapai';
+      if (sifat === 'Level tertentu' && p >= e * 0.70) return 'On Track';
+      if (sifat === 'Level tertentu') return 'Perlu Perhatian';
+      if (p >= e * 0.95) return 'On Track';
+      if (p >= e * 0.70) return 'At Risk';
+      return 'Perlu Perhatian';
+    }
 
-function switchTab(tab, navEl){
-  currentTab=tab;
-  document.querySelectorAll('.tab-nav-btn').forEach(b=>b.classList.remove('active'));
-  const btn=document.getElementById('tnbtn-'+tab);
-  if(btn) btn.classList.add('active');
-  document.querySelectorAll('.sb-item').forEach(n=>n.classList.remove('active'));
-  const sbEl=document.getElementById('sb-'+tab);
-  if(sbEl) sbEl.classList.add('active');
-  else if(navEl) navEl.classList.add('active');
-  document.querySelectorAll('.tab-page').forEach(p=>p.classList.remove('active'));
-  document.getElementById('page-'+tab).classList.add('active');
-  if(tab==='uker') renderUkerCharts();
-  if(tab==='detail') renderDetailTab();
-  if(tab==='narasi') renderNarasiTab();
-  if(tab==='search'){ const q=document.getElementById('search-input')?.value||''; renderSearchPage(q); }
-}
+    /* ── Kelompok_Visualisasi ── */
+    function getKelompokViz(tipe) {
+      if (tipe === 'Kuantitatif - Hitungan' || tipe === 'Kuantitatif - Volume') return 'Progress Bar';
+      if (tipe === 'Biner / Level Tertentu') return 'Badge Status';
+      return 'Narasi';
+    }
 
-function setMonth(m){
-  currentMonth=m; currentUker='ALL';
-  document.querySelectorAll('.mbtn').forEach(b=>b.classList.toggle('active',+b.dataset.m===m));
-  renderAll(); updateTrendHighlight();
-}
+    /* ── Label Status Keseluruhan (DAX Bagian 6) ── */
+    function getLabelStatus(pctOnTrack) {
+      if (pctOnTrack >= 0.90) return { label: 'Sangat Baik', color: '#16a34a', bg: '#dcfce7' };
+      if (pctOnTrack >= 0.75) return { label: 'Baik', color: '#2563eb', bg: '#dbeafe' };
+      if (pctOnTrack >= 0.60) return { label: 'Cukup', color: '#b45309', bg: '#fef9c3' };
+      return { label: 'Perlu Perhatian', color: '#dc2626', bg: '#fee2e2' };
+    }
 
-function renderAll(){
-  const d=processedData.byMonth[currentMonth];
-  if(!d) return;
-  document.getElementById('badge-period').textContent=d.nama+' 2026';
-  renderKPIs(d); renderDonut(d); renderUker(d); renderDetailOverview(d);
-  renderSidebarUker(d);
-  if(currentTab==='uker') renderUkerCharts();
-  if(currentTab==='detail') renderDetailTab();
-  if(currentTab==='narasi') renderNarasiTab();
-}
+    /* ── buildDashboardData — menggabungkan semua logika PQ + DAX ── */
+    function buildDashboardData(raw) {
+      if (!raw || raw.length < 7) throw new Error('Data sheet kosong atau terlalu pendek.');
+      const headers = raw[5].map(h => String(h || '').trim());
+      const ci = h => headers.indexOf(h);
 
-/* ── KPIs ── */
-function renderKPIs(d){
-  // Row 1
-  document.getElementById('kpi-total').textContent=d.n;
-  document.getElementById('kpi-nuker').textContent=d.nUker;
-  document.getElementById('kpi-avg-kuan').textContent=pct(d.avgKuantitatif);
-  document.getElementById('kpi-eksp').textContent=pct(d.eksp);
+      const dataRows = raw.slice(6).filter(r => r[ci('PS')] != null && String(r[ci('PS')] || '').trim() !== '');
 
-  const gap=(d.avgKuantitatif??d.avg)-d.eksp;
-  document.getElementById('kpi-gap').textContent=(gap>=0?'+':'')+pct(gap);
-  document.getElementById('kpi-gap').style.color=gap>=0?'var(--green)':'var(--red)';
-  document.getElementById('kpi-gap-card').className='kpi '+(gap>=0?'green':'red');
-  document.getElementById('kpi-gap-desc').textContent=gap>=0?'Ahead of schedule ✓':'Behind schedule ✗';
+      // Temukan index kolom bulan (header "01","02",...,"12")
+      const monthIdx = {};
+      for (let m = 1; m <= 12; m++) {
+        const k = String(m).padStart(2, '0');
+        const i = headers.indexOf(k);
+        if (i >= 0) monthIdx[m] = i;
+      }
 
-  // Delta MoM
-  const mom=d.deltaVsLastMonth;
-  const momEl=document.getElementById('kpi-mom');
-  momEl.textContent=mom!=null?(mom>=0?'+':'')+pct(mom):'—';
-  momEl.style.color=mom==null?'var(--blue)':mom>=0?'var(--green)':'var(--red)';
+      // ── Build records — satu baris per (ICK × Bulan) ──
+      // Sub-header order (9 kolom per blok, sesuai Fact_Progress v4):
+      // si+0 Kode_Bulan | si+1 Realisasi | si+2 Penjelasan_Realisasi
+      // si+3 Progres    | si+4 Prognosa  | si+5 Keterangan
+      // si+6 Action     | si+7 Risiko    | si+8 Mitigasi
+      const records = [];
+      for (const [mNo, si] of Object.entries(monthIdx)) {
+        const m = +mNo;
+        const eksp = +(m / 12).toFixed(4);
+        for (const row of dataRows) {
+          const sifat = String(row[ci('Sifat Perhitungan Target')] || '').trim();
+          const narasi = String(row[ci('Narasi Target ICK')] || '');
+          // HasTargetFleksibel — baca raw sebelum parse (PQ fix #3)
+          const rawTarget = row[ci('Target 2026')];
+          const hasTargetFleksibel = isFleksibel(rawTarget);
+          const t26 = pn(rawTarget);
 
-  // Label Status
-  const lbl=d.statusLabel;
-  document.getElementById('kpi-label').textContent=lbl.label;
-  document.getElementById('kpi-label').style.color=lbl.color;
-  document.getElementById('kpi-pct-on').textContent=pct(d.pctOn)+' On Track';
-  document.getElementById('kpi-on').textContent=d.nOn+' ICK';
+          const prog = pn(row[si + 3], true);   // Progres
+          const real = pn(row[si + 1]);          // Realisasi
+          const prognosa = pn(row[si + 4]);     // Prognosa_Akhir_Tahun
 
-  // Sidebar badge
-  const sbBadge=document.getElementById('sb-status-badge');
-  sbBadge.style.display='block';
-  sbBadge.textContent=lbl.label+' — '+pct(d.pctOn);
-  sbBadge.style.background=lbl.bg;
-  sbBadge.style.color=lbl.color;
+          // Hapus baris tanpa data (sesuai PQ HasData filter)
+          if (prog === null && real === null) continue;
+          if (prog === null) continue;  // hanya simpan yang ada progres
 
-  document.getElementById('kpi-on-pct').textContent=pct(d.pctOn)+' dari total aktif';
-  document.getElementById('kpi-butuh').textContent=d.nButuhTindakan+' ICK';
-  document.getElementById('kpi-at').textContent=d.sc['At Risk']||0;
-  document.getElementById('kpi-pp').textContent=d.sc['Perlu Perhatian']||0;
+          const ick = String(row[ci('Target ICK')] || '').trim();
+          let lbl = String(row[ci('Deskripsi Indikator ICK Satker')] || row[ci('Indikator ICK Satker')] || '').trim();
+          if (!lbl || lbl === 'null' || lbl === 'undefined') lbl = ick;
 
-  // Prognosa
-  document.getElementById('kpi-prognosa-ok').textContent=d.nPrognosaOk||'—';
-  document.getElementById('kpi-prognosa-total').textContent=d.nPrognosaTotal||0;
-  document.getElementById('kpi-avg-prognosa').textContent=d.avgPrognosa!=null?pct(d.avgPrognosa):'—';
-  document.getElementById('uker-badge').textContent=d.nama+' 2026';
+          const tipe = getTipe(sifat, narasi, t26);
+          // Valid_Tren_Chart = hanya ICK Akumulatif (Fact_Progress WithValidTren)
+          const validTrenChart = (sifat === 'Akumulatif');
+          // Pct_vs_Target = Realisasi / Target_2026 (Fact_Progress WithPct)
+          const pctVsTarget = (t26 != null && t26 !== 0 && real != null) ? real / t26 : null;
+          // Gap_vs_Ekspektasi
+          const gap = prog - eksp;
+          // Kelompok_Visualisasi dan flags (Dim_ICK)
+          const kelompokViz = getKelompokViz(tipe);
+          const perluNarasi = (tipe === 'Skala Penilaian' || tipe === 'Biner / Level Tertentu');
 
-  // Narasi tab KPIs
-  document.getElementById('kpi-n-skala').textContent=d.tipoCount['Skala Penilaian']||0;
-  document.getElementById('kpi-avg-skala').textContent=d.avgNilaiSkala!=null?d.avgNilaiSkala:'—';
-  document.getElementById('kpi-n-biner').textContent=d.tipoCount['Biner / Level Tertentu']||0;
-  document.getElementById('kpi-pct-biner').textContent=pct(d.pctBiner);
-  document.getElementById('kpi-n-fleksibel').textContent=d.nFleksibel||0;
-  document.getElementById('kpi-n-narasi').textContent=d.nPerluNarasi||0;
-}
+          // Kolom teks per bulan
+          const penjelasan = row[si + 2] ? String(row[si + 2]).trim() : '';
+          const keterangan = row[si + 5] ? String(row[si + 5]).trim() : '';
+          const action = row[si + 6] ? String(row[si + 6]).trim() : '';
 
-/* ── Donut ── */
-function renderDonut(d){
-  const labels=['On Track','Tercapai','At Risk','Perlu Perhatian'];
-  const vals=labels.map(l=>d.sc[l]||0);
-  if(donutChart) donutChart.destroy();
-  donutChart=new Chart(document.getElementById('donutChart').getContext('2d'),{
-    type:'doughnut',
-    data:{labels,datasets:[{data:vals,backgroundColor:labels.map(l=>SC[l]),borderColor:'#fff',borderWidth:3}]},
-    options:{responsive:true,maintainAspectRatio:false,cutout:'66%',
-      plugins:{legend:{position:'bottom',labels:{color:'#4a6080',font:{size:10},boxWidth:10,padding:7}},
-               tooltip:{backgroundColor:'#fff',borderColor:'#c8e0f0',borderWidth:1,titleColor:'#0d1e3a',bodyColor:'#4a6080',
-                        callbacks:{label:c=>` ${c.label}: ${c.parsed} ICK`}}}}
-  });
-}
+          records.push({
+            ick, lbl: lbl,
+            uker: String(row[ci('Uker')] || '').trim(),
+            sifat, tipe, kelompokViz, perluNarasi,
+            validTrenChart, hasTargetFleksibel,
+            bulan: m, bl: ML[m - 1],
+            progres: prog, realisasi: real, ekspektasi: eksp,
+            gap, pctVsTarget, prognosa, t26,
+            penjelasan, keterangan, action,
+            status: getStatus(prog, eksp, sifat)
+          });
+        }
+      }
 
-/* ── Uker list ── */
-function renderUker(d){
-  const list=document.getElementById('uker-list');
-  if(!d.uker?.length){list.innerHTML='<div style="color:var(--text2);font-size:11px">Data belum tersedia</div>';return;}
-  list.innerHTML=d.uker.map(u=>{
-    const v=u.avgKuan??u.avg;
-    const p=(v*100).toFixed(1),c=bColor(v);
-    return `<div class="uker-item">
+      // ── Aggregate per Bulan ──
+      const byMonth = {}, monthly = [];
+      // Simpan avgKuantitatif per bulan untuk Delta MoM
+      const kpiByMonth = {};
+
+      for (let m = 1; m <= 12; m++) {
+        const recs = records.filter(r => r.bulan === m);
+        if (!recs.length) continue;
+
+        // Semua ICK aktif
+        const allProgs = recs.map(r => r.progres);
+        const sts = recs.map(r => r.status);
+        const avg = +(allProgs.reduce((a, b) => a + b, 0) / allProgs.length).toFixed(4);
+
+        // Avg Progres Kuantitatif — hanya Valid_Tren_Chart (DAX Bagian 3)
+        const kuanRecs = recs.filter(r => r.validTrenChart);
+        const avgKuantitatif = kuanRecs.length > 0
+          ? +(kuanRecs.map(r => r.progres).reduce((a, b) => a + b, 0) / kuanRecs.length).toFixed(4)
+          : null;
+
+        // Status counts
+        const sc = {};
+        ['On Track', 'Tercapai', 'At Risk', 'Perlu Perhatian', 'Belum Ada Data'].forEach(s => sc[s] = sts.filter(x => x === s).length);
+        const nTotal = sts.length;
+        const nOn = (sc['On Track'] || 0) + (sc['Tercapai'] || 0);
+        const pctOn = nTotal > 0 ? nOn / nTotal : 0;
+
+        // ICK Butuh Tindakan (DAX Bagian 7)
+        const nButuhTindakan = (sc['At Risk'] || 0) + (sc['Perlu Perhatian'] || 0);
+
+        // Label Status (DAX Bagian 6)
+        const statusLabel = getLabelStatus(pctOn);
+
+        // Prognosa (DAX Bagian 5)
+        // Prognosa adalah raw value (sama dgn Realisasi), bukan 0-1
+        // avgPrognosa = avg(prognosa / target) agar bisa ditampilkan sebagai % (0-1 scale)
+        const progrecs = recs.filter(r => r.prognosa != null && r.t26 != null && r.t26 !== 0);
+        const avgPrognosa = progrecs.length > 0
+          ? +(progrecs.map(r => r.prognosa / r.t26).reduce((a, b) => a + b, 0) / progrecs.length).toFixed(4)
+          : null;
+        // ICK Prognosa >= Target (raw value comparison — sudah benar)
+        const nPrognosaOk = recs.filter(r => r.prognosa != null && r.t26 != null && r.prognosa >= r.t26).length;
+
+        // Per Tipe breakdown
+        const tipoCount = {};
+        ['Skala Penilaian', 'Biner / Level Tertentu', 'Kuantitatif - Hitungan', 'Kuantitatif - Volume', 'Lainnya']
+          .forEach(t => tipoCount[t] = recs.filter(r => r.tipe === t).length);
+
+        // Avg Nilai Skala (DAX Bagian 3)
+        const skalaRecs = recs.filter(r => r.tipe === 'Skala Penilaian' && r.realisasi != null);
+        const avgNilaiSkala = skalaRecs.length > 0
+          ? +(skalaRecs.map(r => r.realisasi).reduce((a, b) => a + b, 0) / skalaRecs.length).toFixed(2)
+          : null;
+
+        // % Biner Tercapai (DAX Bagian 3)
+        const binerRecs = recs.filter(r => r.tipe === 'Biner / Level Tertentu');
+        const binerTercapai = binerRecs.filter(r => r.status === 'Tercapai').length;
+        const pctBiner = binerRecs.length > 0 ? +(binerTercapai / binerRecs.length).toFixed(4) : null;
+
+        // Jumlah HasTargetFleksibel (PQ Dim_ICK fix #3)
+        const nFleksibel = recs.filter(r => r.hasTargetFleksibel).length;
+
+        // Jumlah Perlu_Narasi_Detail (Dim_ICK)
+        const nPerluNarasi = recs.filter(r => r.perluNarasi).length;
+
+        // Per Uker
+        const ud = {};
+        for (const r of recs) {
+          if (!ud[r.uker]) ud[r.uker] = { p: [], pk: [], st: [], recs: [] };
+          ud[r.uker].p.push(r.progres);
+          if (r.validTrenChart) ud[r.uker].pk.push(r.progres);
+          ud[r.uker].st.push(r.status);
+          ud[r.uker].recs.push(r);
+        }
+        const ukerArr = Object.entries(ud).map(([u, d]) => ({
+          u,
+          avg: +(d.p.reduce((a, b) => a + b, 0) / d.p.length).toFixed(4),
+          avgKuan: d.pk.length > 0 ? +(d.pk.reduce((a, b) => a + b, 0) / d.pk.length).toFixed(4) : null,
+          n: d.p.length, nKuan: d.pk.length,
+          on: d.st.filter(s => s === 'On Track' || s === 'Tercapai').length,
+          at: d.st.filter(s => s === 'At Risk').length,
+          pp: d.st.filter(s => s === 'Perlu Perhatian').length
+        })).sort((a, b) => (b.avgKuan ?? b.avg) - (a.avgKuan ?? a.avg));
+
+        const detail = [...recs]
+          .sort((a, b) => a.uker.localeCompare(b.uker) || a.ick.localeCompare(b.ick));
+
+        kpiByMonth[m] = { avg, avgKuantitatif, eksp: +(m / 12).toFixed(4) };
+
+        byMonth[m] = {
+          m, nama: MN[m - 1], avg, avgKuantitatif,
+          eksp: +(m / 12).toFixed(4),
+          n: new Set(recs.map(r => r.ick)).size,
+          nKuan: new Set(kuanRecs.map(r => r.ick)).size,
+          nUker: Object.keys(ud).length,
+          sc, nOn, pctOn, nButuhTindakan, statusLabel,
+          avgPrognosa, nPrognosaOk, nPrognosaTotal: progrecs.length,
+          tipoCount, avgNilaiSkala, pctBiner, nFleksibel, nPerluNarasi,
+          uker: ukerArr, detail
+        };
+        monthly.push({ m, lbl: ML[m - 1], avg, avgKuantitatif, eksp: +(m / 12).toFixed(4) });
+      }
+
+      // Delta MoM — hitung setelah semua bulan selesai
+      for (let m = 1; m <= 12; m++) {
+        if (!byMonth[m]) continue;
+        const prev = kpiByMonth[m - 1];
+        byMonth[m].deltaVsLastMonth = (byMonth[m].avgKuantitatif != null && prev?.avgKuantitatif != null)
+          ? +(byMonth[m].avgKuantitatif - prev.avgKuantitatif).toFixed(4)
+          : null;
+        const idx = monthly.findIndex(x => x.m === m);
+        if (idx >= 0) monthly[idx].deltaVsLastMonth = byMonth[m].deltaVsLastMonth;
+      }
+
+      // ── byICK: index semua records per kode ICK (untuk search + detail modal) ──
+      const byICK = {};
+      for (const r of records) {
+        const k = r.ick;
+        if (!byICK[k]) byICK[k] = {
+          ick: r.ick, lbl: r.lbl, uker: r.uker, tipe: r.tipe,
+          sifat: r.sifat, kelompokViz: r.kelompokViz, perluNarasi: r.perluNarasi,
+          hasTargetFleksibel: r.hasTargetFleksibel, validTrenChart: r.validTrenChart,
+          t26: r.t26, months: []
+        };
+        byICK[k].months.push({
+          bulan: r.bulan, bl: r.bl,
+          progres: r.progres, realisasi: r.realisasi, ekspektasi: r.ekspektasi,
+          gap: r.gap, pctVsTarget: r.pctVsTarget, prognosa: r.prognosa,
+          status: r.status, penjelasan: r.penjelasan, keterangan: r.keterangan, action: r.action
+        });
+      }
+      // sort bulan asc per ICK
+      for (const k of Object.keys(byICK)) byICK[k].months.sort((a, b) => a.bulan - b.bulan);
+
+      return { monthly, byMonth, byICK };
+    }
+
+    /* ══════════════════════════════════════════════
+       DASHBOARD INIT
+    ══════════════════════════════════════════════ */
+    function initDashboard() {
+      const months = processedData.monthly;
+      const complete = months.filter(m => processedData.byMonth[m.m].n > 5);
+      currentMonth = (complete[complete.length - 1] || months[months.length - 1])?.m;
+      currentUker = 'ALL';
+
+      // Month buttons
+      document.getElementById('month-btns').innerHTML = months.map(m =>
+        `<button class="mbtn ${m.m === currentMonth ? 'active' : ''}" data-m="${m.m}" onclick="setMonth(${m.m})">${m.lbl}</button>`
+      ).join('');
+
+      document.getElementById('file-badge').textContent = currentFileName;
+      document.getElementById('file-badge').title = currentFileName;
+      const now = new Date().toLocaleString('id-ID');
+      document.getElementById('last-upd').textContent = 'Dimuat: ' + now;
+      document.getElementById('footer-time').textContent = 'Dimuat: ' + now;
+
+      // Destroy existing charts
+      [trendChart, donutChart, ukerBarChart, ukerStackChart].forEach(c => { if (c) c.destroy(); });
+      trendChart = donutChart = ukerBarChart = ukerStackChart = null;
+
+      initTrendChart();
+      renderAll();
+      show('dashboard');
+    }
+
+    /* ══════════════════════════════════════════════
+       RENDER HELPERS
+    ══════════════════════════════════════════════ */
+    function pct(v, dec = 1) { return v == null ? '—' : (v * 100).toFixed(dec) + '%'; }
+    function fmtNum(v) { if (v == null) return '—'; if (v >= 1000000) return (v / 1000000).toFixed(1) + 'jt'; if (v >= 1000) return (v / 1000).toFixed(1) + 'K'; return v.toFixed(2); }
+    function bColor(v) {
+      if (v >= .9) return '#16a34a';
+      if (v >= .6) return '#2563eb';
+      if (v >= .4) return '#b45309';
+      return '#dc2626';
+    }
+    function sClass(s) { return { 'On Track': 's-on', 'Tercapai': 's-tr', 'At Risk': 's-at', 'Perlu Perhatian': 's-pp', 'Belum Ada Data': 's-bd' }[s] || 's-bd'; }
+    function truncate(s, n = 60) { return s && s.length > n ? s.slice(0, n) + '…' : s || ''; }
+
+    function switchTab(tab, navEl) {
+      currentTab = tab;
+      document.querySelectorAll('.tab-nav-btn').forEach(b => b.classList.remove('active'));
+      const btn = document.getElementById('tnbtn-' + tab);
+      if (btn) btn.classList.add('active');
+      document.querySelectorAll('.sb-item').forEach(n => n.classList.remove('active'));
+      const sbEl = document.getElementById('sb-' + tab);
+      if (sbEl) sbEl.classList.add('active');
+      else if (navEl) navEl.classList.add('active');
+      document.querySelectorAll('.tab-page').forEach(p => p.classList.remove('active'));
+      document.getElementById('page-' + tab).classList.add('active');
+      if (tab === 'uker') renderUkerCharts();
+      if (tab === 'detail') renderDetailTab();
+      if (tab === 'narasi') renderNarasiTab();
+      if (tab === 'search') { const q = document.getElementById('search-input')?.value || ''; renderSearchPage(q); }
+    }
+
+    function setMonth(m) {
+      currentMonth = m; currentUker = 'ALL';
+      document.querySelectorAll('.mbtn').forEach(b => b.classList.toggle('active', +b.dataset.m === m));
+      renderAll(); updateTrendHighlight();
+    }
+
+    function renderAll() {
+      const d = processedData.byMonth[currentMonth];
+      if (!d) return;
+      document.getElementById('badge-period').textContent = d.nama + ' 2026';
+      renderKPIs(d); renderDonut(d); renderUker(d); renderDetailOverview(d);
+      renderSidebarUker(d);
+      if (currentTab === 'uker') renderUkerCharts();
+      if (currentTab === 'detail') renderDetailTab();
+      if (currentTab === 'narasi') renderNarasiTab();
+    }
+
+    /* ── KPIs ── */
+    function renderKPIs(d) {
+      // Row 1
+      document.getElementById('kpi-total').textContent = d.n;
+      document.getElementById('kpi-nuker').textContent = d.nUker;
+      document.getElementById('kpi-avg-kuan').textContent = pct(d.avgKuantitatif);
+      document.getElementById('kpi-eksp').textContent = pct(d.eksp);
+
+      const gap = (d.avgKuantitatif ?? d.avg) - d.eksp;
+      document.getElementById('kpi-gap').textContent = (gap >= 0 ? '+' : '') + pct(gap);
+      document.getElementById('kpi-gap').style.color = gap >= 0 ? 'var(--green)' : 'var(--red)';
+      document.getElementById('kpi-gap-card').className = 'kpi ' + (gap >= 0 ? 'green' : 'red');
+      document.getElementById('kpi-gap-desc').textContent = gap >= 0 ? 'Ahead of schedule ✓' : 'Behind schedule ✗';
+
+      // Delta MoM
+      const mom = d.deltaVsLastMonth;
+      const momEl = document.getElementById('kpi-mom');
+      momEl.textContent = mom != null ? (mom >= 0 ? '+' : '') + pct(mom) : '—';
+      momEl.style.color = mom == null ? 'var(--blue)' : mom >= 0 ? 'var(--green)' : 'var(--red)';
+
+      // Label Status
+      const lbl = d.statusLabel;
+      document.getElementById('kpi-label').textContent = lbl.label;
+      document.getElementById('kpi-label').style.color = lbl.color;
+      document.getElementById('kpi-pct-on').textContent = pct(d.pctOn) + ' On Track';
+      document.getElementById('kpi-on').textContent = d.nOn + ' ICK';
+
+      // Sidebar badge
+      const sbBadge = document.getElementById('sb-status-badge');
+      sbBadge.style.display = 'block';
+      sbBadge.textContent = lbl.label + ' — ' + pct(d.pctOn);
+      sbBadge.style.background = lbl.bg;
+      sbBadge.style.color = lbl.color;
+
+      document.getElementById('kpi-on-pct').textContent = pct(d.pctOn) + ' dari total aktif';
+      document.getElementById('kpi-butuh').textContent = d.nButuhTindakan + ' ICK';
+      document.getElementById('kpi-at').textContent = d.sc['At Risk'] || 0;
+      document.getElementById('kpi-pp').textContent = d.sc['Perlu Perhatian'] || 0;
+
+      // Prognosa
+      document.getElementById('kpi-prognosa-ok').textContent = d.nPrognosaOk || '—';
+      document.getElementById('kpi-prognosa-total').textContent = d.nPrognosaTotal || 0;
+      document.getElementById('kpi-avg-prognosa').textContent = d.avgPrognosa != null ? pct(d.avgPrognosa) : '—';
+      document.getElementById('uker-badge').textContent = d.nama + ' 2026';
+
+      // Narasi tab KPIs
+      document.getElementById('kpi-n-skala').textContent = d.tipoCount['Skala Penilaian'] || 0;
+      document.getElementById('kpi-avg-skala').textContent = d.avgNilaiSkala != null ? d.avgNilaiSkala : '—';
+      document.getElementById('kpi-n-biner').textContent = d.tipoCount['Biner / Level Tertentu'] || 0;
+      document.getElementById('kpi-pct-biner').textContent = pct(d.pctBiner);
+      document.getElementById('kpi-n-fleksibel').textContent = d.nFleksibel || 0;
+      document.getElementById('kpi-n-narasi').textContent = d.nPerluNarasi || 0;
+    }
+
+    /* ── Donut ── */
+    function renderDonut(d) {
+      const labels = ['On Track', 'Tercapai', 'At Risk', 'Perlu Perhatian'];
+      const vals = labels.map(l => d.sc[l] || 0);
+      if (donutChart) donutChart.destroy();
+      donutChart = new Chart(document.getElementById('donutChart').getContext('2d'), {
+        type: 'doughnut',
+        data: { labels, datasets: [{ data: vals, backgroundColor: labels.map(l => SC[l]), borderColor: '#fff', borderWidth: 3 }] },
+        options: {
+          responsive: true, maintainAspectRatio: false, cutout: '66%',
+          plugins: {
+            legend: { position: 'bottom', labels: { color: '#4a6080', font: { size: 10 }, boxWidth: 10, padding: 7 } },
+            tooltip: {
+              backgroundColor: '#fff', borderColor: '#c8e0f0', borderWidth: 1, titleColor: '#0d1e3a', bodyColor: '#4a6080',
+              callbacks: { label: c => ` ${c.label}: ${c.parsed} ICK` }
+            }
+          }
+        }
+      });
+    }
+
+    /* ── Uker list ── */
+    function renderUker(d) {
+      const list = document.getElementById('uker-list');
+      if (!d.uker?.length) { list.innerHTML = '<div style="color:var(--text2);font-size:11px">Data belum tersedia</div>'; return; }
+      list.innerHTML = d.uker.map(u => {
+        const v = u.avgKuan ?? u.avg;
+        const p = (v * 100).toFixed(1), c = bColor(v);
+        return `<div class="uker-item">
       <div class="uker-row1"><span class="uker-name">${u.u}</span><span class="uker-pct" style="color:${c}">${p}%</span></div>
-      <div class="ubar"><div class="ubar-fill" style="width:${Math.min(v*100,100)}%;background:${c}"></div></div>
+      <div class="ubar"><div class="ubar-fill" style="width:${Math.min(v * 100, 100)}%;background:${c}"></div></div>
       <div class="chips">
         <span class="chip c-on">✓ ${u.on}</span>
-        ${u.at?`<span class="chip c-at">⚠ ${u.at}</span>`:''}
-        ${u.pp?`<span class="chip c-pp">✗ ${u.pp}</span>`:''}
+        ${u.at ? `<span class="chip c-at">⚠ ${u.at}</span>` : ''}
+        ${u.pp ? `<span class="chip c-pp">✗ ${u.pp}</span>` : ''}
       </div>
     </div>`;
-  }).join('');
-}
+      }).join('');
+    }
 
-/* ── Sidebar Uker ── */
-function renderSidebarUker(d){
-  document.getElementById('sb-uker-list').innerHTML=d.uker.map(u=>{
-    const v=u.avgKuan??u.avg;
-    const c=bColor(v);
-    return `<div class="sb-item" style="font-size:11px;padding:7px 18px" onclick="goDetailUker('${u.u.replace(/'/g,"\\'")}')">
+    /* ── Sidebar Uker ── */
+    function renderSidebarUker(d) {
+      document.getElementById('sb-uker-list').innerHTML = d.uker.map(u => {
+        const v = u.avgKuan ?? u.avg;
+        const c = bColor(v);
+        return `<div class="sb-item" style="font-size:11px;padding:7px 18px" onclick="goDetailUker('${u.u.replace(/'/g, "\\'")}')">
       <div style="width:7px;height:7px;border-radius:50%;background:${c};flex-shrink:0"></div>
       <span>${u.u}</span>
-      <span style="margin-left:auto;font-size:10px;color:${c};font-weight:700">${(v*100).toFixed(0)}%</span>
+      <span style="margin-left:auto;font-size:10px;color:${c};font-weight:700">${(v * 100).toFixed(0)}%</span>
     </div>`;
-  }).join('');
-}
-function goDetailUker(u){currentUker=u;switchTab('detail');}
+      }).join('');
+    }
+    function goDetailUker(u) { currentUker = u; switchTab('detail'); }
 
-/* ── Detail Overview (tab overview, bottom right) ── */
-function renderDetailOverview(d){
-  const ukers=['ALL',...new Set(d.detail.map(r=>r.uker))].filter(Boolean);
-  document.getElementById('ufilter-overview').innerHTML=ukers.map(u=>
-    `<button class="ufbtn ${u===currentUker?'active':''}" onclick="filterUker('${u.replace(/'/g,"\\'")}','overview')">${u==='ALL'?'Semua':u}</button>`
-  ).join('');
-  const filtered=currentUker==='ALL'?d.detail:d.detail.filter(r=>r.uker===currentUker);
-  document.getElementById('detail-count').textContent=filtered.length+' ICK';
-  document.getElementById('detail-tbody').innerHTML=filtered.map(r=>{
-    const w=Math.min((r.progres||0)*100,100).toFixed(0),c=bColor(r.progres||0);
-    const tc=TIPE_COLOR[r.tipe]||'#9ca3af';
-    const pctTgt=r.pctVsTarget!=null?`<span style="color:${bColor(r.pctVsTarget)};font-weight:700">${pct(r.pctVsTarget)}</span>`:'<span style="color:var(--muted)">—</span>';
-    return `<tr style="cursor:pointer" onclick="openICKDetail('${escKey(r.ick)}')" title="Klik untuk lihat detail bulanan">
-      <td style="min-width:160px">
-        <div style="font-size:10px;font-weight:700;color:var(--navy);white-space:nowrap;margin-bottom:1px">${r.ick}</div>
-        <div style="font-size:9px;color:var(--text2);line-height:1.3">${r.lbl!==r.ick?r.lbl:''}</div>
-      </td>
+    /* ── Detail Overview (tab overview, bottom right) ── */
+    function renderDetailOverview(d) {
+      const ukers = ['ALL', ...new Set(d.detail.map(r => r.uker))].filter(Boolean);
+      document.getElementById('ufilter-overview').innerHTML = ukers.map(u =>
+        `<button class="ufbtn ${u === currentUker ? 'active' : ''}" onclick="filterUker('${u.replace(/'/g, "\\'")}','overview')">${u === 'ALL' ? 'Semua' : u}</button>`
+      ).join('');
+      const filtered = currentUker === 'ALL' ? d.detail : d.detail.filter(r => r.uker === currentUker);
+      document.getElementById('detail-count').textContent = filtered.length + ' ICK';
+      document.getElementById('detail-tbody').innerHTML = filtered.map(r => {
+        const w = Math.min((r.progres || 0) * 100, 100).toFixed(0), c = bColor(r.progres || 0);
+        const tc = TIPE_COLOR[r.tipe] || '#9ca3af';
+        const pctTgt = r.pctVsTarget != null ? `<span style="color:${bColor(r.pctVsTarget)};font-weight:700">${pct(r.pctVsTarget)}</span>` : '<span style="color:var(--muted)">—</span>';
+        return `<tr style="cursor:pointer" onclick="openICKDetail('${escKey(r.ick)}')" title="Klik untuk lihat detail bulanan">
+      <td style="font-size:9px;color:var(--text2);min-width:160px;line-height:1.4">${r.lbl}</td>
       <td style="font-weight:700;font-size:9px;color:var(--navy);white-space:nowrap">${r.uker}</td>
-      <td><span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:${tc};margin-right:3px;vertical-align:middle"></span><span style="font-size:9px">${r.tipe.replace('Kuantitatif - ','K.')}</span></td>
+      <td><span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:${tc};margin-right:3px;vertical-align:middle"></span><span style="font-size:9px">${r.tipe.replace('Kuantitatif - ', 'K.')}</span></td>
       <td>
         <div class="pcell">
           <div class="mbar"><div class="mbar-fill" style="width:${w}%;background:${c}"></div></div>
@@ -1357,80 +2293,74 @@ function renderDetailOverview(d){
       <td>${pctTgt}</td>
       <td><span class="bs ${sClass(r.status)}">${r.status}</span></td>
     </tr>`;
-  }).join('');
-}
+      }).join('');
+    }
 
-function filterUker(u, ctx){
-  currentUker=u;
-  const d=processedData.byMonth[currentMonth];
-  if(ctx==='overview') renderDetailOverview(d);
-  else if(ctx==='detail') renderDetailTab();
-  else if(ctx==='narasi') renderNarasiTab();
-}
+    function filterUker(u, ctx) {
+      currentUker = u;
+      const d = processedData.byMonth[currentMonth];
+      if (ctx === 'overview') renderDetailOverview(d);
+      else if (ctx === 'detail') renderDetailTab();
+      else if (ctx === 'narasi') renderNarasiTab();
+    }
 
-/* ── Detail ICK Tab (hanya Kuantitatif yang Valid_Tren_Chart) ── */
-function renderDetailTab(){
-  const d=processedData.byMonth[currentMonth];
-  if(!d) return;
-  // Tampilkan semua tipe, filter oleh Uker
-  const ukers=['ALL',...new Set(d.detail.map(r=>r.uker))].filter(Boolean);
-  document.getElementById('ufilter-detail').innerHTML=ukers.map(u=>
-    `<button class="ufbtn ${u===currentUker?'active':''}" onclick="filterUker('${u.replace(/'/g,"\\'")}','detail')">${u==='ALL'?'Semua':u}</button>`
-  ).join('');
-  let filtered=d.detail.filter(r=>r.validTrenChart);
-  if(currentUker!=='ALL') filtered=filtered.filter(r=>r.uker===currentUker);
-  document.getElementById('detail-tab-count').textContent=filtered.length+' ICK Kuantitatif';
-  document.getElementById('detail-tab-tbody').innerHTML=filtered.map(r=>{
-    const c=bColor(r.progres||0);
-    const tc=TIPE_COLOR[r.tipe]||'#9ca3af';
-    const gColor=r.gap>=0?'#16a34a':'#dc2626';
-    const pctTgt=r.pctVsTarget!=null?`<span style="color:${bColor(r.pctVsTarget)};font-weight:700">${pct(r.pctVsTarget)}</span>`:'—';
-    const prognosaStr=r.prognosa!=null?`<span style="color:${r.prognosa>=(r.t26??0)?'var(--green)':'var(--yellow)'};">${fmtNum(r.prognosa)}</span>`:'—';
-    return `<tr style="cursor:pointer" onclick="openICKDetail('${escKey(r.ick)}')" title="Klik untuk lihat tren bulanan">
-      <td style="min-width:180px">
-        <div style="font-size:10px;font-weight:700;color:var(--navy);white-space:nowrap;margin-bottom:1px">${r.ick}</div>
-        <div style="font-size:9px;color:var(--text2);line-height:1.3">${r.lbl!==r.ick?r.lbl:''}</div>
-      </td>
+    /* ── Detail ICK Tab (hanya Kuantitatif yang Valid_Tren_Chart) ── */
+    function renderDetailTab() {
+      const d = processedData.byMonth[currentMonth];
+      if (!d) return;
+      // Tampilkan semua tipe, filter oleh Uker
+      const ukers = ['ALL', ...new Set(d.detail.map(r => r.uker))].filter(Boolean);
+      document.getElementById('ufilter-detail').innerHTML = ukers.map(u =>
+        `<button class="ufbtn ${u === currentUker ? 'active' : ''}" onclick="filterUker('${u.replace(/'/g, "\\'")}','detail')">${u === 'ALL' ? 'Semua' : u}</button>`
+      ).join('');
+      let filtered = d.detail.filter(r => r.validTrenChart);
+      if (currentUker !== 'ALL') filtered = filtered.filter(r => r.uker === currentUker);
+      document.getElementById('detail-tab-count').textContent = filtered.length + ' ICK Kuantitatif';
+      document.getElementById('detail-tab-tbody').innerHTML = filtered.map(r => {
+        const c = bColor(r.progres || 0);
+        const tc = TIPE_COLOR[r.tipe] || '#9ca3af';
+        const gColor = r.gap >= 0 ? '#16a34a' : '#dc2626';
+        const pctTgt = r.pctVsTarget != null ? `<span style="color:${bColor(r.pctVsTarget)};font-weight:700">${pct(r.pctVsTarget)}</span>` : '—';
+        const prognosaStr = r.prognosa != null ? `<span style="color:${r.prognosa >= (r.t26 ?? 0) ? 'var(--green)' : 'var(--yellow)'};">${fmtNum(r.prognosa)}</span>` : '—';
+        return `<tr style="cursor:pointer" onclick="openICKDetail('${escKey(r.ick)}')" title="Klik untuk lihat tren bulanan">
+      <td style="font-size:10px;min-width:180px;line-height:1.4">${r.lbl}</td>
       <td style="font-weight:700;font-size:10px;white-space:nowrap;color:var(--navy)">${r.uker}</td>
-      <td><span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:${tc};margin-right:3px;vertical-align:middle"></span><span style="font-size:9px">${r.tipe.replace('Kuantitatif - ','K.')}</span></td>
-      <td><div class="pcell"><div class="mbar"><div class="mbar-fill" style="width:${Math.min((r.progres||0)*100,100).toFixed(0)}%;background:${c}"></div></div><span style="color:${c};font-weight:700;font-size:9px">${pct(r.progres)}</span></div></td>
+      <td><span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:${tc};margin-right:3px;vertical-align:middle"></span><span style="font-size:9px">${r.tipe.replace('Kuantitatif - ', 'K.')}</span></td>
+      <td><div class="pcell"><div class="mbar"><div class="mbar-fill" style="width:${Math.min((r.progres || 0) * 100, 100).toFixed(0)}%;background:${c}"></div></div><span style="color:${c};font-weight:700;font-size:9px">${pct(r.progres)}</span></div></td>
       <td style="font-size:9px;color:var(--text2)">${pct(r.ekspektasi)}</td>
-      <td style="font-size:9px;font-weight:700;color:${gColor}">${(r.gap>=0?'+':'')+pct(r.gap)}</td>
+      <td style="font-size:9px;font-weight:700;color:${gColor}">${(r.gap >= 0 ? '+' : '') + pct(r.gap)}</td>
       <td style="font-size:9px">${fmtNum(r.realisasi)}</td>
-      <td style="font-size:9px">${r.t26!=null?fmtNum(r.t26):r.hasTargetFleksibel?'<span style="color:var(--orange);font-size:9px">Fleksibel</span>':'—'}</td>
+      <td style="font-size:9px">${r.t26 != null ? fmtNum(r.t26) : r.hasTargetFleksibel ? '<span style="color:var(--orange);font-size:9px">Fleksibel</span>' : '—'}</td>
       <td>${pctTgt}</td>
       <td>${prognosaStr}</td>
       <td><span class="bs ${sClass(r.status)}">${r.status}</span></td>
     </tr>`;
-  }).join('');
-}
+      }).join('');
+    }
 
-/* ── Skala & Biner Tab ── */
-function renderNarasiTab(){
-  const d=processedData.byMonth[currentMonth];
-  if(!d) return;
-  const ukers=['ALL',...new Set(d.detail.filter(r=>r.perluNarasi).map(r=>r.uker))].filter(Boolean);
-  document.getElementById('ufilter-narasi').innerHTML=ukers.map(u=>
-    `<button class="ufbtn ${u===currentUker?'active':''}" onclick="filterUker('${u.replace(/'/g,"\\'")}','narasi')">${u==='ALL'?'Semua':u}</button>`
-  ).join('');
-  let filtered=d.detail.filter(r=>r.perluNarasi);
-  if(currentUker!=='ALL') filtered=filtered.filter(r=>r.uker===currentUker);
-  document.getElementById('narasi-count').textContent=filtered.length+' ICK';
-  document.getElementById('narasi-tbody').innerHTML=filtered.map(r=>{
-    const tc=TIPE_COLOR[r.tipe]||'#9ca3af';
-    const tgtStr=r.t26!=null?fmtNum(r.t26):(r.hasTargetFleksibel?'Fleksibel':'—');
-    const fleksibel=r.hasTargetFleksibel
-      ?'<span style="background:#ffedd5;color:#c2410c;padding:2px 6px;border-radius:8px;font-size:9px;font-weight:700">Fleksibel</span>'
-      :'<span style="color:var(--muted);font-size:9px">Fixed</span>';
-    const realStr=r.realisasi!=null?fmtNum(r.realisasi):'—';
-    const penj=r.penjelasan?`<div class="tt">📝<span class="tt-content">${r.penjelasan}</span></div>`:'—';
-    const ket=r.keterangan?`<div class="tt">💬<span class="tt-content">${r.keterangan}</span></div>`:'—';
-    const act=r.action?`<div class="tt">⚡<span class="tt-content">${r.action}</span></div>`:'—';
-    return `<tr>
-      <td style="min-width:180px">
-        <div style="font-size:10px;font-weight:700;color:var(--navy);white-space:nowrap;margin-bottom:1px">${r.ick}</div>
-        <div style="font-size:9px;color:var(--text2);line-height:1.3">${r.lbl!==r.ick?r.lbl:''}</div>
-      </td>
+    /* ── Skala & Biner Tab ── */
+    function renderNarasiTab() {
+      const d = processedData.byMonth[currentMonth];
+      if (!d) return;
+      const ukers = ['ALL', ...new Set(d.detail.filter(r => r.perluNarasi).map(r => r.uker))].filter(Boolean);
+      document.getElementById('ufilter-narasi').innerHTML = ukers.map(u =>
+        `<button class="ufbtn ${u === currentUker ? 'active' : ''}" onclick="filterUker('${u.replace(/'/g, "\\'")}','narasi')">${u === 'ALL' ? 'Semua' : u}</button>`
+      ).join('');
+      let filtered = d.detail.filter(r => r.perluNarasi);
+      if (currentUker !== 'ALL') filtered = filtered.filter(r => r.uker === currentUker);
+      document.getElementById('narasi-count').textContent = filtered.length + ' ICK';
+      document.getElementById('narasi-tbody').innerHTML = filtered.map(r => {
+        const tc = TIPE_COLOR[r.tipe] || '#9ca3af';
+        const tgtStr = r.t26 != null ? fmtNum(r.t26) : (r.hasTargetFleksibel ? 'Fleksibel' : '—');
+        const fleksibel = r.hasTargetFleksibel
+          ? '<span style="background:#ffedd5;color:#c2410c;padding:2px 6px;border-radius:8px;font-size:9px;font-weight:700">Fleksibel</span>'
+          : '<span style="color:var(--muted);font-size:9px">Fixed</span>';
+        const realStr = r.realisasi != null ? fmtNum(r.realisasi) : '—';
+        const penj = r.penjelasan ? `<div class="tt">📝<span class="tt-content">${r.penjelasan}</span></div>` : '—';
+        const ket = r.keterangan ? `<div class="tt">💬<span class="tt-content">${r.keterangan}</span></div>` : '—';
+        const act = r.action ? `<div class="tt">⚡<span class="tt-content">${r.action}</span></div>` : '—';
+        return `<tr>
+      <td style="font-size:10px;min-width:180px;line-height:1.4">${r.lbl}</td>
       <td style="font-weight:700;font-size:10px;white-space:nowrap;color:var(--navy)">${r.uker}</td>
       <td><span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:${tc};margin-right:3px;vertical-align:middle"></span><span style="font-size:9px">${r.tipe}</span></td>
       <td style="font-size:9px">${tgtStr}</td>
@@ -1441,310 +2371,334 @@ function renderNarasiTab(){
       <td style="text-align:center">${act}</td>
       <td><span class="bs ${sClass(r.status)}">${r.status}</span></td>
     </tr>`;
-  }).join('');
-}
-
-/* ── Per Uker Charts ── */
-function renderUkerCharts(){
-  const d=processedData.byMonth[currentMonth];
-  if(!d) return;
-  document.getElementById('uker-month-label').textContent=d.nama+' 2026';
-
-  const labels=d.uker.map(u=>u.u);
-  const avgs=d.uker.map(u=>(u.avgKuan??u.avg)*100);
-  const ekspektasi=d.eksp*100;
-
-  if(ukerBarChart) ukerBarChart.destroy();
-  ukerBarChart=new Chart(document.getElementById('ukerBarChart').getContext('2d'),{
-    type:'bar',
-    data:{
-      labels,
-      datasets:[
-        {label:'Progres Kuantitatif (%)',data:avgs,
-         backgroundColor:avgs.map(v=>v/100>=d.eksp*0.95?'#87CEEB':'rgba(135,206,235,.45)'),
-         borderColor:'#4fa8d5',borderWidth:1,borderRadius:6},
-        {label:'Ekspektasi',data:labels.map(()=>ekspektasi),
-         type:'line',borderColor:'#ef4444',borderWidth:2,borderDash:[5,4],pointRadius:0,fill:false}
-      ]
-    },
-    options:{
-      responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{labels:{color:'#4a6080',font:{size:10}}},
-               tooltip:{backgroundColor:'#fff',borderColor:'#c8e0f0',borderWidth:1,titleColor:'#0d1e3a',bodyColor:'#4a6080',
-                        callbacks:{label:c=>` ${c.dataset.label}: ${c.parsed.y?.toFixed(1)??''}%`}}},
-      scales:{
-        x:{grid:{display:false},ticks:{color:'#4a6080',font:{size:10}}},
-        y:{min:0,max:100,grid:{color:'rgba(200,224,240,.6)'},ticks:{color:'#4a6080',font:{size:10},callback:v=>v+'%'}}
-      }
+      }).join('');
     }
-  });
 
-  if(ukerStackChart) ukerStackChart.destroy();
-  const statLabels=['On Track','Tercapai','At Risk','Perlu Perhatian'];
-  const statColors=['#22c55e','#3b82f6','#f59e0b','#ef4444'];
-  ukerStackChart=new Chart(document.getElementById('ukerStackChart').getContext('2d'),{
-    type:'bar',
-    data:{
-      labels,
-      datasets:statLabels.map((sl,i)=>({
-        label:sl,
-        data:d.uker.map(u=>d.detail.filter(r=>r.uker===u.u&&r.status===sl).length),
-        backgroundColor:statColors[i],borderRadius:3
-      }))
-    },
-    options:{
-      responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{labels:{color:'#4a6080',font:{size:10}}}},
-      scales:{
-        x:{stacked:true,grid:{display:false},ticks:{color:'#4a6080',font:{size:10}}},
-        y:{stacked:true,grid:{color:'rgba(200,224,240,.6)'},ticks:{color:'#4a6080',font:{size:10}}}
-      }
-    }
-  });
+    /* ── Per Uker Charts ── */
+    function renderUkerCharts() {
+      const d = processedData.byMonth[currentMonth];
+      if (!d) return;
+      document.getElementById('uker-month-label').textContent = d.nama + ' 2026';
 
-  // Tipe breakdown
-  const tipoEl=document.getElementById('tipe-breakdown-uker');
-  const tipeList=[
-    {key:'Kuantitatif - Hitungan',label:'K. Hitungan',color:'var(--green)'},
-    {key:'Kuantitatif - Volume',label:'K. Volume',color:'var(--orange)'},
-    {key:'Skala Penilaian',label:'Skala Penilaian',color:'var(--purple)'},
-    {key:'Biner / Level Tertentu',label:'Biner',color:'var(--blue)'},
-    {key:'Lainnya',label:'Lainnya',color:'var(--muted)'},
-  ];
-  tipoEl.innerHTML=tipeList.map(t=>`
+      const labels = d.uker.map(u => u.u);
+      const avgs = d.uker.map(u => (u.avgKuan ?? u.avg) * 100);
+      const ekspektasi = d.eksp * 100;
+
+      if (ukerBarChart) ukerBarChart.destroy();
+      ukerBarChart = new Chart(document.getElementById('ukerBarChart').getContext('2d'), {
+        type: 'bar',
+        data: {
+          labels,
+          datasets: [
+            {
+              label: 'Progres Kuantitatif (%)', data: avgs,
+              backgroundColor: avgs.map(v => v / 100 >= d.eksp * 0.95 ? '#87CEEB' : 'rgba(135,206,235,.45)'),
+              borderColor: '#4fa8d5', borderWidth: 1, borderRadius: 6
+            },
+            {
+              label: 'Ekspektasi', data: labels.map(() => ekspektasi),
+              type: 'line', borderColor: '#ef4444', borderWidth: 2, borderDash: [5, 4], pointRadius: 0, fill: false
+            }
+          ]
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          plugins: {
+            legend: { labels: { color: '#4a6080', font: { size: 10 } } },
+            tooltip: {
+              backgroundColor: '#fff', borderColor: '#c8e0f0', borderWidth: 1, titleColor: '#0d1e3a', bodyColor: '#4a6080',
+              callbacks: { label: c => ` ${c.dataset.label}: ${c.parsed.y?.toFixed(1) ?? ''}%` }
+            }
+          },
+          scales: {
+            x: { grid: { display: false }, ticks: { color: '#4a6080', font: { size: 10 } } },
+            y: { min: 0, max: 100, grid: { color: 'rgba(200,224,240,.6)' }, ticks: { color: '#4a6080', font: { size: 10 }, callback: v => v + '%' } }
+          }
+        }
+      });
+
+      if (ukerStackChart) ukerStackChart.destroy();
+      const statLabels = ['On Track', 'Tercapai', 'At Risk', 'Perlu Perhatian'];
+      const statColors = ['#22c55e', '#3b82f6', '#f59e0b', '#ef4444'];
+      ukerStackChart = new Chart(document.getElementById('ukerStackChart').getContext('2d'), {
+        type: 'bar',
+        data: {
+          labels,
+          datasets: statLabels.map((sl, i) => ({
+            label: sl,
+            data: d.uker.map(u => d.detail.filter(r => r.uker === u.u && r.status === sl).length),
+            backgroundColor: statColors[i], borderRadius: 3
+          }))
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          plugins: { legend: { labels: { color: '#4a6080', font: { size: 10 } } } },
+          scales: {
+            x: { stacked: true, grid: { display: false }, ticks: { color: '#4a6080', font: { size: 10 } } },
+            y: { stacked: true, grid: { color: 'rgba(200,224,240,.6)' }, ticks: { color: '#4a6080', font: { size: 10 } } }
+          }
+        }
+      });
+
+      // Tipe breakdown
+      const tipoEl = document.getElementById('tipe-breakdown-uker');
+      const tipeList = [
+        { key: 'Kuantitatif - Hitungan', label: 'K. Hitungan', color: 'var(--green)' },
+        { key: 'Kuantitatif - Volume', label: 'K. Volume', color: 'var(--orange)' },
+        { key: 'Skala Penilaian', label: 'Skala Penilaian', color: 'var(--purple)' },
+        { key: 'Biner / Level Tertentu', label: 'Biner', color: 'var(--blue)' },
+        { key: 'Lainnya', label: 'Lainnya', color: 'var(--muted)' },
+      ];
+      tipoEl.innerHTML = tipeList.map(t => `
     <div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:var(--bg);border-radius:8px;border:1.5px solid var(--border)">
       <div style="width:10px;height:10px;border-radius:50%;background:${t.color};flex-shrink:0"></div>
       <span style="font-size:11px;color:var(--text)">${t.label}</span>
-      <span style="margin-left:auto;font-size:16px;font-weight:800;color:${t.color}">${d.tipoCount[t.key]||0}</span>
+      <span style="margin-left:auto;font-size:16px;font-weight:800;color:${t.color}">${d.tipoCount[t.key] || 0}</span>
       <span style="font-size:9px;color:var(--muted)">ICK</span>
     </div>
   `).join('');
-}
-
-/* ── Trend Chart (Valid_Tren_Chart = Kuantitatif saja) ── */
-function initTrendChart(){
-  const months=processedData.monthly;
-  trendChart=new Chart(document.getElementById('trendChart').getContext('2d'),{
-    type:'line',
-    data:{
-      labels:months.map(m=>m.lbl),
-      datasets:[
-        {label:'Progres Kuantitatif (%)',
-         data:months.map(m=>m.avgKuantitatif!=null?+(m.avgKuantitatif*100).toFixed(2):null),
-         borderColor:'#4fa8d5',backgroundColor:'rgba(135,206,235,.12)',borderWidth:2.5,
-         pointBackgroundColor:'#4fa8d5',pointRadius:5,pointHoverRadius:7,fill:true,tension:.35,spanGaps:false},
-        {label:'Ekspektasi (%)',
-         data:months.map(m=>+(m.eksp*100).toFixed(2)),
-         borderColor:'#9ca3af',borderDash:[5,4],borderWidth:1.5,pointRadius:0,fill:false,tension:0}
-      ]
-    },
-    options:{
-      responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},
-      plugins:{legend:{labels:{color:'#4a6080',font:{size:10},boxWidth:10,padding:10}},
-               tooltip:{backgroundColor:'#fff',borderColor:'#c8e0f0',borderWidth:1,titleColor:'#0d1e3a',bodyColor:'#4a6080',
-                        callbacks:{label:c=>` ${c.dataset.label}: ${c.parsed.y?.toFixed(1)??''}%`}}},
-      scales:{
-        x:{grid:{color:'rgba(200,224,240,.5)'},ticks:{color:'#4a6080',font:{size:10}}},
-        y:{min:0,max:100,grid:{color:'rgba(200,224,240,.5)'},ticks:{color:'#4a6080',font:{size:10},callback:v=>v+'%'}}
-      }
     }
-  });
-}
-function updateTrendHighlight(){
-  if(!trendChart) return;
-  const months=processedData.monthly;
-  trendChart.data.datasets[0].pointBackgroundColor=months.map(m=>m.m===currentMonth?'#0a2a5e':'#4fa8d5');
-  trendChart.data.datasets[0].pointRadius=months.map(m=>m.m===currentMonth?8:4);
-  trendChart.update('none');
-}
 
-/* ══════════════════════════════════════════════
-   SEARCH PAGE
-══════════════════════════════════════════════ */
-function renderSearchPage(q){
-  if(!processedData?.byICK) return;
-  const query=(q||'').toLowerCase().trim();
-  const all=Object.values(processedData.byICK);
-  const filtered=query
-    ? all.filter(d=>
-        d.lbl.toLowerCase().includes(query)||
-        d.ick.toLowerCase().includes(query)||
-        d.uker.toLowerCase().includes(query)||
-        d.tipe.toLowerCase().includes(query)
-      )
-    : all;
+    /* ── Trend Chart (Valid_Tren_Chart = Kuantitatif saja) ── */
+    function initTrendChart() {
+      const months = processedData.monthly;
+      trendChart = new Chart(document.getElementById('trendChart').getContext('2d'), {
+        type: 'line',
+        data: {
+          labels: months.map(m => m.lbl),
+          datasets: [
+            {
+              label: 'Progres Kuantitatif (%)',
+              data: months.map(m => m.avgKuantitatif != null ? +(m.avgKuantitatif * 100).toFixed(2) : null),
+              borderColor: '#4fa8d5', backgroundColor: 'rgba(135,206,235,.12)', borderWidth: 2.5,
+              pointBackgroundColor: '#4fa8d5', pointRadius: 5, pointHoverRadius: 7, fill: true, tension: .35, spanGaps: false
+            },
+            {
+              label: 'Ekspektasi (%)',
+              data: months.map(m => +(m.eksp * 100).toFixed(2)),
+              borderColor: '#9ca3af', borderDash: [5, 4], borderWidth: 1.5, pointRadius: 0, fill: false, tension: 0
+            }
+          ]
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false, interaction: { mode: 'index', intersect: false },
+          plugins: {
+            legend: { labels: { color: '#4a6080', font: { size: 10 }, boxWidth: 10, padding: 10 } },
+            tooltip: {
+              backgroundColor: '#fff', borderColor: '#c8e0f0', borderWidth: 1, titleColor: '#0d1e3a', bodyColor: '#4a6080',
+              callbacks: { label: c => ` ${c.dataset.label}: ${c.parsed.y?.toFixed(1) ?? ''}%` }
+            }
+          },
+          scales: {
+            x: { grid: { color: 'rgba(200,224,240,.5)' }, ticks: { color: '#4a6080', font: { size: 10 } } },
+            y: { min: 0, max: 100, grid: { color: 'rgba(200,224,240,.5)' }, ticks: { color: '#4a6080', font: { size: 10 }, callback: v => v + '%' } }
+          }
+        }
+      });
+    }
+    function updateTrendHighlight() {
+      if (!trendChart) return;
+      const months = processedData.monthly;
+      trendChart.data.datasets[0].pointBackgroundColor = months.map(m => m.m === currentMonth ? '#0a2a5e' : '#4fa8d5');
+      trendChart.data.datasets[0].pointRadius = months.map(m => m.m === currentMonth ? 8 : 4);
+      trendChart.update('none');
+    }
 
-  document.getElementById('search-count').textContent=filtered.length+' ICK';
+    /* ══════════════════════════════════════════════
+       SEARCH PAGE
+    ══════════════════════════════════════════════ */
+    function renderSearchPage(q) {
+      if (!processedData?.byICK) return;
+      const query = (q || '').toLowerCase().trim();
+      const all = Object.values(processedData.byICK);
+      const filtered = query
+        ? all.filter(d =>
+          d.lbl.toLowerCase().includes(query) ||
+          d.ick.toLowerCase().includes(query) ||
+          d.uker.toLowerCase().includes(query) ||
+          d.tipe.toLowerCase().includes(query)
+        )
+        : all;
 
-  if(!filtered.length){
-    document.getElementById('search-results').innerHTML=
-      `<div class="search-empty">🔍 Tidak ada ICK yang cocok dengan "<strong>${q}</strong>"</div>`;
-    return;
-  }
+      document.getElementById('search-count').textContent = filtered.length + ' ICK';
 
-  // Ambil data bulan terakhir per ICK untuk preview status & progres
-  document.getElementById('search-results').innerHTML=filtered.map(d=>{
-    const lastM=d.months[d.months.length-1];
-    const latestBulan=lastM?.bulan;
-    const latestRec=d.months.filter(m=>m.bulan===latestBulan)[0]??lastM;
-    const prog=latestRec?.progres;
-    const stat=latestRec?.status||'Belum Ada Data';
-    const c=prog!=null?bColor(prog):'var(--muted)';
-    const vizIcon=d.kelompokViz==='Progress Bar'?'📊':d.kelompokViz==='Badge Status'?'🏅':'📝';
-    const tipeShort=d.tipe.replace('Kuantitatif - ','K. ');
-    return `<div class="ick-card" onclick="openICKDetail('${escKey(d.ick)}')">
-      <div style="font-size:10px;font-weight:800;color:var(--navy);margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${d.ick}</div>
-      <div class="ick-card-name" style="font-weight:400;color:var(--text2)">${d.lbl!==d.ick?d.lbl:''}</div>
+      if (!filtered.length) {
+        document.getElementById('search-results').innerHTML =
+          `<div class="search-empty">🔍 Tidak ada ICK yang cocok dengan "<strong>${q}</strong>"</div>`;
+        return;
+      }
+
+      // Ambil data bulan terakhir per ICK untuk preview status & progres
+      document.getElementById('search-results').innerHTML = filtered.map(d => {
+        const lastM = d.months[d.months.length - 1];
+        const latestBulan = lastM?.bulan;
+        const latestRec = d.months.filter(m => m.bulan === latestBulan)[0] ?? lastM;
+        const prog = latestRec?.progres;
+        const stat = latestRec?.status || 'Belum Ada Data';
+        const c = prog != null ? bColor(prog) : 'var(--muted)';
+        const vizIcon = d.kelompokViz === 'Progress Bar' ? '📊' : d.kelompokViz === 'Badge Status' ? '🏅' : '📝';
+        const tipeShort = d.tipe.replace('Kuantitatif - ', 'K. ');
+        return `<div class="ick-card" onclick="openICKDetail('${escKey(d.ick)}')">
+      <div class="ick-card-name">${d.lbl}</div>
       <div class="ick-card-meta">
         <span class="ick-card-uker">${d.uker}</span>
         <span class="ick-card-tipe">${vizIcon} ${tipeShort}</span>
-        ${d.hasTargetFleksibel?'<span class="ick-card-tipe" style="color:var(--orange);border-color:#fed7aa">Fleksibel</span>':''}
+        ${d.hasTargetFleksibel ? '<span class="ick-card-tipe" style="color:var(--orange);border-color:#fed7aa">Fleksibel</span>' : ''}
       </div>
       <div class="ick-card-bottom">
         <span class="bs ${sClass(stat)}">${stat}</span>
-        <span style="font-size:13px;font-weight:800;color:${c}">${prog!=null?pct(prog):'—'}</span>
+        <span style="font-size:13px;font-weight:800;color:${c}">${prog != null ? pct(prog) : '—'}</span>
       </div>
-      ${prog!=null?`<div style="margin-top:8px;background:var(--border2);border-radius:3px;height:4px">
-        <div style="width:${Math.min(prog*100,100).toFixed(0)}%;height:4px;border-radius:3px;background:${c};transition:width .4s"></div>
-      </div>`:''}
+      ${prog != null ? `<div style="margin-top:8px;background:var(--border2);border-radius:3px;height:4px">
+        <div style="width:${Math.min(prog * 100, 100).toFixed(0)}%;height:4px;border-radius:3px;background:${c};transition:width .4s"></div>
+      </div>`: ''}
     </div>`;
-  }).join('');
-}
+      }).join('');
+    }
 
-function escKey(s){return (s||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'");}
+    function escKey(s) { return (s || '').replace(/\\/g, '\\\\').replace(/'/g, "\\'"); }
 
-/* ══════════════════════════════════════════════
-   ICK DETAIL MODAL
-══════════════════════════════════════════════ */
-function openICKDetail(ickKey){
-  const d=processedData?.byICK?.[ickKey];
-  if(!d) return;
+    /* ══════════════════════════════════════════════
+       ICK DETAIL MODAL
+    ══════════════════════════════════════════════ */
+    function openICKDetail(ickKey) {
+      const d = processedData?.byICK?.[ickKey];
+      if (!d) return;
 
-  // Header
-  document.getElementById('ick-modal-title').textContent=d.ick+(d.lbl&&d.lbl!==d.ick?' — '+d.lbl:'');
-  document.getElementById('ick-modal-uker').textContent='📍 '+d.uker;
-  document.getElementById('ick-modal-sifat').textContent='⟳ '+d.sifat;
+      // Header
+      document.getElementById('ick-modal-title').textContent = d.lbl;
+      document.getElementById('ick-modal-uker').textContent = '📍 ' + d.uker;
+      document.getElementById('ick-modal-sifat').textContent = '⟳ ' + d.sifat;
 
-  // Badges
-  const badges=[];
-  badges.push(`<span class="ick-mbadge">${d.tipe}</span>`);
-  if(d.validTrenChart) badges.push('<span class="ick-mbadge">Akumulatif ✓</span>');
-  if(d.hasTargetFleksibel) badges.push('<span class="ick-mbadge" style="background:rgba(251,146,60,.2);color:#fb923c">Target Fleksibel</span>');
-  if(d.t26!=null) badges.push(`<span class="ick-mbadge">Target 2026: ${fmtNum(d.t26)}</span>`);
-  document.getElementById('ick-modal-badges').innerHTML=badges.join('');
+      // Badges
+      const badges = [];
+      badges.push(`<span class="ick-mbadge">${d.tipe}</span>`);
+      if (d.validTrenChart) badges.push('<span class="ick-mbadge">Akumulatif ✓</span>');
+      if (d.hasTargetFleksibel) badges.push('<span class="ick-mbadge" style="background:rgba(251,146,60,.2);color:#fb923c">Target Fleksibel</span>');
+      if (d.t26 != null) badges.push(`<span class="ick-mbadge">Target 2026: ${fmtNum(d.t26)}</span>`);
+      document.getElementById('ick-modal-badges').innerHTML = badges.join('');
 
-  // Tabel bulan
-  document.getElementById('ick-month-tbody').innerHTML=d.months.map(m=>{
-    const c=m.progres!=null?bColor(m.progres):'var(--muted)';
-    const gColor=m.gap!=null?(m.gap>=0?'#16a34a':'#dc2626'):'var(--muted)';
-    const hasNote=!!(m.penjelasan||m.keterangan||m.action);
-    const rowId=`imr-${m.bulan}`;
-    const noteId=`imn-${m.bulan}`;
-    return `<tr id="${rowId}">
-      <td style="font-weight:700;white-space:nowrap">${MN[m.bulan-1]||m.bl}</td>
+      // Tabel bulan
+      document.getElementById('ick-month-tbody').innerHTML = d.months.map(m => {
+        const c = m.progres != null ? bColor(m.progres) : 'var(--muted)';
+        const gColor = m.gap != null ? (m.gap >= 0 ? '#16a34a' : '#dc2626') : 'var(--muted)';
+        const hasNote = !!(m.penjelasan || m.keterangan || m.action);
+        const rowId = `imr-${m.bulan}`;
+        const noteId = `imn-${m.bulan}`;
+        return `<tr id="${rowId}">
+      <td style="font-weight:700;white-space:nowrap">${MN[m.bulan - 1] || m.bl}</td>
       <td>
         <div class="pcell">
-          <div class="mbar"><div class="mbar-fill" style="width:${Math.min((m.progres||0)*100,100).toFixed(0)}%;background:${c}"></div></div>
+          <div class="mbar"><div class="mbar-fill" style="width:${Math.min((m.progres || 0) * 100, 100).toFixed(0)}%;background:${c}"></div></div>
           <span style="color:${c};font-weight:700;font-size:9px">${pct(m.progres)}</span>
         </div>
       </td>
       <td style="color:var(--text2)">${pct(m.ekspektasi)}</td>
-      <td style="font-weight:700;color:${gColor}">${m.gap!=null?(m.gap>=0?'+':'')+pct(m.gap):'—'}</td>
-      <td>${m.realisasi!=null?fmtNum(m.realisasi):'—'}</td>
-      <td>${m.pctVsTarget!=null?`<span style="color:${bColor(m.pctVsTarget)};font-weight:700">${pct(m.pctVsTarget)}</span>`:'—'}</td>
-      <td>${m.prognosa!=null?fmtNum(m.prognosa):'—'}</td>
+      <td style="font-weight:700;color:${gColor}">${m.gap != null ? (m.gap >= 0 ? '+' : '') + pct(m.gap) : '—'}</td>
+      <td>${m.realisasi != null ? fmtNum(m.realisasi) : '—'}</td>
+      <td>${m.pctVsTarget != null ? `<span style="color:${bColor(m.pctVsTarget)};font-weight:700">${pct(m.pctVsTarget)}</span>` : '—'}</td>
+      <td>${m.prognosa != null ? fmtNum(m.prognosa) : '—'}</td>
       <td><span class="bs ${sClass(m.status)}">${m.status}</span></td>
       <td style="text-align:center">
-        ${hasNote?`<button onclick="toggleNote('${noteId}',this)" style="background:var(--bg);border:1.5px solid var(--border);border-radius:6px;cursor:pointer;font-size:11px;padding:2px 7px;color:var(--sky-deeper)" title="Lihat catatan">▼</button>`:'<span style="color:var(--muted);font-size:10px">—</span>'}
+        ${hasNote ? `<button onclick="toggleNote('${noteId}',this)" style="background:var(--bg);border:1.5px solid var(--border);border-radius:6px;cursor:pointer;font-size:11px;padding:2px 7px;color:var(--sky-deeper)" title="Lihat catatan">▼</button>` : '<span style="color:var(--muted);font-size:10px">—</span>'}
       </td>
     </tr>
-    ${hasNote?`<tr id="${noteId}" style="display:none;background:#f7fbff">
+    ${hasNote ? `<tr id="${noteId}" style="display:none;background:#f7fbff">
       <td colspan="9" style="padding:10px 14px">
         <div style="display:flex;flex-direction:column;gap:8px">
-          ${m.penjelasan?`<div style="display:flex;gap:8px;align-items:flex-start">
+          ${m.penjelasan ? `<div style="display:flex;gap:8px;align-items:flex-start">
             <span style="font-size:9px;font-weight:700;color:var(--sky-deeper);white-space:nowrap;min-width:80px;padding-top:1px">📝 Penjelasan</span>
             <span style="font-size:10px;color:var(--text);line-height:1.5">${m.penjelasan}</span>
-          </div>`:''}
-          ${m.keterangan?`<div style="display:flex;gap:8px;align-items:flex-start">
+          </div>`: ''}
+          ${m.keterangan ? `<div style="display:flex;gap:8px;align-items:flex-start">
             <span style="font-size:9px;font-weight:700;color:var(--sky-deeper);white-space:nowrap;min-width:80px;padding-top:1px">💬 Keterangan</span>
             <span style="font-size:10px;color:var(--text);line-height:1.5">${m.keterangan}</span>
-          </div>`:''}
-          ${m.action?`<div style="display:flex;gap:8px;align-items:flex-start">
+          </div>`: ''}
+          ${m.action ? `<div style="display:flex;gap:8px;align-items:flex-start">
             <span style="font-size:9px;font-weight:700;color:var(--orange);white-space:nowrap;min-width:80px;padding-top:1px">⚡ Action</span>
             <span style="font-size:10px;color:var(--text);line-height:1.5">${m.action}</span>
-          </div>`:''}
+          </div>`: ''}
         </div>
       </td>
-    </tr>`:''}`.trim();
-  }).join('');
+    </tr>`: ''}`.trim();
+      }).join('');
 
-  // Chart
-  if(ickDetailChart){ickDetailChart.destroy();ickDetailChart=null;}
-  const ctx=document.getElementById('ickDetailChart').getContext('2d');
-  const hasReal=d.months.some(m=>m.progres!=null);
-  ickDetailChart=new Chart(ctx,{
-    type:'line',
-    data:{
-      labels:d.months.map(m=>ML[m.bulan-1]||m.bl),
-      datasets:[
-        {label:'Progres (%)',
-         data:d.months.map(m=>m.progres!=null?+(m.progres*100).toFixed(2):null),
-         borderColor:'#4fa8d5',backgroundColor:'rgba(135,206,235,.15)',
-         borderWidth:2.5,pointBackgroundColor:d.months.map(m=>{
-           if(m.progres==null) return null;
-           return m.bulan===currentMonth?'#0a2a5e':'#4fa8d5';
-         }),
-         pointRadius:d.months.map(m=>m.bulan===currentMonth?8:5),
-         pointHoverRadius:8,fill:true,tension:.35,spanGaps:false},
-        {label:'Ekspektasi (%)',
-         data:d.months.map(m=>m.ekspektasi!=null?+(m.ekspektasi*100).toFixed(2):null),
-         borderColor:'#9ca3af',borderDash:[5,4],borderWidth:1.5,pointRadius:0,fill:false,tension:0,spanGaps:true},
-        ...(hasReal&&d.t26?[{
-          label:'Prognosa (raw)',
-          data:d.months.map(m=>m.prognosa!=null&&d.t26?+(m.prognosa/d.t26*100).toFixed(2):null),
-          borderColor:'#a78bfa',borderDash:[3,3],borderWidth:1.5,pointRadius:3,
-          pointBackgroundColor:'#a78bfa',fill:false,tension:.2,spanGaps:false
-        }]:[])
-      ]
-    },
-    options:{
-      responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},
-      plugins:{
-        legend:{labels:{color:'#4a6080',font:{size:10},boxWidth:10,padding:10}},
-        tooltip:{backgroundColor:'#fff',borderColor:'#c8e0f0',borderWidth:1,
-                 titleColor:'#0d1e3a',bodyColor:'#4a6080',
-                 callbacks:{label:c=>` ${c.dataset.label}: ${c.parsed.y!=null?c.parsed.y.toFixed(1)+'%':'—'}`}}
-      },
-      scales:{
-        x:{grid:{color:'rgba(200,224,240,.5)'},ticks:{color:'#4a6080',font:{size:10}}},
-        y:{min:0,max:105,grid:{color:'rgba(200,224,240,.5)'},
-           ticks:{color:'#4a6080',font:{size:10},callback:v=>v+'%'}}
-      }
+      // Chart
+      if (ickDetailChart) { ickDetailChart.destroy(); ickDetailChart = null; }
+      const ctx = document.getElementById('ickDetailChart').getContext('2d');
+      const hasReal = d.months.some(m => m.progres != null);
+      ickDetailChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: d.months.map(m => ML[m.bulan - 1] || m.bl),
+          datasets: [
+            {
+              label: 'Progres (%)',
+              data: d.months.map(m => m.progres != null ? +(m.progres * 100).toFixed(2) : null),
+              borderColor: '#4fa8d5', backgroundColor: 'rgba(135,206,235,.15)',
+              borderWidth: 2.5, pointBackgroundColor: d.months.map(m => {
+                if (m.progres == null) return null;
+                return m.bulan === currentMonth ? '#0a2a5e' : '#4fa8d5';
+              }),
+              pointRadius: d.months.map(m => m.bulan === currentMonth ? 8 : 5),
+              pointHoverRadius: 8, fill: true, tension: .35, spanGaps: false
+            },
+            {
+              label: 'Ekspektasi (%)',
+              data: d.months.map(m => m.ekspektasi != null ? +(m.ekspektasi * 100).toFixed(2) : null),
+              borderColor: '#9ca3af', borderDash: [5, 4], borderWidth: 1.5, pointRadius: 0, fill: false, tension: 0, spanGaps: true
+            },
+            ...(hasReal && d.t26 ? [{
+              label: 'Prognosa (raw)',
+              data: d.months.map(m => m.prognosa != null && d.t26 ? +(m.prognosa / d.t26 * 100).toFixed(2) : null),
+              borderColor: '#a78bfa', borderDash: [3, 3], borderWidth: 1.5, pointRadius: 3,
+              pointBackgroundColor: '#a78bfa', fill: false, tension: .2, spanGaps: false
+            }] : [])
+          ]
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false, interaction: { mode: 'index', intersect: false },
+          plugins: {
+            legend: { labels: { color: '#4a6080', font: { size: 10 }, boxWidth: 10, padding: 10 } },
+            tooltip: {
+              backgroundColor: '#fff', borderColor: '#c8e0f0', borderWidth: 1,
+              titleColor: '#0d1e3a', bodyColor: '#4a6080',
+              callbacks: { label: c => ` ${c.dataset.label}: ${c.parsed.y != null ? c.parsed.y.toFixed(1) + '%' : '—'}` }
+            }
+          },
+          scales: {
+            x: { grid: { color: 'rgba(200,224,240,.5)' }, ticks: { color: '#4a6080', font: { size: 10 } } },
+            y: {
+              min: 0, max: 105, grid: { color: 'rgba(200,224,240,.5)' },
+              ticks: { color: '#4a6080', font: { size: 10 }, callback: v => v + '%' }
+            }
+          }
+        }
+      });
+
+      document.getElementById('ick-modal-overlay').classList.add('open');
+      document.body.style.overflow = 'hidden';
     }
-  });
 
-  document.getElementById('ick-modal-overlay').classList.add('open');
-  document.body.style.overflow='hidden';
-}
+    function closeICKDetail() {
+      document.getElementById('ick-modal-overlay').classList.remove('open');
+      document.body.style.overflow = '';
+    }
 
-function closeICKDetail(){
-  document.getElementById('ick-modal-overlay').classList.remove('open');
-  document.body.style.overflow='';
-}
+    function closeICKDetailOverlay(e) {
+      if (e.target === document.getElementById('ick-modal-overlay')) closeICKDetail();
+    }
 
-function closeICKDetailOverlay(e){
-  if(e.target===document.getElementById('ick-modal-overlay')) closeICKDetail();
-}
-
-function toggleNote(noteId, btn){
-  const row=document.getElementById(noteId);
-  if(!row) return;
-  const open=row.style.display==='none'||row.style.display==='';
-  row.style.display=open?'table-row':'none';
-  btn.textContent=open?'▲':'▼';
-  btn.style.background=open?'var(--sky)':'var(--bg)';
-  btn.style.color=open?'var(--navy)':'var(--sky-deeper)';
-}
-</script>
+    function toggleNote(noteId, btn) {
+      const row = document.getElementById(noteId);
+      if (!row) return;
+      const open = row.style.display === 'none' || row.style.display === '';
+      row.style.display = open ? 'table-row' : 'none';
+      btn.textContent = open ? '▲' : '▼';
+      btn.style.background = open ? 'var(--sky)' : 'var(--bg)';
+      btn.style.color = open ? 'var(--navy)' : 'var(--sky-deeper)';
+    }
+  </script>
 </body>
+
 </html>
