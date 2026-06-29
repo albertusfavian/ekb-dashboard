@@ -479,6 +479,213 @@
       cursor: not-allowed;
     }
 
+    /* ── EWS BELL ── */
+    .ews-wrap {
+      position: relative;
+    }
+
+    .ews-btn {
+      background: var(--bg);
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      width: 34px;
+      height: 34px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      transition: all .15s;
+      position: relative;
+    }
+
+    .ews-btn:hover {
+      background: var(--sky);
+      border-color: var(--sky);
+    }
+
+    .ews-badge {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      background: var(--red);
+      color: #fff;
+      font-size: 9px;
+      font-weight: 800;
+      min-width: 16px;
+      height: 16px;
+      border-radius: 8px;
+      padding: 0 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+      border: 2px solid var(--white);
+      display: none;
+    }
+
+    .ews-badge.visible {
+      display: flex;
+    }
+
+    .ews-panel {
+      position: absolute;
+      top: calc(100% + 8px);
+      right: 0;
+      width: 380px;
+      background: var(--white);
+      border: 1.5px solid var(--border);
+      border-radius: 14px;
+      box-shadow: 0 16px 48px rgba(10, 42, 94, .18);
+      z-index: 9999;
+      display: none;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .ews-panel.open {
+      display: flex;
+    }
+
+    .ews-panel-hdr {
+      background: linear-gradient(135deg, #dc2626, #b91c1c);
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .ews-panel-hdr-ico {
+      font-size: 18px;
+    }
+
+    .ews-panel-hdr-info {
+      flex: 1;
+    }
+
+    .ews-panel-hdr-title {
+      font-size: 12px;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .ews-panel-hdr-sub {
+      font-size: 10px;
+      color: rgba(255, 255, 255, .75);
+      margin-top: 2px;
+    }
+
+    .ews-panel-body {
+      max-height: 360px;
+      overflow-y: auto;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .ews-item {
+      border-radius: 8px;
+      padding: 10px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      border-left: 3px solid transparent;
+      background: var(--bg);
+    }
+
+    .ews-item.at-risk {
+      border-left-color: #f59e0b;
+      background: #fffbeb;
+      transition: background .12s;
+    }
+
+    .ews-item.at-risk:hover {
+      background: #fef3c7;
+    }
+
+    .ews-item.perlu-perhatian {
+      border-left-color: #ef4444;
+      background: #fff5f5;
+      transition: background .12s;
+    }
+
+    .ews-item.perlu-perhatian:hover {
+      background: #fee2e2;
+    }
+
+    .ews-item-top {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .ews-item-status {
+      font-size: 9px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 10px;
+      white-space: nowrap;
+    }
+
+    .ews-item-status.at-risk {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .ews-item-status.perlu-perhatian {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    .ews-item-ick {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--text2);
+    }
+
+    .ews-item-lbl {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text);
+      line-height: 1.4;
+    }
+
+    .ews-item-meta {
+      display: flex;
+      gap: 10px;
+      margin-top: 2px;
+    }
+
+    .ews-item-meta span {
+      font-size: 10px;
+      color: var(--text2);
+    }
+
+    .ews-item-meta strong {
+      color: var(--text);
+    }
+
+    .ews-empty {
+      text-align: center;
+      padding: 28px 16px;
+      color: var(--text2);
+      font-size: 12px;
+    }
+
+    .ews-empty-ico {
+      font-size: 28px;
+      margin-bottom: 8px;
+    }
+
+    .ews-panel-ftr {
+      padding: 10px 16px;
+      border-top: 1px solid var(--border2);
+      font-size: 10px;
+      color: var(--text2);
+      text-align: center;
+    }
+
     /* TAB NAV */
     .tab-nav {
       background: var(--white);
@@ -595,6 +802,10 @@
       grid-template-columns: repeat(4, 1fr);
     }
 
+    .kpi-row-2 {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
     .kpi {
       background: var(--card);
       border: 1px solid var(--border);
@@ -603,6 +814,65 @@
       position: relative;
       overflow: hidden;
       box-shadow: 0 2px 8px rgba(10, 42, 94, .06);
+    }
+
+    /* Wide card: horizontal layout untuk row bawah */
+    .kpi.kpi-wide {
+      padding: 16px 22px;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .kpi-wide-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      flex-shrink: 0;
+    }
+
+    .kpi-wide-body {
+      flex: 1;
+    }
+
+    .kpi-wide-divider {
+      width: 1px;
+      height: 44px;
+      background: var(--border2);
+      flex-shrink: 0;
+    }
+
+    .kpi-wide-stat {
+      text-align: center;
+      min-width: 70px;
+    }
+
+    .kpi-wide-stat-val {
+      font-size: 20px;
+      font-weight: 800;
+      line-height: 1;
+    }
+
+    .kpi-wide-stat-lbl {
+      font-size: 9px;
+      color: var(--text2);
+      font-weight: 600;
+      margin-top: 3px;
+      text-transform: uppercase;
+      letter-spacing: .4px;
+    }
+
+    /* Icon badge di pojok kanan atas card kecil */
+    .kpi-icon {
+      position: absolute;
+      top: 12px;
+      right: 14px;
+      font-size: 18px;
+      opacity: .18;
     }
 
     .kpi::before {
@@ -902,6 +1172,19 @@
 
     .dtable tr:hover td {
       background: #f7fbff;
+    }
+
+    .narasi-row {
+      cursor: pointer;
+      transition: background .1s;
+    }
+
+    .narasi-row:hover td {
+      background: #eef5fb !important;
+    }
+
+    .narasi-row:hover td:first-child {
+      color: var(--sky-deeper);
     }
 
     .pcell {
@@ -1351,6 +1634,24 @@
           <div class="topbar-right">
             <span class="tb-badge" id="badge-period">—</span>
             <span class="tb-file" id="file-badge" title="">—</span>
+            <!-- EWS Bell -->
+            <div class="ews-wrap" id="ews-wrap">
+              <button class="ews-btn" id="ews-btn" onclick="toggleEWSPanel()" title="EWS – ICK Butuh Perhatian">
+                🔔
+                <span class="ews-badge" id="ews-badge"></span>
+              </button>
+              <div class="ews-panel" id="ews-panel">
+                <div class="ews-panel-hdr">
+                  <span class="ews-panel-hdr-ico">⚠️</span>
+                  <div class="ews-panel-hdr-info">
+                    <div class="ews-panel-hdr-title">Early Warning System – ICK</div>
+                    <div class="ews-panel-hdr-sub" id="ews-panel-sub">Memuat data…</div>
+                  </div>
+                </div>
+                <div class="ews-panel-body" id="ews-panel-body"></div>
+                <div class="ews-panel-ftr" id="ews-panel-ftr"></div>
+              </div>
+            </div>
             <button class="tb-btn" id="btn-reload" onclick="reloadFile()">↻ Reload</button>
             <button class="tb-btn" onclick="backToWelcome()" style="color:var(--text2)">Ganti File</button>
           </div>
@@ -1378,54 +1679,69 @@
             <!-- KPI Row 1: KPI Utama -->
             <div class="kpi-row kpi-row-5">
               <div class="kpi sky">
+                <span class="kpi-icon">📋</span>
                 <div class="kpi-label">Total ICK Aktif</div>
                 <div class="kpi-value" id="kpi-total" style="color:var(--sky-deeper)">—</div>
                 <div class="kpi-sub">dari <span id="kpi-nuker">—</span> Unit Kerja</div>
               </div>
               <div class="kpi green">
+                <span class="kpi-icon">📈</span>
                 <div class="kpi-label">Avg Progres (Kuantitatif)</div>
                 <div class="kpi-value" id="kpi-avg-kuan" style="color:var(--green)">—</div>
                 <div class="kpi-sub">Ekspektasi: <span id="kpi-eksp">—</span></div>
               </div>
               <div class="kpi" id="kpi-gap-card">
+                <span class="kpi-icon">🎯</span>
                 <div class="kpi-label">Gap vs Ekspektasi</div>
                 <div class="kpi-value" id="kpi-gap">—</div>
                 <div class="kpi-sub" id="kpi-gap-desc">—</div>
               </div>
               <div class="kpi blue">
+                <span class="kpi-icon">📅</span>
                 <div class="kpi-label">Delta MoM</div>
                 <div class="kpi-value" id="kpi-mom" style="color:var(--blue)">—</div>
                 <div class="kpi-sub">vs bulan lalu</div>
               </div>
               <div class="kpi purple">
+                <span class="kpi-icon">🏷️</span>
                 <div class="kpi-label">Label Status</div>
                 <div class="kpi-value" id="kpi-label" style="font-size:16px;margin-top:8px">—</div>
                 <div class="kpi-sub" id="kpi-pct-on">—</div>
               </div>
             </div>
 
-            <!-- KPI Row 2: Status + Prognosa -->
-            <div class="kpi-row kpi-row-4">
-              <div class="kpi green">
-                <div class="kpi-label">On Track + Tercapai</div>
-                <div class="kpi-value" id="kpi-on" style="color:var(--green)">—</div>
-                <div class="kpi-sub" id="kpi-on-pct">—</div>
-              </div>
-              <div class="kpi orange">
-                <div class="kpi-label">Butuh Tindakan</div>
-                <div class="kpi-value" id="kpi-butuh" style="color:var(--orange)">—</div>
-                <div class="kpi-sub">At Risk: <span id="kpi-at">—</span> | Perlu Perhatian: <span id="kpi-pp">—</span>
+            <!-- KPI Row 2: Status (wide horizontal cards) -->
+            <div class="kpi-row kpi-row-2">
+              <div class="kpi kpi-wide green">
+                <div class="kpi-wide-icon" style="background:#dcfce7">✅</div>
+                <div class="kpi-wide-body">
+                  <div class="kpi-label">On Track + Tercapai</div>
+                  <div class="kpi-value" id="kpi-on" style="color:var(--green);font-size:28px">—</div>
+                  <div class="kpi-sub" id="kpi-on-pct">—</div>
+                </div>
+                <div class="kpi-wide-divider"></div>
+                <div class="kpi-wide-stat">
+                  <div class="kpi-wide-stat-val" style="color:var(--green)" id="kpi-on-pct-num">—</div>
+                  <div class="kpi-wide-stat-lbl">% dari total</div>
                 </div>
               </div>
-              <div class="kpi sky">
-                <div class="kpi-label">Prognosa Tercapai</div>
-                <div class="kpi-value" id="kpi-prognosa-ok" style="color:var(--sky-deeper)">—</div>
-                <div class="kpi-sub">dari <span id="kpi-prognosa-total">—</span> ICK berprognosa</div>
-              </div>
-              <div class="kpi sky">
-                <div class="kpi-label">Avg Prognosa Akhir Tahun</div>
-                <div class="kpi-value" id="kpi-avg-prognosa" style="color:var(--sky-deeper)">—</div>
-                <div class="kpi-sub">estimasi capaian akhir 2026</div>
+              <div class="kpi kpi-wide orange">
+                <div class="kpi-wide-icon" style="background:#ffedd5">⚠️</div>
+                <div class="kpi-wide-body">
+                  <div class="kpi-label">Butuh Tindakan</div>
+                  <div class="kpi-value" id="kpi-butuh" style="color:var(--orange);font-size:28px">—</div>
+                  <div class="kpi-sub">ICK memerlukan perhatian segera</div>
+                </div>
+                <div class="kpi-wide-divider"></div>
+                <div class="kpi-wide-stat">
+                  <div class="kpi-wide-stat-val" style="color:var(--yellow)"><span id="kpi-at">—</span></div>
+                  <div class="kpi-wide-stat-lbl">At Risk</div>
+                </div>
+                <div class="kpi-wide-divider"></div>
+                <div class="kpi-wide-stat">
+                  <div class="kpi-wide-stat-val" style="color:var(--red)"><span id="kpi-pp">—</span></div>
+                  <div class="kpi-wide-stat-lbl">Perlu Perhatian</div>
+                </div>
               </div>
             </div>
 
@@ -1473,12 +1789,13 @@
                   <table class="dtable">
                     <thead>
                       <tr>
-                        <th>ICK / Indikator</th>
+                        <th>Kode ICK</th>
                         <th>Uker</th>
                         <th>Tipe</th>
                         <th>Progres</th>
                         <th>Pct/Target</th>
                         <th>Status</th>
+                        <th style="width:20px"></th>
                       </tr>
                     </thead>
                     <tbody id="detail-tbody"></tbody>
@@ -1531,7 +1848,7 @@
                 <table class="dtable">
                   <thead>
                     <tr>
-                      <th>ICK / Indikator</th>
+                      <th>Kode ICK</th>
                       <th>Uker</th>
                       <th>Tipe</th>
                       <th>Progres</th>
@@ -1540,8 +1857,8 @@
                       <th>Realisasi</th>
                       <th>Target</th>
                       <th>Pct/Target</th>
-                      <th>Prognosa</th>
                       <th>Status</th>
+                      <th style="width:20px"></th>
                     </tr>
                   </thead>
                   <tbody id="detail-tab-tbody"></tbody>
@@ -1585,16 +1902,18 @@
                 <table class="dtable">
                   <thead>
                     <tr>
-                      <th>ICK / Indikator</th>
+                      <th>Kode ICK</th>
                       <th>Uker</th>
                       <th>Tipe</th>
                       <th>Target</th>
                       <th>Fleksibel</th>
                       <th>Realisasi</th>
+                      <th title="Realisasi / Nilai Maks Skala (dari narasi)">Skala Norm.</th>
                       <th>Penjelasan</th>
                       <th>Keterangan</th>
                       <th>Action</th>
                       <th>Status</th>
+                      <th style="width:20px"></th>
                     </tr>
                   </thead>
                   <tbody id="narasi-tbody"></tbody>
@@ -1635,6 +1954,7 @@
       <div class="ick-modal-header">
         <button class="ick-modal-back" onclick="closeICKDetail()">←</button>
         <div style="flex:1">
+          <div style="font-size:10px;font-weight:700;color:rgba(255,255,255,.55);font-family:monospace;letter-spacing:.3px;margin-bottom:4px" id="ick-modal-key">—</div>
           <div class="ick-modal-title" id="ick-modal-title">—</div>
           <div class="ick-modal-sub" id="ick-modal-sub">
             <span id="ick-modal-uker">—</span>
@@ -1666,7 +1986,7 @@
                   <th>Gap</th>
                   <th>Realisasi</th>
                   <th>Pct/Target</th>
-                  <th>Prognosa</th>
+
                   <th>Status</th>
                   <th style="width:32px"></th>
                 </tr>
@@ -1832,6 +2152,14 @@
       return s.startsWith('≥') || s.startsWith('≤') || s.startsWith('±');
     }
 
+    /* ── extractMaxSkala — parse "skala 1-X" dari teks narasi ── */
+    function extractMaxSkala(narasi) {
+      if (!narasi) return null;
+      // Cocokkan pola: "skala 1-6", "skala 1–6", "skala 1 - 6" (angka setelah tanda hubung)
+      const m = narasi.match(/skala\s+1\s*[-–]\s*(\d+)/i);
+      return m ? +m[1] : null;
+    }
+
     /* ── getTipe — sama dengan Dim_ICK WithTipePengukuran ── */
     function getTipe(sifat, narasi, t26) {
       const n = (narasi || '').toLowerCase();
@@ -1890,7 +2218,7 @@
       // ── Build records — satu baris per (ICK × Bulan) ──
       // Sub-header order (9 kolom per blok, sesuai Fact_Progress v4):
       // si+0 Kode_Bulan | si+1 Realisasi | si+2 Penjelasan_Realisasi
-      // si+3 Progres    | si+4 Prognosa  | si+5 Keterangan
+      // si+3 Progres    | si+4 (skip)    | si+5 Keterangan
       // si+6 Action     | si+7 Risiko    | si+8 Mitigasi
       const records = [];
       for (const [mNo, si] of Object.entries(monthIdx)) {
@@ -1906,7 +2234,6 @@
 
           const prog = pn(row[si + 3], true);   // Progres
           const real = pn(row[si + 1]);          // Realisasi
-          const prognosa = pn(row[si + 4]);     // Prognosa_Akhir_Tahun
 
           // Hapus baris tanpa data (sesuai PQ HasData filter)
           if (prog === null && real === null) continue;
@@ -1921,6 +2248,9 @@
           const validTrenChart = (sifat === 'Akumulatif');
           // Pct_vs_Target = Realisasi / Target_2026 (Fact_Progress WithPct)
           const pctVsTarget = (t26 != null && t26 !== 0 && real != null) ? real / t26 : null;
+          // Skala Normalisasi = Realisasi / MaxSkala (dari narasi "skala 1-X")
+          const maxScale = (tipe === 'Skala Penilaian') ? extractMaxSkala(narasi) : null;
+          const skalaNorm = (maxScale != null && real != null) ? +(real / maxScale).toFixed(4) : null;
           // Gap_vs_Ekspektasi
           const gap = prog - eksp;
           // Kelompok_Visualisasi dan flags (Dim_ICK)
@@ -1939,7 +2269,8 @@
             validTrenChart, hasTargetFleksibel,
             bulan: m, bl: ML[m - 1],
             progres: prog, realisasi: real, ekspektasi: eksp,
-            gap, pctVsTarget, prognosa, t26,
+            gap, pctVsTarget, t26,
+            maxScale, skalaNorm,
             penjelasan, keterangan, action,
             status: getStatus(prog, eksp, sifat)
           });
@@ -1979,36 +2310,28 @@
         // Label Status (DAX Bagian 6)
         const statusLabel = getLabelStatus(pctOn);
 
-        // Prognosa (DAX Bagian 5)
-        // Prognosa adalah raw value (sama dgn Realisasi), bukan 0-1
-        // avgPrognosa = avg(prognosa / target) agar bisa ditampilkan sebagai % (0-1 scale)
-        const progrecs = recs.filter(r => r.prognosa != null && r.t26 != null && r.t26 !== 0);
-        const avgPrognosa = progrecs.length > 0
-          ? +(progrecs.map(r => r.prognosa / r.t26).reduce((a, b) => a + b, 0) / progrecs.length).toFixed(4)
-          : null;
-        // ICK Prognosa >= Target (raw value comparison — sudah benar)
-        const nPrognosaOk = recs.filter(r => r.prognosa != null && r.t26 != null && r.prognosa >= r.t26).length;
-
         // Per Tipe breakdown
         const tipoCount = {};
         ['Skala Penilaian', 'Biner / Level Tertentu', 'Kuantitatif - Hitungan', 'Kuantitatif - Volume', 'Lainnya']
           .forEach(t => tipoCount[t] = recs.filter(r => r.tipe === t).length);
 
-        // Avg Nilai Skala (DAX Bagian 3)
+        // Avg Nilai Skala (raw) — tetap disimpan untuk referensi
         const skalaRecs = recs.filter(r => r.tipe === 'Skala Penilaian' && r.realisasi != null);
         const avgNilaiSkala = skalaRecs.length > 0
           ? +(skalaRecs.map(r => r.realisasi).reduce((a, b) => a + b, 0) / skalaRecs.length).toFixed(2)
           : null;
+        // Avg Skala Normalisasi — realisasi/maxScale, comparable antar ICK beda skala
+        const skalaNormRecs = recs.filter(r => r.tipe === 'Skala Penilaian' && r.skalaNorm != null);
+        const avgSkalaNorm = skalaNormRecs.length > 0
+          ? +(skalaNormRecs.map(r => r.skalaNorm).reduce((a, b) => a + b, 0) / skalaNormRecs.length).toFixed(4)
+          : null;
 
-        // % Biner Tercapai (DAX Bagian 3)
+        // % Biner Tercapai
         const binerRecs = recs.filter(r => r.tipe === 'Biner / Level Tertentu');
         const binerTercapai = binerRecs.filter(r => r.status === 'Tercapai').length;
         const pctBiner = binerRecs.length > 0 ? +(binerTercapai / binerRecs.length).toFixed(4) : null;
 
-        // Jumlah HasTargetFleksibel (PQ Dim_ICK fix #3)
         const nFleksibel = recs.filter(r => r.hasTargetFleksibel).length;
-
-        // Jumlah Perlu_Narasi_Detail (Dim_ICK)
         const nPerluNarasi = recs.filter(r => r.perluNarasi).length;
 
         // Per Uker
@@ -2042,8 +2365,7 @@
           nKuan: new Set(kuanRecs.map(r => r.ick)).size,
           nUker: Object.keys(ud).length,
           sc, nOn, pctOn, nButuhTindakan, statusLabel,
-          avgPrognosa, nPrognosaOk, nPrognosaTotal: progrecs.length,
-          tipoCount, avgNilaiSkala, pctBiner, nFleksibel, nPerluNarasi,
+          tipoCount, avgNilaiSkala, avgSkalaNorm, pctBiner, nFleksibel, nPerluNarasi,
           uker: ukerArr, detail
         };
         monthly.push({ m, lbl: ML[m - 1], avg, avgKuantitatif, eksp: +(m / 12).toFixed(4) });
@@ -2073,7 +2395,7 @@
         byICK[k].months.push({
           bulan: r.bulan, bl: r.bl,
           progres: r.progres, realisasi: r.realisasi, ekspektasi: r.ekspektasi,
-          gap: r.gap, pctVsTarget: r.pctVsTarget, prognosa: r.prognosa,
+          gap: r.gap, pctVsTarget: r.pctVsTarget,
           status: r.status, penjelasan: r.penjelasan, keterangan: r.keterangan, action: r.action
         });
       }
@@ -2158,7 +2480,118 @@
       if (currentTab === 'uker') renderUkerCharts();
       if (currentTab === 'detail') renderDetailTab();
       if (currentTab === 'narasi') renderNarasiTab();
+      updateEWSBadge();
     }
+
+    /* ══════════════════════════════════════════════
+       EWS — EARLY WARNING SYSTEM
+    ══════════════════════════════════════════════ */
+    function getEWSItems() {
+      if (!processedData || !currentMonth) return [];
+      const d = processedData.byMonth[currentMonth];
+      if (!d) return [];
+      // Ambil unique ICK yang At Risk / Perlu Perhatian di bulan ini
+      // detail[] sudah sorted per uker+ick, satu baris per ICK per bulan
+      const seen = new Set();
+      const items = [];
+      for (const r of d.detail) {
+        if (r.status !== 'At Risk' && r.status !== 'Perlu Perhatian') continue;
+        if (seen.has(r.ick)) continue;
+        seen.add(r.ick);
+        items.push(r);
+      }
+      // Sort: Perlu Perhatian dulu (lebih kritis), lalu At Risk
+      items.sort((a, b) => {
+        const order = { 'Perlu Perhatian': 0, 'At Risk': 1 };
+        return (order[a.status] ?? 2) - (order[b.status] ?? 2);
+      });
+      return items;
+    }
+
+    function updateEWSBadge() {
+      const items = getEWSItems();
+      const badge = document.getElementById('ews-badge');
+      if (!badge) return;
+      if (items.length > 0) {
+        badge.textContent = items.length > 99 ? '99+' : items.length;
+        badge.classList.add('visible');
+      } else {
+        badge.classList.remove('visible');
+      }
+      // Jika panel sedang terbuka, refresh isinya
+      const panel = document.getElementById('ews-panel');
+      if (panel && panel.classList.contains('open')) renderEWSPanel(items);
+    }
+
+    function toggleEWSPanel() {
+      const panel = document.getElementById('ews-panel');
+      if (!panel) return;
+      const isOpen = panel.classList.contains('open');
+      if (isOpen) {
+        panel.classList.remove('open');
+      } else {
+        panel.classList.add('open');
+        renderEWSPanel(getEWSItems());
+      }
+    }
+
+    function renderEWSPanel(items) {
+      const body = document.getElementById('ews-panel-body');
+      const sub = document.getElementById('ews-panel-sub');
+      const ftr = document.getElementById('ews-panel-ftr');
+      if (!body) return;
+
+      const d = processedData?.byMonth?.[currentMonth];
+      const namaBulan = d?.nama || '';
+      const nAt = items.filter(r => r.status === 'At Risk').length;
+      const nPP = items.filter(r => r.status === 'Perlu Perhatian').length;
+
+      sub.textContent = `${namaBulan} 2026 · ${items.length} ICK butuh perhatian`;
+
+      if (items.length === 0) {
+        body.innerHTML = `
+          <div class="ews-empty">
+            <div class="ews-empty-ico">✅</div>
+            <div>Semua ICK dalam kondisi <strong>On Track</strong> atau <strong>Tercapai</strong></div>
+          </div>`;
+        ftr.textContent = '';
+        return;
+      }
+
+      body.innerHTML = items.map(r => {
+        const isAR = r.status === 'At Risk';
+        const cls = isAR ? 'at-risk' : 'perlu-perhatian';
+        const progLabel = r.progres != null ? pct(r.progres) : '—';
+        const ekspLabel = r.ekspektasi != null ? pct(r.ekspektasi) : '—';
+        const lblText = r.lbl || r.ick;
+        const safeKey = r.ick.replace(/'/g, "\\'");
+        return `
+          <div class="ews-item ${cls}" style="cursor:pointer" onclick="document.getElementById('ews-panel').classList.remove('open'); openICKDetail('${safeKey}')" title="Klik untuk lihat detail ICK">
+            <div class="ews-item-top">
+              <span class="ews-item-status ${cls}">${r.status}</span>
+              <span class="ews-item-ick">${r.ick}</span>
+              <span style="margin-left:auto;font-size:11px;color:var(--text2)">→</span>
+            </div>
+            <div class="ews-item-lbl">${lblText}</div>
+            <div class="ews-item-meta">
+              <span>Uker: <strong>${r.uker || '—'}</strong></span>
+              <span>Progres: <strong>${progLabel}</strong></span>
+              <span>Ekspektasi: <strong>${ekspLabel}</strong></span>
+            </div>
+          </div>`;
+      }).join('');
+
+      ftr.textContent = `${nPP} Perlu Perhatian · ${nAt} At Risk · ${namaBulan} 2026`;
+    }
+
+    // Tutup panel EWS jika klik di luar
+    document.addEventListener('click', function (e) {
+      const wrap = document.getElementById('ews-wrap');
+      const panel = document.getElementById('ews-panel');
+      if (wrap && panel && !wrap.contains(e.target)) {
+        panel.classList.remove('open');
+      }
+    });
 
     /* ── KPIs ── */
     function renderKPIs(d) {
@@ -2195,19 +2628,17 @@
       sbBadge.style.color = lbl.color;
 
       document.getElementById('kpi-on-pct').textContent = pct(d.pctOn) + ' dari total aktif';
+      document.getElementById('kpi-on-pct-num').textContent = pct(d.pctOn);
       document.getElementById('kpi-butuh').textContent = d.nButuhTindakan + ' ICK';
       document.getElementById('kpi-at').textContent = d.sc['At Risk'] || 0;
       document.getElementById('kpi-pp').textContent = d.sc['Perlu Perhatian'] || 0;
-
-      // Prognosa
-      document.getElementById('kpi-prognosa-ok').textContent = d.nPrognosaOk || '—';
-      document.getElementById('kpi-prognosa-total').textContent = d.nPrognosaTotal || 0;
-      document.getElementById('kpi-avg-prognosa').textContent = d.avgPrognosa != null ? pct(d.avgPrognosa) : '—';
       document.getElementById('uker-badge').textContent = d.nama + ' 2026';
 
       // Narasi tab KPIs
       document.getElementById('kpi-n-skala').textContent = d.tipoCount['Skala Penilaian'] || 0;
-      document.getElementById('kpi-avg-skala').textContent = d.avgNilaiSkala != null ? d.avgNilaiSkala : '—';
+      document.getElementById('kpi-avg-skala').textContent = d.avgSkalaNorm != null
+        ? pct(d.avgSkalaNorm) + (d.avgNilaiSkala != null ? ' (raw: ' + d.avgNilaiSkala + ')' : '')
+        : (d.avgNilaiSkala != null ? d.avgNilaiSkala : '—');
       document.getElementById('kpi-n-biner').textContent = d.tipoCount['Biner / Level Tertentu'] || 0;
       document.getElementById('kpi-pct-biner').textContent = pct(d.pctBiner);
       document.getElementById('kpi-n-fleksibel').textContent = d.nFleksibel || 0;
@@ -2280,8 +2711,8 @@
         const w = Math.min((r.progres || 0) * 100, 100).toFixed(0), c = bColor(r.progres || 0);
         const tc = TIPE_COLOR[r.tipe] || '#9ca3af';
         const pctTgt = r.pctVsTarget != null ? `<span style="color:${bColor(r.pctVsTarget)};font-weight:700">${pct(r.pctVsTarget)}</span>` : '<span style="color:var(--muted)">—</span>';
-        return `<tr style="cursor:pointer" onclick="openICKDetail('${escKey(r.ick)}')" title="Klik untuk lihat detail bulanan">
-      <td style="font-size:9px;color:var(--text2);min-width:160px;line-height:1.4">${r.lbl}</td>
+        return `<tr class="narasi-row" onclick="openICKDetail('${escKey(r.ick)}')">
+      <td style="font-size:9px;font-weight:700;color:var(--sky-deeper);white-space:nowrap;font-family:monospace">${r.ick}</td>
       <td style="font-weight:700;font-size:9px;color:var(--navy);white-space:nowrap">${r.uker}</td>
       <td><span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:${tc};margin-right:3px;vertical-align:middle"></span><span style="font-size:9px">${r.tipe.replace('Kuantitatif - ', 'K.')}</span></td>
       <td>
@@ -2292,6 +2723,7 @@
       </td>
       <td>${pctTgt}</td>
       <td><span class="bs ${sClass(r.status)}">${r.status}</span></td>
+      <td style="color:var(--text2);font-size:12px;text-align:center">›</td>
     </tr>`;
       }).join('');
     }
@@ -2321,9 +2753,8 @@
         const tc = TIPE_COLOR[r.tipe] || '#9ca3af';
         const gColor = r.gap >= 0 ? '#16a34a' : '#dc2626';
         const pctTgt = r.pctVsTarget != null ? `<span style="color:${bColor(r.pctVsTarget)};font-weight:700">${pct(r.pctVsTarget)}</span>` : '—';
-        const prognosaStr = r.prognosa != null ? `<span style="color:${r.prognosa >= (r.t26 ?? 0) ? 'var(--green)' : 'var(--yellow)'};">${fmtNum(r.prognosa)}</span>` : '—';
-        return `<tr style="cursor:pointer" onclick="openICKDetail('${escKey(r.ick)}')" title="Klik untuk lihat tren bulanan">
-      <td style="font-size:10px;min-width:180px;line-height:1.4">${r.lbl}</td>
+        return `<tr class="narasi-row" onclick="openICKDetail('${escKey(r.ick)}')">
+      <td style="font-size:10px;font-weight:700;color:var(--sky-deeper);white-space:nowrap;font-family:monospace">${r.ick}</td>
       <td style="font-weight:700;font-size:10px;white-space:nowrap;color:var(--navy)">${r.uker}</td>
       <td><span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:${tc};margin-right:3px;vertical-align:middle"></span><span style="font-size:9px">${r.tipe.replace('Kuantitatif - ', 'K.')}</span></td>
       <td><div class="pcell"><div class="mbar"><div class="mbar-fill" style="width:${Math.min((r.progres || 0) * 100, 100).toFixed(0)}%;background:${c}"></div></div><span style="color:${c};font-weight:700;font-size:9px">${pct(r.progres)}</span></div></td>
@@ -2332,8 +2763,8 @@
       <td style="font-size:9px">${fmtNum(r.realisasi)}</td>
       <td style="font-size:9px">${r.t26 != null ? fmtNum(r.t26) : r.hasTargetFleksibel ? '<span style="color:var(--orange);font-size:9px">Fleksibel</span>' : '—'}</td>
       <td>${pctTgt}</td>
-      <td>${prognosaStr}</td>
       <td><span class="bs ${sClass(r.status)}">${r.status}</span></td>
+      <td style="color:var(--text2);font-size:12px;text-align:center">›</td>
     </tr>`;
       }).join('');
     }
@@ -2359,17 +2790,31 @@
         const penj = r.penjelasan ? `<div class="tt">📝<span class="tt-content">${r.penjelasan}</span></div>` : '—';
         const ket = r.keterangan ? `<div class="tt">💬<span class="tt-content">${r.keterangan}</span></div>` : '—';
         const act = r.action ? `<div class="tt">⚡<span class="tt-content">${r.action}</span></div>` : '—';
-        return `<tr>
-      <td style="font-size:10px;min-width:180px;line-height:1.4">${r.lbl}</td>
+        // Skala Normalisasi — hanya untuk Skala Penilaian
+        let skalaNormStr = '—';
+        if (r.tipe === 'Skala Penilaian') {
+          if (r.skalaNorm != null) {
+            const normColor = r.skalaNorm >= 0.80 ? 'var(--green)' : r.skalaNorm >= 0.60 ? 'var(--yellow)' : 'var(--red)';
+            skalaNormStr = `<span style="font-weight:700;color:${normColor}">${pct(r.skalaNorm)}</span>`
+              + `<span style="font-size:8px;color:var(--text2);display:block">${fmtNum(r.realisasi)}/${r.maxScale}</span>`;
+          } else {
+            skalaNormStr = `<span style="color:var(--muted);font-size:9px">no skala</span>`;
+          }
+        }
+        const safeIck = r.ick.replace(/'/g, "\\'");
+        return `<tr class="narasi-row" onclick="openICKDetail('${safeIck}')">
+      <td style="font-size:10px;font-weight:700;color:var(--sky-deeper);white-space:nowrap;font-family:monospace">${r.ick}</td>
       <td style="font-weight:700;font-size:10px;white-space:nowrap;color:var(--navy)">${r.uker}</td>
       <td><span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:${tc};margin-right:3px;vertical-align:middle"></span><span style="font-size:9px">${r.tipe}</span></td>
       <td style="font-size:9px">${tgtStr}</td>
       <td>${fleksibel}</td>
       <td style="font-size:9px;font-weight:700">${realStr}</td>
+      <td style="text-align:center;min-width:70px">${skalaNormStr}</td>
       <td style="text-align:center">${penj}</td>
       <td style="text-align:center">${ket}</td>
       <td style="text-align:center">${act}</td>
       <td><span class="bs ${sClass(r.status)}">${r.status}</span></td>
+      <td style="color:var(--text2);font-size:12px;text-align:center">›</td>
     </tr>`;
       }).join('');
     }
@@ -2566,6 +3011,7 @@
       if (!d) return;
 
       // Header
+      document.getElementById('ick-modal-key').textContent = ickKey;
       document.getElementById('ick-modal-title').textContent = d.lbl;
       document.getElementById('ick-modal-uker').textContent = '📍 ' + d.uker;
       document.getElementById('ick-modal-sifat').textContent = '⟳ ' + d.sifat;
@@ -2597,7 +3043,6 @@
       <td style="font-weight:700;color:${gColor}">${m.gap != null ? (m.gap >= 0 ? '+' : '') + pct(m.gap) : '—'}</td>
       <td>${m.realisasi != null ? fmtNum(m.realisasi) : '—'}</td>
       <td>${m.pctVsTarget != null ? `<span style="color:${bColor(m.pctVsTarget)};font-weight:700">${pct(m.pctVsTarget)}</span>` : '—'}</td>
-      <td>${m.prognosa != null ? fmtNum(m.prognosa) : '—'}</td>
       <td><span class="bs ${sClass(m.status)}">${m.status}</span></td>
       <td style="text-align:center">
         ${hasNote ? `<button onclick="toggleNote('${noteId}',this)" style="background:var(--bg);border:1.5px solid var(--border);border-radius:6px;cursor:pointer;font-size:11px;padding:2px 7px;color:var(--sky-deeper)" title="Lihat catatan">▼</button>` : '<span style="color:var(--muted);font-size:10px">—</span>'}
@@ -2647,13 +3092,7 @@
               label: 'Ekspektasi (%)',
               data: d.months.map(m => m.ekspektasi != null ? +(m.ekspektasi * 100).toFixed(2) : null),
               borderColor: '#9ca3af', borderDash: [5, 4], borderWidth: 1.5, pointRadius: 0, fill: false, tension: 0, spanGaps: true
-            },
-            ...(hasReal && d.t26 ? [{
-              label: 'Prognosa (raw)',
-              data: d.months.map(m => m.prognosa != null && d.t26 ? +(m.prognosa / d.t26 * 100).toFixed(2) : null),
-              borderColor: '#a78bfa', borderDash: [3, 3], borderWidth: 1.5, pointRadius: 3,
-              pointBackgroundColor: '#a78bfa', fill: false, tension: .2, spanGaps: false
-            }] : [])
+            }
           ]
         },
         options: {
